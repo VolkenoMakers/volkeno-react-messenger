@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { VolkenoReactMessenger } from '.'
 
-describe('ExampleComponent', () => {
+describe('VolkenoReactMessenger', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(VolkenoReactMessenger).toBeTruthy()
   })
 })
