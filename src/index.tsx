@@ -4,17 +4,15 @@ import styles from './styles.module.css'
 interface Props {
   titlePage: string;
   avatar: any;
-  name: string;
   date: string;
-  text: string;
   StatutConnect: string;
-  messageRecevied: string;
-  timeMessageReceved: string;
-  textMessageSend: string;
-  StatutMessageDelivered: string
+  usersList: any;
+  sender: any;
+  recever: any;
 }
 
-export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, StatutConnect, messageRecevied, timeMessageReceved, textMessageSend, StatutMessageDelivered }: Props) => {
+export const VolkenoReactMessenger = ({ titlePage, avatar, date, usersList, sender, recever }: Props) => {
+  console.log("userList", usersList)
   return (
   <div className={styles.containerPage}>
      <div className={styles.containerMessenger}>
@@ -37,123 +35,49 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
           </form>
         </div>
         <ul className={styles.listGroupMessage}>
-          <li className={`${styles.listGroupItemMeessage} ${styles.active} `}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
-                    </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsTraite}`}>
-                        <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className={`${styles.listGroupItemMeessage}`}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
-                    </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsNonTraite}`}>
-                          <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className={`${styles.listGroupItemMeessage}`}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
-                    </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsErreur}`}>
-                        <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
+          {usersList && usersList?.map((user: any) => (
+             <li className={`${styles.listGroupItemMeessage} ${styles.active} `}>
+             <div>
+               <div className={styles.blocProfilContact}>
+                 <div className={styles.containerListMessageItem}>
+                   <img
+                     src={user?.avatar}
+                     className={styles.imgMessgeContact}
+                     alt="image profil contact"
+                   />
+                   <div className={styles.contentTextMessageList}>
+                     <div className={styles.containerHeaderMessageList}>
+                       <p className={styles.nomContact}>{user?.firstname + " " + user?.lastName}</p>
+                       <p className={styles.timeMessageContact}>{date}</p>
+                     </div>
+                     <div className={styles.blocMessageContact}>
+                       <div className="">
+                         <p
+                           className={styles.contenuMessageContact}
+                           style={{
+                             textOverflow: "ellipsis",
+                             overflow: "hidden",
+                             whiteSpace: "nowrap",
+                           }}
+                         >
+                           {user?.lastMessage}
+                         </p>
+                       </div>
+                       <div className="">
+                         <span className={`${styles.statutMessageTabsTraite}`}>
+                         <i className="fa-solid fa-check-double"></i>
+                         </span>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </li>
+          ))}
         </ul>
       </div>
-      <div className={styles.containerDetailMessage}>
+      {/* <div className={styles.containerDetailMessage}>
         <div className={styles.containerSectionHeaderDetailMessage}>
           <div className={styles.contentImgProfil}>
             <img
@@ -334,7 +258,7 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
             </div>
           </form>
         </div>
-      </div>
+      </div> */}
      </div>
     </div>)
 }

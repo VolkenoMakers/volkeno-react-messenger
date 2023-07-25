@@ -1,39 +1,37 @@
-import Avatar from "./assets/avatar.png"
-import Profil from "./assets/profil.png"
 
 export const usersList = [
     {
         id: 1,
-        name: "Paul",
+        firstname: "Paul",
         lastName: "Gomis",
         email: "paul.gomis@gmail.com",
-        avatar: Avatar,
+        avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`,
         lastMessage: "Lorem ipsum dolor sit amet consectetur. Cursus magna mollis."
     },
     {
         id: 2,
-        name: "Mardoché",
+        firstname: "Mardoché",
         lastName: "Kiki",
         email: "paul.gomis@gmail.com",
-        avatar: Avatar,
+        avatar: `https://ui-avatars.com/api/?name=Mardoché+Kiki`,
 
         lastMessage: "Lorem ipsum dolor sit amet consectetur. Cursus magna mollis."
     },
     {
         id: 3,
-        name: "Mbaye",
+        firstname: "Mbaye",
         lastName: "Niass",
         email: "paul.gomis@gmail.com",
-        avatar: Avatar,
+        avatar: `https://ui-avatars.com/api/?name=Mbaye+Niass`,
 
         lastMessage: "Lorem ipsum dolor sit amet consectetur. Cursus magna mollis."
     },
     {
         id: 4,
-        name: "Chérif",
+        firstname: "Chérif",
         lastName: "Guissé",
         email: "paul.gomis@gmail.com",
-        avatar: Avatar,
+        avatar: `https://ui-avatars.com/api/?name=Chérif+Guissé`,
 
         lastMessage: "Lorem ipsum dolor sit amet consectetur. Cursus magna mollis."
     }
@@ -41,18 +39,18 @@ export const usersList = [
 
 export const recever = {
     id: 5,
-    name: "Adama",
+    firstname: "Adama",
     lastName: "Diakhaté",
     email: "diakhateadama36@gmail.com",
-    avatar: Profil,
+    avatar: `https://ui-avatars.com/api/?name=Adama+Diakhaté`,
 }
 
 export const sender = {
     id: 6,
-    name: "Adama",
+    firstname: "Adama",
     lastName: "Diakhaté",
     email: "diakhateadama36@gmail.com",
-    avatar: Profil,
+    avatar: `https://ui-avatars.com/api/?name=Adama+Diakhaté`,
 }
 
 export const chatData = [
