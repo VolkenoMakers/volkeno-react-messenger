@@ -44,7 +44,7 @@
   background: transparent;
   position: absolute;
   left: 5%;
-    top: 27%;
+    top: 39%;
   border: none;
 }
 .btnSearchIcon:focus {
@@ -519,4 +519,29 @@ button.btn.btn.btn-see-more.notif-disabled {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.customPosRelative {
+  position: relative;
+}
+.messengerAlert {
+  border-left: 6px solid #1C208F;
+  border-radius: 0.4rem;
+  color: #1C208F;
+  padding: 2rem 1%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(50, 175, 239, 0.1);
+  width: 100%;
+}
+
+.messengerAlert h4 {
+  margin: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-size: 18px;
+}
+.dtailsMessagesTabsComponent {
+  min-height: 50%;
+  width: 100%;
 }

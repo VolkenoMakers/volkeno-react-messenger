@@ -85,18 +85,20 @@ export const VolkenoReactMessenger = ({
           </div>
           <div className={styles.blocSearchMessage}>
             <form>
-              <input
-                className={styles.formControlSearch}
-                type='search'
-                placeholder='Rechercher'
-              />
-              <button
-                type='submit'
-                value='search'
-                className={styles.btnSearchIcon}
-              >
-                <i className='fa fa-search' aria-hidden='true'></i>
-              </button>
+              <div className={styles.customPosRelative}>
+                <input
+                  className={styles.formControlSearch}
+                  type='search'
+                  placeholder='Rechercher'
+                />
+                <button
+                  type='submit'
+                  value='search'
+                  className={styles.btnSearchIcon}
+                >
+                  <i className='fa fa-search' aria-hidden='true'></i>
+                </button>
+              </div>
             </form>
           </div>
           <ul className={styles.listGroupMessage}>
@@ -105,7 +107,7 @@ export const VolkenoReactMessenger = ({
                 <Sommaire
                   active={selectedChat === chat}
                   item={chat}
-                  onClick={() => setSelectedUser(chat.user)}
+                  onClick={() => setSelectedUser(chat?.user)}
                   key={chat?.user?.id}
                 />
               ))}
@@ -168,7 +170,7 @@ function Sommaire({
                       whiteSpace: 'nowrap'
                     }}
                   >
-                    {item?.lastMessage?.content?.slice(0, 100)}
+                    {item?.lastMessage?.content?.slice(0, 30)}
                   </p>
                 </div>
                 <div className=''>
@@ -227,11 +229,10 @@ function DetailsMessageTabsAdmin({
   if (!user)
     return (
       <div
-        className='dtails-messages-tabs-component'
-        style={{ minHeight: '50%' }}
+        className={styles.dtailsMessagesTabsComponent}
       >
-        <div>Pas de discussion ouverte</div>
-        {/* <AlertInfo message="Pas de discussion ouverte" /> */}
+        {/* <div>Pas de discussion ouverte</div> */}
+        <AlertInfo message="Pas de discussion ouverte" />
       </div>
     )
 
@@ -263,9 +264,9 @@ function DetailsMessageTabsAdmin({
       <div className={styles.blocDetails}>
         {chat?.messages?.map((message) => {
           if (message?.sender?.id === user?.id) {
-            return <Message item={message} key={message.id} />
+            return <Message item={message} key={message?.id} />
           }
-          return <Response item={message} key={message.id} />
+          return <Response item={message} key={message?.id} />
         })}
       </div>
       <div className={styles.containerChatInput}>
@@ -310,11 +311,11 @@ function Message({ item }: { item: Chat }) {
     <div className={styles.receivedMsgItem}>
       <div className={styles.conatinerReceivedMsgItem}>
         <div className={styles.contentImgReceivedMsgItem}>
-          {/* <img
+          {item?.avatar && <img
                   src={item?.avatar}
                   className={styles.imgReceivedMsg}
                   alt="image profil contact"
-                /> */}
+                />}
         </div>
         <div className={styles.containerTextMessageRecu}>
           <div className={styles.blocMessageRecu}>
@@ -344,4 +345,18 @@ function Response({ item }: { item: Chat }) {
       </div>
     </div>
   )
+}
+
+type PropsType = {
+	message: string;
+};
+export function AlertInfo({ message }: PropsType) {
+	return (
+		<div className="px-3">
+			<div className={styles.messengerAlert} role="alert">
+				{/* <FiAlertCircle style={{ fontSize: 24 }} /> */}
+				<h4>{message}</h4>
+			</div>
+		</div>
+	);
 }

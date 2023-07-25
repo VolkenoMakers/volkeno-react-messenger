@@ -57,16 +57,15 @@ export const user = {
 
 export const chatData = [
   {
-    lastMessage:
-      'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+    lastMessage: {
+        content: 'Creation Ipsum is simply dummy text of the printing and typesetting industry.'
+    },
     user: {
       id: 1,
       prenom: 'Paul',
       nom: 'Gomis',
       email: 'paul.gomis@gmail.com',
       avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`,
-      lastMessage:
-        'Lorem ipsum dolor sit amet consectetur. Cursus magna mollis.'
     },
     messages: [
       {
@@ -76,8 +75,9 @@ export const chatData = [
         date: '09:04 PM',
         type: 'send',
         sender: {
-          id: 20
-        }
+          id: 1
+        },
+        avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`,
       },
       {
         id: 1,
@@ -100,7 +100,11 @@ export const chatData = [
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
         date: '09:04 PM',
-        type: 'send'
+        type: 'send',
+        sender: {
+            id: 1
+          },
+          avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`,
       },
       {
         id: 4,
@@ -115,26 +119,18 @@ export const chatData = [
   },
 
   {
-    lastMessage:
-      'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+    lastMessage: {
+        content: 'Creation Ipsum is simply dummy text of the printing and typesetting industry.'
+    },
     user: {
       id: 2,
       prenom: 'Mardoché',
       nom: 'Kiki',
       email: 'paul.gomis@gmail.com',
       avatar: `https://ui-avatars.com/api/?name=Mardoché+Kiki`,
-      lastMessage:
-        'Lorem ipsum dolor sit amet consectetur. Cursus magna mollis.'
     },
     messages: [
-      {
-        id: 3,
-        content:
-          'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
-        date: '09:04 PM',
-        type: 'send'
-      },
-      {
+        {
         id: 1,
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
@@ -142,6 +138,18 @@ export const chatData = [
         type: 'received',
         sender: sender
       },
+      {
+        id: 3,
+        content:
+          'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+        date: '09:04 PM',
+        type: 'send',
+        sender: {
+            id: 2
+          },
+          avatar: `https://ui-avatars.com/api/?name=Mardoché+Kiki`,
+      },
+      
       {
         id: 2,
         content:
@@ -155,7 +163,11 @@ export const chatData = [
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
         date: '09:04 PM',
-        type: 'send'
+        type: 'send',
+        sender: {
+            id: 2
+          },
+          avatar: `https://ui-avatars.com/api/?name=Mardoché+Kiki`,
       },
       {
         id: 4,
@@ -169,25 +181,28 @@ export const chatData = [
     count: 5
   },
   {
-    lastMessage:
-      'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+    lastMessage: {
+        content: 'Creation Ipsum is simply dummy text of the printing and typesetting industry.'
+    },
     user: {
       id: 3,
       prenom: 'Mbaye',
       nom: 'Niass',
       email: 'paul.gomis@gmail.com',
       avatar: `https://ui-avatars.com/api/?name=Mbaye+Niass`,
-      lastMessage:
-        'Lorem ipsum dolor sit amet consectetur. Cursus magna mollis.'
     },
     messages: [
-      {
-        id: 3,
-        content:
-          'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
-        date: '09:04 PM',
-        type: 'send'
-      },
+        {
+            id: 3,
+            content:
+              'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+            date: '09:04 PM',
+            type: 'send',
+            sender: {
+                id: 3
+              },
+              avatar: `https://ui-avatars.com/api/?name=Mbaye+Niass`,
+          },
       {
         id: 1,
         content:
@@ -209,7 +224,11 @@ export const chatData = [
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
         date: '09:04 PM',
-        type: 'send'
+        type: 'send',
+        sender: {
+            id: 3
+          },
+          avatar: `https://ui-avatars.com/api/?name=Mbaye+Niass`,
       },
       {
         id: 4,
@@ -223,16 +242,15 @@ export const chatData = [
     count: 5
   },
   {
-    lastMessage:
-      'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+    lastMessage: {
+        content: 'Creation Ipsum is simply dummy text of the printing and typesetting industry.'
+    },
     user: {
       id: 4,
       prenom: 'Chérif',
       nom: 'Guissé',
       email: 'paul.gomis@gmail.com',
       avatar: `https://ui-avatars.com/api/?name=Chérif+Guissé`,
-      lastMessage:
-        'Lorem ipsum dolor sit amet consectetur. Cursus magna mollis.'
     },
     messages: [
       {
@@ -240,7 +258,22 @@ export const chatData = [
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
         date: '09:04 PM',
-        type: 'send'
+        type: 'send',
+        sender: {
+            id: 4
+          },
+          avatar: `https://ui-avatars.com/api/?name=Chérif+Guissé`,
+      },
+      {
+        id: 3,
+        content:
+          'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+        date: '09:04 PM',
+        type: 'send',
+        sender: {
+            id: 4
+          },
+          avatar: `https://ui-avatars.com/api/?name=Chérif+Guissé`,
       },
       {
         id: 1,
@@ -263,7 +296,11 @@ export const chatData = [
         content:
           'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
         date: '09:04 PM',
-        type: 'send'
+        type: 'send',
+        sender: {
+            id: 4
+          },
+          avatar: `https://ui-avatars.com/api/?name=Chérif+Guissé`,
       },
       {
         id: 4,

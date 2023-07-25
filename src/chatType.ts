@@ -33,6 +33,7 @@ export type Chat = {
   sender: IUser
   recever: IUser
   created_at: string
+  avatar?: string
 }
 export type ChatFormData = Partial<
   Pick<Chat, 'content' | 'slug' | 'read' | 'is_read'> & {
