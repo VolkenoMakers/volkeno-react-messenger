@@ -545,3 +545,13 @@ button.btn.btn.btn-see-more.notif-disabled {
   min-height: 50%;
   width: 100%;
 }
+
+.statutMessageTabsTraite {
+  color: #2ed47a;
+}
+.statutMessageTabsNonTraite {
+  color: gray;
+}
+.statutMessageTabsErreur {
+  color: #ff3c5f;
+}
