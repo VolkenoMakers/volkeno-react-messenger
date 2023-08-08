@@ -1,427 +1,368 @@
 import * as React from 'react'
 import styles from './styles.module.css'
-import { chatData } from './data';
+import { Chat, ChatData, IUser } from './chatType'
+import moment from 'moment'
 
 interface Props {
-  titlePage: string;
-  StatutConnect: string;
-  usersList: any;
-  recever: any;
-  sender: any;
-  date: string
+  titlePage: string
+  date?: string
+  StatutConnect: string
+  usersList: any
+  sender: any
+  recever: any
+  chatData: any
+  user: any
 }
 
-export const VolkenoReactMessenger = ({ titlePage, date, StatutConnect, usersList, sender }: Props) => {
- 
+export const VolkenoReactMessenger = ({
+  titlePage,
+  usersList,
+  chatData,
+  user
+}: Props) => {
+  console.log('chatData', chatData)
+  console.log('usersList', usersList)
+
+  // const userId = useAppSelector((s) => s.user.user?.id);
+  const userId = user?.id
+
+  // const [isSuccess, setIsSuccess] = React.useState<boolean>(true);
+  const [filteredChat, setFilteredChat] = React.useState<ChatData[]>([])
+  const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null)
+  // const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
+  const [selectedChat, setSelectedChat] = React.useState<ChatData | null>(null)
+  // const sUser = useLocationState<IUser>(null);
+
+  const [count, setCount] = React.useState(0)
+  React.useEffect(() => {
+    // if (isSuccess) {
+    setFilteredChat(chatData)
+    // }
+  }, [
+    chatData
+    // isSuccess
+  ])
+
+  React.useEffect(() => {
+    let newCount = 0
+    if (filteredChat?.length) {
+      filteredChat.forEach((item) => {
+        newCount += item?.messages?.filter(
+          (el) => el?.recever?.id === userId && el?.is_read === false
+        )?.length
+      })
+    }
+    setCount(newCount)
+    console.log(count)
+  }, [filteredChat])
+
+  // React.useEffect(() => {
+  //   if (!selectedUser) {
+  //     if (sUser && userId !== sUser?.id) {
+  //       setSelectedUser(sUser);
+  //     } else {
+  //       if (chatData?.length > 0) {
+  //         setSelectedUser(chatData[0].user);
+  //       }
+  //     }
+  //   }
+  // }, [sUser, chatData, selectedUser, userId]);
+  React.useEffect(() => {
+    if (selectedUser) {
+      setSelectedChat(
+        chatData.find((l: any) => l.user.id === selectedUser.id) || null
+      )
+    } else {
+      setSelectedChat(null)
+    }
+  }, [selectedUser, chatData])
   return (
-  <div className={styles.containerPage}>
-     <div className={styles.containerMessenger}>
-      <div  className={styles.containerSectionDiscussion}>
-        <div className={styles.contentTitleDiscussion}>
-          <p className={styles.titreMessagesBloc}>
-            {titlePage}
-          </p>
-        </div>
-        <div className={styles.blocSearchMessage}>
-          <form className={styles.formSearch}>
-            <input
-              className={styles.formControlSearch}
-              type="search"
-              placeholder="Rechercher"
-            />
-            <button type="submit" value="search" className={styles.btnSearchIcon}>
-              <i className="fa fa-search" aria-hidden="true"></i>
-            </button>
-          </form>
-        </div>
-        <ul className={styles.listGroupMessage}>
-          {usersList.map((item:any, index:number) => 
-          <li className={`${styles.listGroupItemMeessage} ${index === 0 && styles.active} `} key={item?.id}>
-          <div>
-            <div className={styles.blocProfilContact}>
-              <div className={styles.containerListMessageItem}>
-                <img
-                  src={item?.avatar}
-                  className={styles.imgMessgeContact}
-                  alt="image profil contact"
+    <div className={styles.containerPage}>
+      <div className={styles.containerMessenger}>
+        <div className={styles.containerSectionDiscussion}>
+          <div className={styles.contentTitleDiscussion}>
+            <p className={styles.titreMessagesBloc}>{titlePage}</p>
+          </div>
+          <div className={styles.blocSearchMessage}>
+            <form>
+              <div className={styles.customPosRelative}>
+                <input
+                  className={styles.formControlSearch}
+                  type='search'
+                  placeholder='Rechercher'
                 />
-                <div className={styles.contentTextMessageList}>
-                  <div className={styles.containerHeaderMessageList}>
-                    <p className={styles.nomContact}>{item?.name + " " + item?.lastName}</p>
-                    <p className={styles.timeMessageContact}>{date}</p>
-                  </div>
-                  <div className={styles.blocMessageContact}>
-                    <div className="">
-                      <p
-                        className={styles.contenuMessageContact}
-                        style={{
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {item.lastMessage}
-                      </p>
-                    </div>
-                    <div className="">
-                      <span className={`${styles.statutMessageTabsTraite}`}>
-                      <i className="fa-solid fa-check-double"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <button
+                  type='submit'
+                  value='search'
+                  className={styles.btnSearchIcon}
+                >
+                  <i className='fa fa-search' aria-hidden='true'></i>
+                </button>
               </div>
-            </div>
+            </form>
           </div>
-        </li>
-          )}
-        </ul>
-      </div>
-      <div className={styles.containerDetailMessage}>
-        <div className={styles.containerSectionHeaderDetailMessage}>
-          <div className={styles.contentImgProfil}>
-            <img
-              src={sender?.avatar}
-              className={styles.imgReceivedMsg}
-              alt="profil detail message"
-            />
-          </div>
-          <div className={styles.contentTextUserConnectMessage}>
-            <div className={styles.msgUserInfosContainer}>
-              <div className={styles.contentMsgUserName}>
-                <p className={styles.profilDetailMessage}>{sender?.name + " " + sender?.lastName}</p>
+          <ul className={styles.listGroupMessage}>
+            {chatData &&
+              chatData?.map((chat: any) => (
+                <Sommaire
+                  active={selectedChat === chat}
+                  item={chat}
+                  onClick={() => setSelectedUser(chat?.user)}
+                  key={chat?.user?.id}
+                />
+              ))}
+          </ul>
+          <div className="no-view-desktop">
+              <div className={styles.detailMessageMobile}>
+                <DetailsMessageTabsAdmin
+                    user={selectedUser}
+                    // user={user}
+                    chat={selectedChat}
+                  />
               </div>
-              <div className={`${styles.blocUserDisconnectTime} ${styles.msgUserLastonline}`}>
-                <p className={styles.textDisconnectTime}>
-                  {StatutConnect}
-                </p>
-              </div>
-            </div>
-          </div>
+					</div>
         </div>
-        <div className={styles.blocDetails}>
-          {console.log('data item', chatData)}
-          {chatData?.map((message) => {
-            if(message?.type === "received") {
-              return <Message item={message} key={message?.id} />
-            } else {
-              return <Response item={message} key={message?.id} />
-            }
-          })}
-          
-        </div>
-        <div className={styles.containerChatInput}>
-          <form>
-            <div className={styles.leftFooter}>
-              <div className={styles.leftFooterContainer}>
-                <div className={styles.inputGroup}>
-                  <div className={styles.inputContainer}>
-                    <div className={styles.containerDisplayInputMessage}>
-                      <span className={styles.share}>
-                        <i className="fa-solid fa-link img-icon-chat" ></i>
-                      </span>
-                      <div className={styles.containerTextarea}>
-                        <textarea
-                          className={styles.textarreaMessageCustomChat}
-                          rows={1}
-                          name="reponse"
-                          placeholder="Type your message here..."
-                        ></textarea>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.customBtnChatContainer}>
-                  <div className={styles.emoji}>
-                    <i className="fa-regular fa-face-smile"></i>
-                  </div>
-                  <button type="submit" className={styles.btnSendMessageTabs}>
-                    <i className="fa-solid fa-paper-plane"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-     </div>
-    </div>)
-}
-
-export const Message = ({item}: {item: any}) => {
- 
-  return (
-    <div className={styles.receivedMsgItem}>
-    <div className={styles.conatinerReceivedMsgItem}>
-      <div className={styles.contentImgReceivedMsgItem}>
-        <img
-          src={item?.sender?.avatar}
-          className={styles.imgReceivedMsg}
-          alt="image profil contact"
+        <DetailsMessageTabsAdmin
+          user={selectedUser}
+          // user={user}
+          chat={selectedChat}
         />
       </div>
-      <div className={styles.containerTextMessageRecu}>
-        <div className={styles.blocMessageRecu}>
-          <div className={styles.textMessageRecu}>
-            {item?.content}
-          </div>
-        </div>
-        <span className={styles.timeDetailMessage}>{item?.created_at}</span>
-      </div>
     </div>
-  </div>
   )
 }
 
-export const Response = ({item}: {item: any}) => {
+function Sommaire({
+  item,
+  onClick,
+  active
+}: {
+  item: ChatData
+  onClick: () => any
+  active: boolean
+}) {
+  const send = item?.lastMessage?.sender?.id !== item?.user?.id
+  const receive = item?.lastMessage?.recever?.id !== item?.user?.id
+  const [notRead, setNotRead] = React.useState([{}])
+  React.useEffect(() => {
+    setNotRead(item?.messages?.filter((itm) => itm?.is_read === false))
+  }, [item?.messages])
   return (
-    <div className={styles.blocReponse}>
-            <div className={styles.sendingMsgItem}>
-              <div className={styles.blocMessageEnvoyer}>
-                <div className={styles.textMessageEnvoyer}>
-                {item?.content}
-                </div>
+    <li
+      onClick={onClick}
+      className={`${styles.listGroupItemMeessage} ${active && styles.active} `}
+    >
+      <div>
+        <div className={styles.blocProfilContact}>
+          <div className={styles.containerListMessageItem}>
+            <div>
+            <img
+              src={item?.user?.avatar}
+              className={styles.imgMessgeContact}
+              alt='image profil contact'
+            />
+            </div>
+            <div className={styles.contentTextMessageList}>
+              <div className={styles.containerHeaderMessageList}>
+                <p className={styles.nomContact}>
+                  {item?.user?.prenom} {item?.user?.nom}
+                </p>
+                <p className={styles.timeMessageContact}>
+                  {moment(item?.lastMessage?.created_at).calendar()}
+                </p>
               </div>
-              <div className={styles.contentStatutMessageDelivered}>
-                <span className={styles.timeDetailMessage}>{item?.created_at}</span>
+              <div className={styles.blocMessageContact}>
+                <div className=''>
+                  <p
+                    className={styles.contenuMessageContact}
+                  >
+                    {item?.lastMessage?.content?.slice(0, 30)}
+                  </p>
+                </div>
+                <div className=''>
+                  {receive && notRead?.length > 0 && (
+                    <span>
+                      <span className='statutMessageTabsNonLu'>
+                        {notRead?.length}
+                      </span>
+                    </span>
+                  )}
+                  {send && (
+                    <span className=''>
+                      <span
+                        className={
+                          notRead?.length === 0
+                            ? 'statutMessageTabsTraite'
+                            : 'statutMessageTabsNonTraite'
+                        }
+                      >
+                        <i className='fa-solid fa-check-double'></i>
+                      </span>
+                    </span>
+                  )}
+                </div>
+                {/* <div className="">
+                         <span className={`${styles.statutMessageTabsTraite}`}>
+                         <i className="fa-solid fa-check-double"></i>
+                         </span>
+                       </div> */}
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </li>
   )
 }
-// function DetailsMessagerieAdmin({avatar}: {avatar: string}) {
-//   return (
-//     <div className="dtails-messages-tabs-component">
-//       <div className="d-flex gap-3 align-items-center border-bottom p-3">
-//         <div className="">
-//           <img
-//             src={avatar}
-//             className="img-received-msg"
-//             alt="profil detail message"
-//             style={{ width: "60", height: "60" }}
-//           />
-//         </div>
-//         <div className="">
-//           <div className="msg-user-infos-container">
-//             <div className="d-flex align-items-center msg-user-name">
-//               <p className="profil-detail-message mb-0">Esther Howard</p>
-//             </div>
-//             <div className="bloc-user-disconnect-time msg-user-lastonline">
-//               <p className="text-disconnect-time mb-0">
-//                 Online - Last seen, 2.02pm
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       <div className="bloc-details pb-5">
-//         <Message  avatar={avatar} />
-//         <Response  />
-//       </div>
-//       <ChatInput />
-//     </div>
-//   );
-// }
 
-// function Message({avatar}: {avatar: string}) {
-//   return (
-//     <div className="received-msg-item">
-//         <img
-//             src={avatar}
-//             className="img-received-msg"
-//             alt="image profil contact"
-//           />
-//         </div>
-//         <div className="container-text-message-recu">
-//           <div className="bloc-message-recu mb-2">
-//             <div className="text-message-recu">
-//               Creation Ipsum is simply dummy text of the printing and
-//               typesetting industry.{" "}
-//             </div>
-//           </div>
-//           <span className="time-detail-message">09:04 PM</span>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+function DetailsMessageTabsAdmin({
+  chat,
+  user
+}: {
+  chat: ChatData | null
+  user: IUser | null
+}) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (ref.current) {
+        ref.current.scrollTo({
+          top: ref.current.scrollHeight
+        })
+      }
+    }, 500)
+  }, [ref.current, chat])
+  if (!user)
+    return (
+      <div
+        className={styles.dtailsMessagesTabsComponent}
+      >
+        {/* <div>Pas de discussion ouverte</div> */}
+        <AlertInfo message="Pas de discussion ouverte" />
+      </div>
+    )
 
-// function Response() {
-//   return (
-//     <div className="bloc-reponse">
-//       <div className="sending-msg-item">
-//         <div className="bloc-message-envoyer">
-//           <div className="text-message-envoyer mb-2">
-//             Creation Ipsum is simply dummy text of the printing and typesetting
-//             industry.{" "}
-//           </div>
-//         </div>
-//         <div className="d-flex justify-content-end align-items-center">
-//           <span className="time-detail-message px-2">Delivered</span>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+  return (
+    <div className={styles.containerDetailMessage}>
+      <div className={styles.containerSectionHeaderDetailMessage}>
+        <div className={styles.contentImgProfil}>
+          <img
+            src={user?.avatar}
+            className={styles.imgReceivedMsg}
+            alt='profil detail message'
+          />
+        </div>
+        <div className={styles.contentTextUserConnectMessage}>
+          <div className={styles.msgUserInfosContainer}>
+            <div className={styles.contentMsgUserName}>
+              <p className={styles.profilDetailMessage}>
+                {user?.prenom} {user?.nom}
+              </p>
+            </div>
+            <div
+              className={`${styles.blocUserDisconnectTime} ${styles.msgUserLastonline}`}
+            >
+              <p className={styles.textDisconnectTime}>En ligne</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.blocDetails}>
+        {chat?.messages?.map((message) => {
+          if (message?.sender?.id === user?.id) {
+            return <Message item={message} key={message?.id} />
+          }
+          return <Response item={message} key={message?.id} />
+        })}
+      </div>
+      <div className={styles.containerChatInput}>
+        <form>
+          <div className={styles.leftFooter}>
+            <div className={styles.leftFooterContainer}>
+              <div className={styles.inputGroup}>
+                <div className={styles.inputContainer}>
+                  <div className={styles.containerDisplayInputMessage}>
+                    <span className={styles.share}>
+                      <i className='fa-solid fa-link img-icon-chat'></i>
+                    </span>
+                    <div className={styles.containerTextarea}>
+                      <textarea
+                        className={styles.textarreaMessageCustomChat}
+                        rows={1}
+                        name='reponse'
+                        placeholder='Type your message here...'
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.customBtnChatContainer}>
+                <div className={styles.emoji}>
+                  <i className='fa-regular fa-face-smile'></i>
+                </div>
+                <button type='submit' className={styles.btnSendMessageTabs}>
+                  <i className='fa-solid fa-paper-plane'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
 
-// function ChatInput() {
-//   return (
-//     <div className="p-3 border-top">
-//       <form>
-//         <div className="left-footer">
-//           <div className="left-footer-container">
-//             <div className="input-group">
-//               <div className="input-container">
-//                 <div className="container-display-input-message">
-//                   <div className="share">
-//                     <i className="fa-solid fa-link img-icon-chat" ></i>
-//                   </div>
-//                   <div className="inp w-100">
-//                     <textarea
-//                       className="textarrea-message-custom-chat form-control"
-//                       rows={1}
-//                       name="reponse"
-//                       placeholder="Type your message here..."
-//                     ></textarea>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//             <div className="btn-container custom-btn-chat-container">
-//               <div className="emoji">
-//               <i className="fa-regular fa-face-smile"></i>
-//               </div>
-//               <button type="submit" className="btn btn-send-message-tabs">
-//               <i className="fa-solid fa-paper-plane"></i>
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
+function Message({ item }: { item: Chat }) {
+  return (
+    <div className={styles.receivedMsgItem}>
+      <div className={styles.conatinerReceivedMsgItem}>
+        <div className={styles.contentImgReceivedMsgItem}>
+          {item?.avatar && <img
+                  src={item?.avatar}
+                  className={styles.imgReceivedMsg}
+                  alt="image profil contact"
+                />}
+        </div>
+        <div className={styles.containerTextMessageRecu}>
+          <div className={styles.blocMessageRecu}>
+            <div className={styles.textMessageRecu}>{item?.content}</div>
+          </div>
+          <span className={styles.timeDetailMessage}>
+            {moment(item?.created_at).calendar()}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-// function Sommaire({avatar}: {avatar: string}) {
-//   return (
-//     <>
-//       <li className="list-group-item list-group-item-meessage linkable active">
-//         <div>
-//           <div className="bloc-profil-contact">
-//             <div className="d-flex align-items-center gap-3 w-100">
-//               <img
-//                 src={avatar}
-//                 className="img-messge-contact"
-//                 alt="image profil contact"
-//               />
-//               <div className="w-90">
-//                 <div className="container-header-message-list">
-//                   <p className="nom-contact mb-0 active">Esther Howard</p>
-//                   <p className="time-message-contact mb-0">8:10 PM</p>
-//                 </div>
-//                 <div className="bloc-message-contact">
-//                   <div className="w-50">
-//                     <p
-//                       className="contenu-message-contact linkable mb-0"
-//                       style={{
-//                         textOverflow: "ellipsis",
-//                         overflow: "hidden",
-//                         whiteSpace: "nowrap",
-//                       }}
-//                     >
-//                       Lorem ipsum dolor sit amet consectetur. Cursus magna
-//                       mollis.
-//                     </p>
-//                   </div>
-//                   <div className="">
-//                     <span className="statut-message-tabs-traite statut-message-tabs-non-traite">
-//                     <i className="fa-solid fa-check-double"></i>
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </li>
-//       <li className="list-group-item list-group-item-meessage linkable">
-//         <div>
-//           <div className="bloc-profil-contact">
-//             <div className="d-flex align-items-center gap-3 w-100">
-//               <img
-//                 src={avatar}
-//                 className="img-messge-contact"
-//                 alt="image profil contact"
-//               />
-//               <div className="w-90">
-//                 <div className="container-header-message-list">
-//                   <p className="nom-contact mb-0">Esther Howard</p>
-//                   <p className="time-message-contact mb-0">8:10 PM</p>
-//                 </div>
-//                 <div className="bloc-message-contact">
-//                   <div className="w-50">
-//                     <p
-//                       className="contenu-message-contact linkable mb-0"
-//                       style={{
-//                         textOverflow: "ellipsis",
-//                         overflow: "hidden",
-//                         whiteSpace: "nowrap",
-//                       }}
-//                     >
-//                       Lorem ipsum dolor sit amet consectetur. Cursus magna
-//                       mollis.
-//                     </p>
-//                   </div>
-//                   <div className="">
-//                     <span className="statut-message-tabs-traite statut-message-tabs-non-traite">
-//                       <i className="fa-solid fa-check-double"></i>
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </li>
-//       <li className="list-group-item list-group-item-meessage linkable">
-//         <div>
-//           <div className="bloc-profil-contact">
-//             <div className="d-flex align-items-center gap-3 w-100">
-//               <img
-//                 src={avatar}
-//                 className="img-messge-contact"
-//                 alt="image profil contact"
-//               />
-//               <div className="w-90">
-//                 <div className="container-header-message-list">
-//                   <p className="nom-contact mb-0">Esther Howard</p>
-//                   <p className="time-message-contact mb-0">8:10 PM</p>
-//                 </div>
-//                 <div className="bloc-message-contact">
-//                   <div className="w-50">
-//                     <p
-//                       className="contenu-message-contact linkable mb-0"
-//                       style={{
-//                         textOverflow: "ellipsis",
-//                         overflow: "hidden",
-//                         whiteSpace: "nowrap",
-//                       }}
-//                     >
-//                       Lorem ipsum dolor sit amet consectetur. Cursus magna
-//                       mollis.
-//                     </p>
-//                   </div>
-//                   <div className="">
-//                     <span className="statut-message-tabs-traite statut-message-tabs-non-traite">
-//                       <i className="fa-solid fa-check-double"></i>
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </li>
-//     </>
-//   );
-// }
+function Response({ item }: { item: Chat }) {
+  return (
+    <div className={styles.blocReponse}>
+      <div className={styles.sendingMsgItem}>
+        <div className={styles.blocMessageEnvoyer}>
+          <div className={styles.textMessageEnvoyer}>{item?.content}</div>
+        </div>
+        <div className={styles.contentStatutMessageDelivered}>
+          <span className={styles.timeDetailMessage}>
+            {moment(item?.created_at).calendar()}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type PropsType = {
+	message: string;
+};
+export function AlertInfo({ message }: PropsType) {
+	return (
+		<div className="px-3">
+			<div className={styles.messengerAlert} role="alert">
+				{/* <FiAlertCircle style={{ fontSize: 24 }} /> */}
+				<h4>{message}</h4>
+			</div>
+		</div>
+	);
+}

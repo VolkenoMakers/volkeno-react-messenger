@@ -30,7 +30,7 @@
   },
   "include": [
     "src"
-  ],
+, "src/data.ts"  ],
   "exclude": [
     "node_modules",
     "build"
