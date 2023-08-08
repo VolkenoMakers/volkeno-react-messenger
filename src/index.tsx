@@ -1,20 +1,18 @@
 import * as React from 'react'
 import styles from './styles.module.css'
+import { chatData } from './data';
 
 interface Props {
   titlePage: string;
-  avatar: any;
-  name: string;
-  date: string;
-  text: string;
   StatutConnect: string;
-  messageRecevied: string;
-  timeMessageReceved: string;
-  textMessageSend: string;
-  StatutMessageDelivered: string
+  usersList: any;
+  recever: any;
+  sender: any;
+  date: string
 }
 
-export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, StatutConnect, messageRecevied, timeMessageReceved, textMessageSend, StatutMessageDelivered }: Props) => {
+export const VolkenoReactMessenger = ({ titlePage, date, StatutConnect, usersList, sender }: Props) => {
+ 
   return (
   <div className={styles.containerPage}>
      <div className={styles.containerMessenger}>
@@ -25,7 +23,7 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
           </p>
         </div>
         <div className={styles.blocSearchMessage}>
-          <form>
+          <form className={styles.formSearch}>
             <input
               className={styles.formControlSearch}
               type="search"
@@ -37,127 +35,53 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
           </form>
         </div>
         <ul className={styles.listGroupMessage}>
-          <li className={`${styles.listGroupItemMeessage} ${styles.active} `}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
+          {usersList.map((item:any, index:number) => 
+          <li className={`${styles.listGroupItemMeessage} ${index === 0 && styles.active} `} key={item?.id}>
+          <div>
+            <div className={styles.blocProfilContact}>
+              <div className={styles.containerListMessageItem}>
+                <img
+                  src={item?.avatar}
+                  className={styles.imgMessgeContact}
+                  alt="image profil contact"
+                />
+                <div className={styles.contentTextMessageList}>
+                  <div className={styles.containerHeaderMessageList}>
+                    <p className={styles.nomContact}>{item?.name + " " + item?.lastName}</p>
+                    <p className={styles.timeMessageContact}>{date}</p>
+                  </div>
+                  <div className={styles.blocMessageContact}>
+                    <div className="">
+                      <p
+                        className={styles.contenuMessageContact}
+                        style={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {item.lastMessage}
+                      </p>
                     </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsTraite}`}>
-                        <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
+                    <div className="">
+                      <span className={`${styles.statutMessageTabsTraite}`}>
+                      <i className="fa-solid fa-check-double"></i>
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </li>
-          <li className={`${styles.listGroupItemMeessage}`}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
-                    </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsNonTraite}`}>
-                          <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className={`${styles.listGroupItemMeessage}`}>
-            <div>
-              <div className={styles.blocProfilContact}>
-                <div className={styles.containerListMessageItem}>
-                  <img
-                    src={avatar}
-                    className={styles.imgMessgeContact}
-                    alt="image profil contact"
-                  />
-                  <div className={styles.contentTextMessageList}>
-                    <div className={styles.containerHeaderMessageList}>
-                      <p className={styles.nomContact}>{name}</p>
-                      <p className={styles.timeMessageContact}>{date}</p>
-                    </div>
-                    <div className={styles.blocMessageContact}>
-                      <div className="">
-                        <p
-                          className={styles.contenuMessageContact}
-                          style={{
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                      <div className="">
-                        <span className={`${styles.statutMessageTabsErreur}`}>
-                        <i className="fa-solid fa-check-double"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
+          </div>
+        </li>
+          )}
         </ul>
       </div>
       <div className={styles.containerDetailMessage}>
         <div className={styles.containerSectionHeaderDetailMessage}>
           <div className={styles.contentImgProfil}>
             <img
-              src={avatar}
+              src={sender?.avatar}
               className={styles.imgReceivedMsg}
               alt="profil detail message"
             />
@@ -165,7 +89,7 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
           <div className={styles.contentTextUserConnectMessage}>
             <div className={styles.msgUserInfosContainer}>
               <div className={styles.contentMsgUserName}>
-                <p className={styles.profilDetailMessage}>{name}</p>
+                <p className={styles.profilDetailMessage}>{sender?.name + " " + sender?.lastName}</p>
               </div>
               <div className={`${styles.blocUserDisconnectTime} ${styles.msgUserLastonline}`}>
                 <p className={styles.textDisconnectTime}>
@@ -176,130 +100,15 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
           </div>
         </div>
         <div className={styles.blocDetails}>
-          <div className={styles.receivedMsgItem}>
-            <div className={styles.conatinerReceivedMsgItem}>
-              <div className={styles.contentImgReceivedMsgItem}>
-                <img
-                  src={avatar}
-                  className={styles.imgReceivedMsg}
-                  alt="image profil contact"
-                />
-              </div>
-              <div className={styles.containerTextMessageRecu}>
-                <div className={styles.blocMessageRecu}>
-                  <div className={styles.textMessageRecu}>
-                    {messageRecevied}
-                  </div>
-                </div>
-                <span className={styles.timeDetailMessage}>{timeMessageReceved}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.blocReponse}>
-            <div className={styles.sendingMsgItem}>
-              <div className={styles.blocMessageEnvoyer}>
-                <div className={styles.textMessageEnvoyer}>
-                  {textMessageSend}
-                </div>
-              </div>
-              <div className={styles.contentStatutMessageDelivered}>
-                <span className={styles.timeDetailMessage}>{StatutMessageDelivered}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.receivedMsgItem}>
-            <div className={styles.conatinerReceivedMsgItem}>
-              <div className={styles.contentImgReceivedMsgItem}>
-                <img
-                  src={avatar}
-                  className={styles.imgReceivedMsg}
-                  alt="image profil contact"
-                />
-              </div>
-              <div className={styles.containerTextMessageRecu}>
-                <div className={styles.blocMessageRecu}>
-                  <div className={styles.textMessageRecu}>
-                    {messageRecevied}
-                  </div>
-                </div>
-                <span className={styles.timeDetailMessage}>{timeMessageReceved}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.blocReponse}>
-            <div className={styles.sendingMsgItem}>
-              <div className={styles.blocMessageEnvoyer}>
-                <div className={styles.textMessageEnvoyer}>
-                  {textMessageSend}
-                </div>
-              </div>
-              <div className={styles.contentStatutMessageDelivered}>
-                <span className={styles.timeDetailMessage}>{StatutMessageDelivered}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.receivedMsgItem}>
-            <div className={styles.conatinerReceivedMsgItem}>
-              <div className={styles.contentImgReceivedMsgItem}>
-                <img
-                  src={avatar}
-                  className={styles.imgReceivedMsg}
-                  alt="image profil contact"
-                />
-              </div>
-              <div className={styles.containerTextMessageRecu}>
-                <div className={styles.blocMessageRecu}>
-                  <div className={styles.textMessageRecu}>
-                    {messageRecevied}
-                  </div>
-                </div>
-                <span className={styles.timeDetailMessage}>{timeMessageReceved}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.blocReponse}>
-            <div className={styles.sendingMsgItem}>
-              <div className={styles.blocMessageEnvoyer}>
-                <div className={styles.textMessageEnvoyer}>
-                  {textMessageSend}
-                </div>
-              </div>
-              <div className={styles.contentStatutMessageDelivered}>
-                <span className={styles.timeDetailMessage}>{StatutMessageDelivered}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.receivedMsgItem}>
-            <div className={styles.conatinerReceivedMsgItem}>
-              <div className={styles.contentImgReceivedMsgItem}>
-                <img
-                  src={avatar}
-                  className={styles.imgReceivedMsg}
-                  alt="image profil contact"
-                />
-              </div>
-              <div className={styles.containerTextMessageRecu}>
-                <div className={styles.blocMessageRecu}>
-                  <div className={styles.textMessageRecu}>
-                    {messageRecevied}
-                  </div>
-                </div>
-                <span className={styles.timeDetailMessage}>{timeMessageReceved}</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.blocReponse}>
-            <div className={styles.sendingMsgItem}>
-              <div className={styles.blocMessageEnvoyer}>
-                <div className={styles.textMessageEnvoyer}>
-                  {textMessageSend}
-                </div>
-              </div>
-              <div className={styles.contentStatutMessageDelivered}>
-                <span className={styles.timeDetailMessage}>{StatutMessageDelivered}</span>
-              </div>
-            </div>
-          </div>
+          {console.log('data item', chatData)}
+          {chatData?.map((message) => {
+            if(message?.type === "received") {
+              return <Message item={message} key={message?.id} />
+            } else {
+              return <Response item={message} key={message?.id} />
+            }
+          })}
+          
         </div>
         <div className={styles.containerChatInput}>
           <form>
@@ -339,8 +148,47 @@ export const VolkenoReactMessenger = ({ titlePage, avatar, name, date, text, Sta
     </div>)
 }
 
+export const Message = ({item}: {item: any}) => {
+ 
+  return (
+    <div className={styles.receivedMsgItem}>
+    <div className={styles.conatinerReceivedMsgItem}>
+      <div className={styles.contentImgReceivedMsgItem}>
+        <img
+          src={item?.sender?.avatar}
+          className={styles.imgReceivedMsg}
+          alt="image profil contact"
+        />
+      </div>
+      <div className={styles.containerTextMessageRecu}>
+        <div className={styles.blocMessageRecu}>
+          <div className={styles.textMessageRecu}>
+            {item?.content}
+          </div>
+        </div>
+        <span className={styles.timeDetailMessage}>{item?.created_at}</span>
+      </div>
+    </div>
+  </div>
+  )
+}
 
-
+export const Response = ({item}: {item: any}) => {
+  return (
+    <div className={styles.blocReponse}>
+            <div className={styles.sendingMsgItem}>
+              <div className={styles.blocMessageEnvoyer}>
+                <div className={styles.textMessageEnvoyer}>
+                {item?.content}
+                </div>
+              </div>
+              <div className={styles.contentStatutMessageDelivered}>
+                <span className={styles.timeDetailMessage}>{item?.created_at}</span>
+              </div>
+            </div>
+          </div>
+  )
+}
 // function DetailsMessagerieAdmin({avatar}: {avatar: string}) {
 //   return (
 //     <div className="dtails-messages-tabs-component">

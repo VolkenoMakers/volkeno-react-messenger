@@ -15,3 +15,9 @@ declare module '*.svg' {
   export default svgUrl;
   export { svgComponent as ReactComponent }
 }
+
+/// <reference types="react-scripts" />
+declare module "*.png" {
+  const src: string;
+  export default src;
+}
