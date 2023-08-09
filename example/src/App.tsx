@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { VolkenoReactMessenger } from 'volkeno-react-messenger'
 import 'volkeno-react-messenger/dist/index.css'
-import { chatData, recever, sender, user, usersList } from './data'
+import { chatData, useAddChatMutation, user } from './data'
 
 const App = () => {
+  const [conversation, setConversation] = useState<any>();
+
+  useEffect(() => {
+    setConversation(chatData);
+  }, [])
+  
   return (
     <VolkenoReactMessenger
       titlePage='Messages'
-      StatutConnect='En ligne'
-      usersList={usersList}
-      user={user}
-      sender={sender}
-      recever={recever}
-      chatData={chatData}
+      me={user}
+      chatData={conversation}
+      setConversation={setConversation}
+      AddChat={useAddChatMutation}
     />
   )
 }

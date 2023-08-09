@@ -5,32 +5,28 @@ import moment from 'moment'
 
 interface Props {
   titlePage: string
-  date?: string
-  StatutConnect: string
-  usersList: any
-  sender: any
-  recever: any
   chatData: any
-  user: any
+  me: IUser
+  AddChat: any
+  setConversation: any
 }
 
 export const VolkenoReactMessenger = ({
   titlePage,
-  usersList,
   chatData,
-  user
+  me,
+  AddChat,
+  setConversation
 }: Props) => {
-  console.log('chatData', chatData)
-  console.log('usersList', usersList)
-
   // const userId = useAppSelector((s) => s.user.user?.id);
-  const userId = user?.id
+  const userId = me?.id
 
   // const [isSuccess, setIsSuccess] = React.useState<boolean>(true);
   const [filteredChat, setFilteredChat] = React.useState<ChatData[]>([])
   const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null)
   // const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
   const [selectedChat, setSelectedChat] = React.useState<ChatData | null>(null)
+  const [conversationID, setConversationID] = React.useState<number | null>(null)
   // const sUser = useLocationState<IUser>(null);
 
   const [count, setCount] = React.useState(0)
@@ -107,16 +103,25 @@ export const VolkenoReactMessenger = ({
                 <Sommaire
                   active={selectedChat === chat}
                   item={chat}
-                  onClick={() => setSelectedUser(chat?.user)}
+                  onClick={() => {
+                    setConversationID(chat?.id);
+                    setSelectedUser(chat?.user)
+                  }}
                   key={chat?.user?.id}
+                  conversationID={conversationID}
                 />
               ))}
           </ul>
         </div>
         <DetailsMessageTabsAdmin
           user={selectedUser}
-          // user={user}
+          me={me}
           chat={selectedChat}
+          allConversation={chatData}
+          AddChat={AddChat}
+          conversationID={conversationID}
+          setConversation={setConversation}
+          setSelectedChat={setSelectedChat}
         />
       </div>
     </div>
@@ -126,12 +131,15 @@ export const VolkenoReactMessenger = ({
 function Sommaire({
   item,
   onClick,
-  active
+  active,
+  conversationID
 }: {
   item: ChatData
   onClick: () => any
-  active: boolean
+  active: boolean,
+  conversationID: any
 }) {
+  console.log(conversationID)
   const send = item?.lastMessage?.sender?.id !== item?.user?.id
   const receive = item?.lastMessage?.recever?.id !== item?.user?.id
   const [notRead, setNotRead] = React.useState([{}])
@@ -186,8 +194,8 @@ function Sommaire({
                       <span
                         className={
                           notRead?.length === 0
-                            ? 'statut-message-tabs-traite'
-                            : 'statut-message-tabs-non-traite'
+                            ? styles.statutMessageTabsTraite
+                            : styles.statutMessageTabsNonTraite
                         }
                       >
                         <i className='fa-solid fa-check-double'></i>
@@ -211,10 +219,22 @@ function Sommaire({
 
 function DetailsMessageTabsAdmin({
   chat,
-  user
+  user,
+  me,
+  AddChat,
+  conversationID,
+  allConversation,
+  setConversation,
+  setSelectedChat
 }: {
   chat: ChatData | null
   user: IUser | null
+  me: IUser
+  AddChat: any
+  conversationID: any
+  allConversation: any
+  setConversation: any
+  setSelectedChat: any
 }) {
   const ref = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
@@ -231,7 +251,6 @@ function DetailsMessageTabsAdmin({
       <div
         className={styles.dtailsMessagesTabsComponent}
       >
-        {/* <div>Pas de discussion ouverte</div> */}
         <AlertInfo message="Pas de discussion ouverte" />
       </div>
     )
@@ -269,39 +288,7 @@ function DetailsMessageTabsAdmin({
           return <Response item={message} key={message?.id} />
         })}
       </div>
-      <div className={styles.containerChatInput}>
-        <form>
-          <div className={styles.leftFooter}>
-            <div className={styles.leftFooterContainer}>
-              <div className={styles.inputGroup}>
-                <div className={styles.inputContainer}>
-                  <div className={styles.containerDisplayInputMessage}>
-                    <span className={styles.share}>
-                      <i className='fa-solid fa-link img-icon-chat'></i>
-                    </span>
-                    <div className={styles.containerTextarea}>
-                      <textarea
-                        className={styles.textarreaMessageCustomChat}
-                        rows={1}
-                        name='reponse'
-                        placeholder='Type your message here...'
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.customBtnChatContainer}>
-                <div className={styles.emoji}>
-                  <i className='fa-regular fa-face-smile'></i>
-                </div>
-                <button type='submit' className={styles.btnSendMessageTabs}>
-                  <i className='fa-solid fa-paper-plane'></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+      <ChatInput userId={user?.id} AddChat={AddChat} me={me} conversationID={conversationID} conversation={chat} allConversation={allConversation} setConversation={setConversation} setSelectedChat={setSelectedChat} />
     </div>
   )
 }
@@ -359,4 +346,147 @@ export function AlertInfo({ message }: PropsType) {
 			</div>
 		</div>
 	);
+}
+
+function ChatInput({ userId, AddChat, me, conversationID, conversation, allConversation, setConversation, setSelectedChat }: { userId: number, AddChat: any, me: IUser, conversationID: any, conversation: any, allConversation: any, setConversation: any, setSelectedChat: any }) {
+  // const user = useAppSelector((s) => s.user.user);
+  // const addChat
+  //   // , { isLoading, isError, isSuccess }
+  //  = AddChat();
+  console.log('setSelectedChat', setSelectedChat)
+  const [message, setMessage] = React.useState("");
+  // React.useEffect(() => {
+  //   if (isError) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       iconColor: Color.themeColor,
+  //       confirmButtonColor: Color.themeColor,
+  //       title: "Message non envoyé",
+  //     });
+  //   }
+  // }, [isError]);
+  // React.useEffect(() => {
+  //   if (isSuccess) {
+  //     setMessage("");
+  //   }
+  // }, [isSuccess]);
+  const onSubmit = React.useCallback(() => {
+    if (message?.trim()?.length > 1) {
+      AddChat({
+        content: message,
+        recever: userId,
+        sender: me?.id,
+        conversationID: conversationID
+      })
+
+      console.log("message", message);
+      console.log("receverId", userId);
+      console.log("senderId", me?.id);
+      console.log("conversationID", conversationID);
+      // let allMessages = conversation?.messages;
+      // let lastMessageId = allMessages[allMessages?.length - 1]?.id;
+      // let newMessage = {
+      //   content: message,
+      //   recever: userId,
+      //   sender: me?.id,
+      //   conversationID: conversationID
+
+        
+      // }
+
+      let newMessage = {
+        id: 10,
+        content: message,
+        date: '09:04 PM',
+        type: "send",
+        sender: {
+          id: me?.id
+        },
+        avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
+      }
+      let index = allConversation.findIndex(({ id }: any) => id === conversationID);
+
+      
+      conversation.messages.push(newMessage)
+      // allConversation[index] = {
+      //   ...allConversation[index]?.messages,
+      //   ...conversation.messages,
+      // };
+      setConversation(allConversation)
+      setSelectedChat(conversation.messages)
+      console.log("conversation.messages", conversation.messages);
+      console.log("index", index);
+      setMessage("");
+
+      // {
+      //   id: 1,
+      //   content:
+      //     'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+      //   date: '09:04 PM',
+      //   type: 'send',
+      //   sender: {
+      //     id: 1
+      //   },
+      //   avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
+      // }
+    }
+  }, [
+    message, 
+    // user, 
+    me, 
+    userId]);
+  return (
+      <div className={styles.containerChatInput}>
+        <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+        >
+          <div className={styles.leftFooter}>
+            <div className={styles.leftFooterContainer}>
+              <div className={styles.inputGroup}>
+                <div className={styles.inputContainer}>
+                  <div className={styles.containerDisplayInputMessage}>
+                    <span className={styles.share}>
+                      <i className='fa-solid fa-link img-icon-chat'></i>
+                    </span>
+                    <div className={styles.containerTextarea}>
+                      <textarea
+                        className={styles.textarreaMessageCustomChat}
+                        rows={1}
+                        value={message}
+                        required
+                        onChange={(e) => setMessage(e.target.value)}
+                        name="reponse"
+                        placeholder='Type your message here...'
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.customBtnChatContainer}>
+                <div className={styles.emoji}>
+                  <i className='fa-regular fa-face-smile' id="mytextarea"></i>
+                </div>
+                {/* {!isLoading && ( */}
+                  <button type='submit' className={styles.btnSendMessageTabs}>
+                    <i className='fa-solid fa-paper-plane'></i>
+                  </button>
+                {/* )} */}
+                {/* {isLoading && (
+                  <button
+                    disabled
+                    type="button"
+                    className={styles.btnSendMessageTabs}
+                  >
+                    <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+                  </button>
+                )} */}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+  );
 }
