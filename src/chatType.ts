@@ -1,26 +1,9 @@
 export interface IUser {
   id: number
   slug: string | any
-  email: string
   nom: string
   prenom: string
-  password: string
-  date_naissance: string
-  telephone: string
   avatar: string
-  adresse: string
-  password_reset_count: number
-  first_connexion: boolean
-  created_at: string
-  last_login: string
-  is_active: boolean
-  is_archive: boolean
-  app_notification: boolean
-  role: string
-  whatsapp: string
-  notification_whatsapp: string
-  username: string
-  cautionnement: boolean
 }
 
 export type Chat = {
