@@ -112,9 +112,9 @@ export const VolkenoReactMessenger = ({
                 />
               ))}
           </ul>
-          <div className="no-view-desktop">
+          <div className={styles.noViewDesktop}>
               <div className={styles.detailMessageMobile}>
-                <DetailsMessageTabsAdmin
+                <DetailsMessageMobile
                     user={selectedUser}
                     // user={user}
                     chat={selectedChat}
@@ -244,6 +244,103 @@ function DetailsMessageTabsAdmin({
 
   return (
     <div className={styles.containerDetailMessage}>
+      <div className={styles.containerSectionHeaderDetailMessage}>
+        <div className={styles.contentImgProfil}>
+          <img
+            src={user?.avatar}
+            className={styles.imgReceivedMsg}
+            alt='profil detail message'
+          />
+        </div>
+        <div className={styles.contentTextUserConnectMessage}>
+          <div className={styles.msgUserInfosContainer}>
+            <div className={styles.contentMsgUserName}>
+              <p className={styles.profilDetailMessage}>
+                {user?.prenom} {user?.nom}
+              </p>
+            </div>
+            <div
+              className={`${styles.blocUserDisconnectTime} ${styles.msgUserLastonline}`}
+            >
+              <p className={styles.textDisconnectTime}>En ligne</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.blocDetails}>
+        {chat?.messages?.map((message) => {
+          if (message?.sender?.id === user?.id) {
+            return <Message item={message} key={message?.id} />
+          }
+          return <Response item={message} key={message?.id} />
+        })}
+      </div>
+      <div className={styles.containerChatInput}>
+        <form>
+          <div className={styles.leftFooter}>
+            <div className={styles.leftFooterContainer}>
+              <div className={styles.inputGroup}>
+                <div className={styles.inputContainer}>
+                  <div className={styles.containerDisplayInputMessage}>
+                    <span className={styles.share}>
+                      <i className='fa-solid fa-link img-icon-chat'></i>
+                    </span>
+                    <div className={styles.containerTextarea}>
+                      <textarea
+                        className={styles.textarreaMessageCustomChat}
+                        rows={1}
+                        name='reponse'
+                        placeholder='Type your message here...'
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.customBtnChatContainer}>
+                <div className={styles.emoji}>
+                  <i className='fa-regular fa-face-smile'></i>
+                </div>
+                <button type='submit' className={styles.btnSendMessageTabs}>
+                  <i className='fa-solid fa-paper-plane'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+function DetailsMessageMobile({
+  chat,
+  user
+}: {
+  chat: ChatData | null
+  user: IUser | null
+}) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (ref.current) {
+        ref.current.scrollTo({
+          top: ref.current.scrollHeight
+        })
+      }
+    }, 500)
+  }, [ref.current, chat])
+  if (!user)
+    return (
+      <div
+        className={styles.detailsMessagesMobile}
+      >
+        {/* <div>Pas de discussion ouverte</div> */}
+        <AlertInfo message="Pas de discussion ouverte" />
+      </div>
+    )
+
+  return (
+    <div className={styles.containerDetailMessageMobile}>
       <div className={styles.containerSectionHeaderDetailMessage}>
         <div className={styles.contentImgProfil}>
           <img

@@ -207,6 +207,13 @@
   border-radius: 20px;
   width: 90%;
 }
+.containerDetailMessageMobile {
+  background: #ffffff;
+  box-shadow: 0px 4px 20px rgb(0 0 0 / 8%);
+  padding: 3%;
+  border-radius: 20px;
+  width: 100%;
+}
 .containerDetailMessage .dropdown-toggle::after {
   display: none;
 }
@@ -248,6 +255,16 @@
   margin-top: 30px;
 }
 .containerDetailMessage .img-icon-chat {
+  cursor: pointer;
+}
+.containerDetailMessageMobile .leftFooterContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FAFAFB;
+  margin-top: 30px;
+}
+.containerDetailMessageMobile .img-icon-chat {
   cursor: pointer;
 }
 .statut-message-tabs-non-lu {
@@ -558,6 +575,10 @@ button.btn.btn.btn-see-more.notif-disabled {
   min-height: 50%;
   width: 100%;
 }
+.detailsMessagesMobile {
+  min-height: 50%;
+  width: 100%;
+} 
 .statutMessageTabsTraite {
   font-size: 10px;
 }
@@ -568,7 +589,7 @@ button.btn.btn.btn-see-more.notif-disabled {
   font-size: 10px;
 }
 @media (min-width: 992px) {
-  .no-view-desktop {
+  .noViewDesktop {
     display: none;
   }
 }
@@ -579,8 +600,23 @@ button.btn.btn.btn-see-more.notif-disabled {
   .containerDetailMessage {
     display: none;
   }
+  .dtailsMessagesTabsComponent {
+    display: none;
+  }
   .containerPage {
     margin: 10px !important;
+  }
+  .blocDetails {
+    padding: 40px 5px !important;
+  }
+  .textMessageRecu {
+    max-width: 90% !important;
+  }
+  .textMessageEnvoyer {
+    max-width: 100% !important;
+  }
+  .contentStatutMessageDelivered {
+    margin-top: 5px;
   }
 }
 @media (min-width: 1000px) and (max-width: 1024px) {
