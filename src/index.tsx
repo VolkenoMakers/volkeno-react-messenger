@@ -18,27 +18,21 @@ export const VolkenoReactMessenger = ({
   AddChat,
   setConversation
 }: Props) => {
-  // const userId = useAppSelector((s) => s.user.user?.id);
+  
   const userId = me?.id
-
-  // const [isSuccess, setIsSuccess] = React.useState<boolean>(true);
+  
   const [filteredChat, setFilteredChat] = React.useState<ChatData[]>([])
   const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null)
-  // const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
   const [selectedChat, setSelectedChat] = React.useState<ChatData | null>(null)
   const [conversationID, setConversationID] = React.useState<number | null>(
     null
   )
-  // const sUser = useLocationState<IUser>(null);
 
   const [count, setCount] = React.useState(0)
   React.useEffect(() => {
-    // if (isSuccess) {
     setFilteredChat(chatData)
-    // }
   }, [
     chatData
-    // isSuccess
   ])
 
   React.useEffect(() => {
@@ -54,17 +48,6 @@ export const VolkenoReactMessenger = ({
     console.log(count)
   }, [filteredChat])
 
-  // React.useEffect(() => {
-  //   if (!selectedUser) {
-  //     if (sUser && userId !== sUser?.id) {
-  //       setSelectedUser(sUser);
-  //     } else {
-  //       if (chatData?.length > 0) {
-  //         setSelectedUser(chatData[0].user);
-  //       }
-  //     }
-  //   }
-  // }, [sUser, chatData, selectedUser, userId]);
   React.useEffect(() => {
     if (selectedUser) {
       setSelectedChat(
@@ -74,6 +57,7 @@ export const VolkenoReactMessenger = ({
       setSelectedChat(null)
     }
   }, [selectedUser, chatData])
+
   return (
     <div className={styles.containerPage}>
       <div className={styles.containerMessenger}>
@@ -117,9 +101,14 @@ export const VolkenoReactMessenger = ({
           <div className={styles.noViewDesktop}>
             <div className={styles.detailMessageMobile}>
               <DetailsMessageMobile
-                user={selectedUser}
-                // user={user}
-                chat={selectedChat}
+               user={selectedUser}
+               me={me}
+               chat={selectedChat}
+               allConversation={chatData}
+               AddChat={AddChat}
+               conversationID={conversationID}
+               setConversation={setConversation}
+               setSelectedChat={setSelectedChat}
               />
             </div>
           </div>
@@ -143,14 +132,14 @@ function Sommaire({
   item,
   onClick,
   active,
-  conversationID
+  // conversationID
 }: {
   item: ChatData
   onClick: () => any
   active: boolean
   conversationID: any
 }) {
-  console.log(conversationID)
+  // console.log(conversationID)
   const send = item?.lastMessage?.sender?.id !== item?.user?.id
   const receive = item?.lastMessage?.recever?.id !== item?.user?.id
   const [notRead, setNotRead] = React.useState([{}])
@@ -209,11 +198,6 @@ function Sommaire({
                     </span>
                   )}
                 </div>
-                {/* <div className="">
-                         <span className={`${styles.statutMessageTabsTraite}`}>
-                         <i className="fa-solid fa-check-double"></i>
-                         </span>
-                       </div> */}
               </div>
             </div>
           </div>
@@ -242,16 +226,16 @@ function DetailsMessageTabsAdmin({
   setConversation: any
   setSelectedChat: any
 }) {
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
-    setTimeout(() => {
-      if (ref.current) {
-        ref.current.scrollTo({
-          top: ref.current.scrollHeight
-        })
-      }
-    }, 500)
-  }, [ref.current, chat])
+    if (ref.current) {
+      ref.current.scrollTo({
+        top: ref.current.scrollHeight
+      });
+    }
+  }, [ref.current, chat?.messages]);
+
   if (!user)
     return (
       <div className={styles.dtailsMessagesTabsComponent}>
@@ -266,7 +250,7 @@ function DetailsMessageTabsAdmin({
           <img
             src={user?.avatar}
             className={styles.imgReceivedMsg}
-            alt='profil detail message'
+            alt='profil image'
           />
         </div>
         <div className={styles.contentTextUserConnectMessage}>
@@ -308,10 +292,22 @@ function DetailsMessageTabsAdmin({
 
 function DetailsMessageMobile({
   chat,
-  user
+  user,
+  me,
+  AddChat,
+  conversationID,
+  allConversation,
+  setConversation,
+  setSelectedChat
 }: {
   chat: ChatData | null
   user: IUser | null
+  me: IUser
+  AddChat: any
+  conversationID: any
+  allConversation: any
+  setConversation: any
+  setSelectedChat: any
 }) {
   const ref = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
@@ -326,7 +322,6 @@ function DetailsMessageMobile({
   if (!user)
     return (
       <div className={styles.detailsMessagesMobile}>
-        {/* <div>Pas de discussion ouverte</div> */}
         <AlertInfo message='Pas de discussion ouverte' />
       </div>
     )
@@ -364,39 +359,17 @@ function DetailsMessageMobile({
           return <Response item={message} key={message?.id} />
         })}
       </div>
-      <div className={styles.containerChatInput}>
-        <form>
-          <div className={styles.leftFooter}>
-            <div className={styles.leftFooterContainer}>
-              <div className={styles.inputGroup}>
-                <div className={styles.inputContainer}>
-                  <div className={styles.containerDisplayInputMessage}>
-                    <span className={styles.share}>
-                      <i className='fa-solid fa-link img-icon-chat'></i>
-                    </span>
-                    <div className={styles.containerTextarea}>
-                      <textarea
-                        className={styles.textarreaMessageCustomChat}
-                        rows={1}
-                        name='reponse'
-                        placeholder='Type your message here...'
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.customBtnChatContainer}>
-                <div className={styles.emoji}>
-                  <i className='fa-regular fa-face-smile'></i>
-                </div>
-                <button type='submit' className={styles.btnSendMessageTabs}>
-                  <i className='fa-solid fa-paper-plane'></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+     
+      <ChatInput
+        userId={user?.id}
+        AddChat={AddChat}
+        me={me}
+        conversationID={conversationID}
+        conversation={chat}
+        allConversation={allConversation}
+        setConversation={setConversation}
+        setSelectedChat={setSelectedChat}
+      />
     </div>
   )
 }
@@ -451,7 +424,6 @@ export function AlertInfo({ message }: PropsType) {
   return (
     <div className='px-3'>
       <div className={styles.messengerAlert} role='alert'>
-        {/* <FiAlertCircle style={{ fontSize: 24 }} /> */}
         <h4>{message}</h4>
       </div>
     </div>
@@ -477,81 +449,53 @@ function ChatInput({
   setConversation: any
   setSelectedChat: any
 }) {
-  // const user = useAppSelector((s) => s.user.user);
-  // const addChat
-  //   // , { isLoading, isError, isSuccess }
-  //  = AddChat();
-  console.log('setSelectedChat', setSelectedChat)
-  const [message, setMessage] = React.useState('')
-  // React.useEffect(() => {
-  //   if (isError) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       iconColor: Color.themeColor,
-  //       confirmButtonColor: Color.themeColor,
-  //       title: "Message non envoyé",
-  //     });
-  //   }
-  // }, [isError]);
-  // React.useEffect(() => {
-  //   if (isSuccess) {
-  //     setMessage("");
-  //   }
-  // }, [isSuccess]);
-  const onSubmit = React.useCallback(() => {
-    if (message?.trim()?.length > 1) {
-      AddChat({
+  // console.log('setSelectedChat', setSelectedChat)
+
+  const [message, setMessage] = React.useState('');
+
+  const onSubmit = async () => {
+    if (message?.trim()?.length > 0) {
+      // Envoyez le message à votre API via AddChat si nécessaire
+      await AddChat({
         content: message,
         recever: userId,
         sender: me?.id,
         conversationID: conversationID
-      })
+      });
 
-      console.log('message', message)
-      console.log('receverId', userId)
-      console.log('senderId', me?.id)
-      console.log('conversationID', conversationID)
-      // let allMessages = conversation?.messages;
-      // let lastMessageId = allMessages[allMessages?.length - 1]?.id;
-      // let newMessage = {
-      //   content: message,
-      //   recever: userId,
-      //   sender: me?.id,
-      //   conversationID: conversationID
-
-      // }
-
-      let newMessage = {
-        id: 10,
+      const newMessage = {
+        id: conversation.messages.length + 1, // Générez un ID unique pour le nouveau message
         content: message,
-        date: '09:04 PM',
+        date: new Date().toLocaleTimeString(), // Utilisez une date réelle
         type: 'send',
         sender: {
           id: me?.id
         },
         avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
-      }
-      let index = allConversation.findIndex(
-        ({ id }: any) => id === conversationID
-      )
+      };
 
-      conversation.messages.push(newMessage)
-      // allConversation[index] = {
-      //   ...allConversation[index]?.messages,
-      //   ...conversation.messages,
-      // };
-      setConversation(allConversation)
-      setSelectedChat(conversation.messages)
-      console.log('conversation.messages', conversation.messages)
-      console.log('index', index)
-      setMessage('')
+      // Mettez à jour l'état local de la conversation
+      const updatedConversation = {
+        ...conversation,
+        messages: [...conversation.messages, newMessage]
+      };
+
+      // Mettez à jour l'état local de toutes les conversations
+      const updatedAllConversations = allConversation.map((c: any) => {
+        if (c.id === conversationID) {
+          return updatedConversation;
+        }
+        return c;
+      });
+
+      setConversation(updatedAllConversations);
+      setSelectedChat(updatedConversation.messages);
+
+      // Réinitialisez le champ de message
+      setMessage('');
     }
-  }, [
-    message,
-    // user,
-    me,
-    userId
-  ])
+  };
+
   return (
     <div className={styles.containerChatInput}>
       <form
@@ -586,20 +530,9 @@ function ChatInput({
               <div className={styles.emoji}>
                 <i className='fa-regular fa-face-smile' id='mytextarea'></i>
               </div>
-              {/* {!isLoading && ( */}
               <button type='submit' className={styles.btnSendMessageTabs}>
                 <i className='fa-solid fa-paper-plane'></i>
               </button>
-              {/* )} */}
-              {/* {isLoading && (
-                  <button
-                    disabled
-                    type="button"
-                    className={styles.btnSendMessageTabs}
-                  >
-                    <i class="fa-solid fa-spinner fa-spin-pulse"></i>
-                  </button>
-                )} */}
             </div>
           </div>
         </div>
@@ -607,3 +540,125 @@ function ChatInput({
     </div>
   )
 }
+
+// function ChatInput({
+//   userId,
+//   AddChat,
+//   me,
+//   conversationID,
+//   conversation,
+//   allConversation,
+//   setConversation,
+//   setSelectedChat
+// }: {
+//   userId: number
+//   AddChat: any
+//   me: IUser
+//   conversationID: any
+//   conversation: any
+//   allConversation: any
+//   setConversation: any
+//   setSelectedChat: any
+// }) {
+//   console.log('setSelectedChat', setSelectedChat)
+//   const [message, setMessage] = React.useState('')
+
+//   const onSubmit = React.useCallback(() => {
+//     if (message?.trim()?.length > 1) {
+//       AddChat({
+//         content: message,
+//         recever: userId,
+//         sender: me?.id,
+//         conversationID: conversationID
+//       })
+
+//       console.log('message', message)
+//       console.log('receverId', userId)
+//       console.log('senderId', me?.id)
+//       console.log('conversationID', conversationID)
+//       // let allMessages = conversation?.messages;
+//       // let lastMessageId = allMessages[allMessages?.length - 1]?.id;
+//       // let newMessage = {
+//       //   content: message,
+//       //   recever: userId,
+//       //   sender: me?.id,
+//       //   conversationID: conversationID
+
+//       // }
+
+//       let newMessage = {
+//         id: 10,
+//         content: message,
+//         date: '09:04 PM',
+//         type: 'send',
+//         sender: {
+//           id: me?.id
+//         },
+//         avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
+//       }
+//       let index = allConversation.findIndex(
+//         ({ id }: any) => id === conversationID
+//       )
+
+//       conversation.messages.push(newMessage)
+//       // allConversation[index] = {
+//       //   ...allConversation[index]?.messages,
+//       //   ...conversation.messages,
+//       // };
+//       setConversation(allConversation)
+//       setSelectedChat(conversation.messages)
+//       console.log('conversation.messages', conversation.messages)
+//       console.log('index', index)
+//       setMessage('')
+//     }
+//   }, [
+//     message,
+//     // user,
+//     me,
+//     userId
+//   ])
+
+//   return (
+//     <div className={styles.containerChatInput}>
+//       <form
+//         onSubmit={(e) => {
+//           e.preventDefault()
+//           onSubmit()
+//         }}
+//       >
+//         <div className={styles.leftFooter}>
+//           <div className={styles.leftFooterContainer}>
+//             <div className={styles.inputGroup}>
+//               <div className={styles.inputContainer}>
+//                 <div className={styles.containerDisplayInputMessage}>
+//                   <span className={styles.share}>
+//                     <i className='fa-solid fa-link img-icon-chat'></i>
+//                   </span>
+//                   <div className={styles.containerTextarea}>
+//                     <textarea
+//                       className={styles.textarreaMessageCustomChat}
+//                       rows={1}
+//                       value={message}
+//                       required
+//                       onChange={(e) => setMessage(e.target.value)}
+//                       name='reponse'
+//                       placeholder='Type your message here...'
+//                     ></textarea>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//             <div className={styles.customBtnChatContainer}>
+//               <div className={styles.emoji}>
+//                 <i className='fa-regular fa-face-smile' id='mytextarea'></i>
+//               </div>
+//               <button type='submit' className={styles.btnSendMessageTabs}>
+//                 <i className='fa-solid fa-paper-plane'></i>
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </form>
+//     </div>
+//   )
+// }
