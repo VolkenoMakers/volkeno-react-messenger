@@ -1,5 +1,5 @@
 /* add css module styles here (optional) */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .containerPage {
   margin: 2em;
@@ -21,7 +21,6 @@
 .container-header-message-list {
   display: flex;
   justify-content: space-between;
-
 }
 .formSearch {
   position: relative;
@@ -31,13 +30,13 @@
   border-radius: 10px;
   border: 0;
   padding: 20px 15px 20px 65px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
   letter-spacing: 0px;
   color: #767278;
-  background: #F8F8FB;
+  background: #f8f8fb;
 }
 .bloc-search-message i {
   color: #7c7c7c;
@@ -46,7 +45,7 @@
   background: transparent;
   position: absolute;
   left: 5%;
-    top: 39%;
+  top: 39%;
   border: none;
 }
 .btnSearchIcon:focus {
@@ -69,7 +68,7 @@
   justify-content: space-between;
 }
 .titreMessagesBloc {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 22.0454px;
@@ -90,7 +89,7 @@
   position: relative;
   transition: all 0.35s;
   border-radius: 4px;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -101,7 +100,7 @@
 }
 .form-search-user {
   width: 100%;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -117,7 +116,7 @@
 }
 
 .user-for-send-message-infos h3 {
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
@@ -126,7 +125,7 @@
   color: #303030;
 }
 .user-for-send-message-infos h4 {
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 300;
   font-size: 13px;
@@ -144,7 +143,7 @@
 .input-send-messge {
   border: none;
   background: #fff;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
@@ -191,6 +190,7 @@
   list-style: none;
   border-bottom: 1px solid rgba(128, 128, 128, 0.349);
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .listGroupItemMeessage:last-child {
   border-bottom: 0 !important;
@@ -206,6 +206,7 @@
   padding: 3%;
   border-radius: 20px;
   width: 90%;
+  position: relative;
 }
 .containerDetailMessageMobile {
   padding: 3%;
@@ -223,7 +224,7 @@
   border: 0;
   outline: 0;
   background-color: transparent;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -248,8 +249,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FAFAFB;
+  background: #fafafb;
   margin-top: 30px;
+  position: absolute;
+  bottom: 12px;
+  width: 92%;
 }
 .containerDetailMessage .img-icon-chat {
   cursor: pointer;
@@ -258,7 +262,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FAFAFB;
+  background: #fafafb;
   margin-top: 30px;
 }
 .containerDetailMessageMobile .img-icon-chat {
@@ -266,7 +270,7 @@
 }
 .statut-message-tabs-non-lu {
   background: #f45b64;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 700;
   font-size: 10px;
@@ -319,7 +323,7 @@
   color: #1f3cad;
 }
 .profilDetailMessage {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -329,7 +333,7 @@
   margin-bottom: 3px;
 }
 .timeDetailMessage {
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 10px;
@@ -338,18 +342,18 @@
   color: #767278;
 }
 .conatinerReceivedMsgItem {
-display: flex;
-gap: 10px;
-align-items: flex-start;
-margin-bottom: 2%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 2%;
 }
 .imgReceivedMsg {
-width: 40px;
-height: 40px;
-border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 .textMessageRecu {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -363,14 +367,14 @@ border-radius: 50%;
 }
 
 .textMessageEnvoyer {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.05em;
   color: #ffffff;
-  background: #1C208F;
+  background: #1c208f;
   border-radius: 10px 10px 0px 10px;
   padding: 10px;
   max-width: 50%;
@@ -406,7 +410,7 @@ border-radius: 50%;
   align-items: center;
 }
 .nomContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 12.3359px;
@@ -417,7 +421,7 @@ border-radius: 50%;
 }
 
 .timeMessageContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 10.6675px;
@@ -427,7 +431,7 @@ border-radius: 50%;
   margin: 0;
 }
 .contenuMessageContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 12.6675px;
@@ -456,7 +460,7 @@ border-radius: 50%;
     padding-left: 5%;
 } */
 .textDisconnectTime {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 10px;
@@ -477,7 +481,7 @@ border-radius: 50%;
   background: transparent;
   width: 100%;
   border: none;
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 15.8344px;
@@ -486,7 +490,7 @@ border-radius: 50%;
   width: 100%;
 }
 .btn-filter-message {
-  font-family: "Raleway";
+  font-family: 'Raleway';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -551,9 +555,9 @@ button.btn.btn.btn-see-more.notif-disabled {
   position: relative;
 }
 .messengerAlert {
-  border-left: 6px solid #1C208F;
+  border-left: 6px solid #1c208f;
   border-radius: 0.4rem;
-  color: #1C208F;
+  color: #1c208f;
   padding: 2rem 1%;
   display: flex;
   align-items: center;
@@ -564,7 +568,7 @@ button.btn.btn.btn-see-more.notif-disabled {
 
 .messengerAlert h4 {
   margin: 0;
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   font-style: normal;
   font-size: 18px;
 }
@@ -575,7 +579,7 @@ button.btn.btn.btn-see-more.notif-disabled {
 .detailsMessagesMobile {
   min-height: 50%;
   width: 100%;
-} 
+}
 .statutMessageTabsTraite {
   font-size: 10px;
 }
@@ -619,7 +623,8 @@ button.btn.btn.btn-see-more.notif-disabled {
   .listGroupMessage {
     height: 370px;
     overflow-y: scroll;
-  }.listGroupMessage::-webkit-scrollbar {
+  }
+  .listGroupMessage::-webkit-scrollbar {
     width: 3px;
   }
   .listGroupMessage::-webkit-scrollbar-track {
@@ -630,7 +635,6 @@ button.btn.btn.btn-see-more.notif-disabled {
     border-radius: 20px;
     border: 2px solid transparent;
   }
-
 }
 @media (min-width: 1000px) and (max-width: 1024px) {
   .containerSectionDiscussion {

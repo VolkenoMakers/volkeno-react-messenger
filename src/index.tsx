@@ -18,9 +18,8 @@ export const VolkenoReactMessenger = ({
   AddChat,
   setConversation
 }: Props) => {
-  
   const userId = me?.id
-  
+
   const [filteredChat, setFilteredChat] = React.useState<ChatData[]>([])
   const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null)
   const [selectedChat, setSelectedChat] = React.useState<ChatData | null>(null)
@@ -31,9 +30,7 @@ export const VolkenoReactMessenger = ({
   const [count, setCount] = React.useState(0)
   React.useEffect(() => {
     setFilteredChat(chatData)
-  }, [
-    chatData
-  ])
+  }, [chatData])
 
   React.useEffect(() => {
     let newCount = 0
@@ -101,14 +98,14 @@ export const VolkenoReactMessenger = ({
           <div className={styles.noViewDesktop}>
             <div className={styles.detailMessageMobile}>
               <DetailsMessageMobile
-               user={selectedUser}
-               me={me}
-               chat={selectedChat}
-               allConversation={chatData}
-               AddChat={AddChat}
-               conversationID={conversationID}
-               setConversation={setConversation}
-               setSelectedChat={setSelectedChat}
+                user={selectedUser}
+                me={me}
+                chat={selectedChat}
+                allConversation={chatData}
+                AddChat={AddChat}
+                conversationID={conversationID}
+                setConversation={setConversation}
+                setSelectedChat={setSelectedChat}
               />
             </div>
           </div>
@@ -131,9 +128,9 @@ export const VolkenoReactMessenger = ({
 function Sommaire({
   item,
   onClick,
-  active,
-  // conversationID
-}: {
+  active
+}: // conversationID
+{
   item: ChatData
   onClick: () => any
   active: boolean
@@ -146,6 +143,8 @@ function Sommaire({
   React.useEffect(() => {
     setNotRead(item?.messages?.filter((itm) => itm?.is_read === false))
   }, [item?.messages])
+
+  var lastIndice = item?.messages.length - 1
   return (
     <li
       onClick={onClick}
@@ -173,7 +172,7 @@ function Sommaire({
               <div className={styles.blocMessageContact}>
                 <div className=''>
                   <p className={styles.contenuMessageContact}>
-                    {item?.lastMessage?.content?.slice(0, 30)}
+                    {item?.messages[lastIndice]?.content?.slice(0, 10)}
                   </p>
                 </div>
                 <div className=''>
@@ -226,15 +225,15 @@ function DetailsMessageTabsAdmin({
   setConversation: any
   setSelectedChat: any
 }) {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     if (ref.current) {
       ref.current.scrollTo({
         top: ref.current.scrollHeight
-      });
+      })
     }
-  }, [ref.current, chat?.messages]);
+  }, [ref.current, chat?.messages])
 
   if (!user)
     return (
@@ -359,7 +358,7 @@ function DetailsMessageMobile({
           return <Response item={message} key={message?.id} />
         })}
       </div>
-     
+
       <ChatInput
         userId={user?.id}
         AddChat={AddChat}
@@ -449,9 +448,7 @@ function ChatInput({
   setConversation: any
   setSelectedChat: any
 }) {
-  // console.log('setSelectedChat', setSelectedChat)
-
-  const [message, setMessage] = React.useState('');
+  const [message, setMessage] = React.useState('')
 
   const onSubmit = async () => {
     if (message?.trim()?.length > 0) {
@@ -461,7 +458,7 @@ function ChatInput({
         recever: userId,
         sender: me?.id,
         conversationID: conversationID
-      });
+      })
 
       const newMessage = {
         id: conversation.messages.length + 1, // Générez un ID unique pour le nouveau message
@@ -472,29 +469,29 @@ function ChatInput({
           id: me?.id
         },
         avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
-      };
+      }
 
       // Mettez à jour l'état local de la conversation
       const updatedConversation = {
         ...conversation,
         messages: [...conversation.messages, newMessage]
-      };
+      }
 
       // Mettez à jour l'état local de toutes les conversations
       const updatedAllConversations = allConversation.map((c: any) => {
         if (c.id === conversationID) {
-          return updatedConversation;
+          return updatedConversation
         }
-        return c;
-      });
+        return c
+      })
 
-      setConversation(updatedAllConversations);
-      setSelectedChat(updatedConversation.messages);
+      setConversation(updatedAllConversations)
+      setSelectedChat(updatedConversation.messages)
 
       // Réinitialisez le champ de message
-      setMessage('');
+      setMessage('')
     }
-  };
+  }
 
   return (
     <div className={styles.containerChatInput}>

@@ -4,12 +4,12 @@ import 'volkeno-react-messenger/dist/index.css'
 import { chatData, useAddChatMutation, user } from './data'
 
 const App = () => {
-  const [conversation, setConversation] = useState<any>();
+  const [conversation, setConversation] = useState<any>()
 
   useEffect(() => {
-    setConversation(chatData);
+    setConversation(chatData)
   }, [])
-  
+
   return (
     <VolkenoReactMessenger
       titlePage='Messages'
