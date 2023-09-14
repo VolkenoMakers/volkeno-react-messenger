@@ -26,7 +26,9 @@ export const VolkenoReactMessenger = ({
   const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null)
   // const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
   const [selectedChat, setSelectedChat] = React.useState<ChatData | null>(null)
-  const [conversationID, setConversationID] = React.useState<number | null>(null)
+  const [conversationID, setConversationID] = React.useState<number | null>(
+    null
+  )
   // const sUser = useLocationState<IUser>(null);
 
   const [count, setCount] = React.useState(0)
@@ -104,7 +106,7 @@ export const VolkenoReactMessenger = ({
                   active={selectedChat === chat}
                   item={chat}
                   onClick={() => {
-                    setConversationID(chat?.id);
+                    setConversationID(chat?.id)
                     setSelectedUser(chat?.user)
                   }}
                   key={chat?.user?.id}
@@ -113,14 +115,14 @@ export const VolkenoReactMessenger = ({
               ))}
           </ul>
           <div className={styles.noViewDesktop}>
-              <div className={styles.detailMessageMobile}>
-                <DetailsMessageMobile
-                    user={selectedUser}
-                    // user={user}
-                    chat={selectedChat}
-                  />
-              </div>
-					</div>
+            <div className={styles.detailMessageMobile}>
+              <DetailsMessageMobile
+                user={selectedUser}
+                // user={user}
+                chat={selectedChat}
+              />
+            </div>
+          </div>
         </div>
         <DetailsMessageTabsAdmin
           user={selectedUser}
@@ -145,7 +147,7 @@ function Sommaire({
 }: {
   item: ChatData
   onClick: () => any
-  active: boolean,
+  active: boolean
   conversationID: any
 }) {
   console.log(conversationID)
@@ -164,11 +166,11 @@ function Sommaire({
         <div className={styles.blocProfilContact}>
           <div className={styles.containerListMessageItem}>
             <div>
-            <img
-              src={item?.user?.avatar}
-              className={styles.imgMessgeContact}
-              alt='image profil contact'
-            />
+              <img
+                src={item?.user?.avatar}
+                className={styles.imgMessgeContact}
+                alt='image profil contact'
+              />
             </div>
             <div className={styles.contentTextMessageList}>
               <div className={styles.containerHeaderMessageList}>
@@ -181,9 +183,7 @@ function Sommaire({
               </div>
               <div className={styles.blocMessageContact}>
                 <div className=''>
-                  <p
-                    className={styles.contenuMessageContact}
-                  >
+                  <p className={styles.contenuMessageContact}>
                     {item?.lastMessage?.content?.slice(0, 30)}
                   </p>
                 </div>
@@ -254,10 +254,8 @@ function DetailsMessageTabsAdmin({
   }, [ref.current, chat])
   if (!user)
     return (
-      <div
-        className={styles.dtailsMessagesTabsComponent}
-      >
-        <AlertInfo message="Pas de discussion ouverte" />
+      <div className={styles.dtailsMessagesTabsComponent}>
+        <AlertInfo message='Pas de discussion ouverte' />
       </div>
     )
 
@@ -294,7 +292,16 @@ function DetailsMessageTabsAdmin({
           return <Response item={message} key={message?.id} />
         })}
       </div>
-      <ChatInput userId={user?.id} AddChat={AddChat} me={me} conversationID={conversationID} conversation={chat} allConversation={allConversation} setConversation={setConversation} setSelectedChat={setSelectedChat} />
+      <ChatInput
+        userId={user?.id}
+        AddChat={AddChat}
+        me={me}
+        conversationID={conversationID}
+        conversation={chat}
+        allConversation={allConversation}
+        setConversation={setConversation}
+        setSelectedChat={setSelectedChat}
+      />
     </div>
   )
 }
@@ -318,11 +325,9 @@ function DetailsMessageMobile({
   }, [ref.current, chat])
   if (!user)
     return (
-      <div
-        className={styles.detailsMessagesMobile}
-      >
+      <div className={styles.detailsMessagesMobile}>
         {/* <div>Pas de discussion ouverte</div> */}
-        <AlertInfo message="Pas de discussion ouverte" />
+        <AlertInfo message='Pas de discussion ouverte' />
       </div>
     )
 
@@ -401,11 +406,13 @@ function Message({ item }: { item: Chat }) {
     <div className={styles.receivedMsgItem}>
       <div className={styles.conatinerReceivedMsgItem}>
         <div className={styles.contentImgReceivedMsgItem}>
-          {item?.avatar && <img
-                  src={item?.avatar}
-                  className={styles.imgReceivedMsg}
-                  alt="image profil contact"
-                />}
+          {item?.avatar && (
+            <img
+              src={item?.avatar}
+              className={styles.imgReceivedMsg}
+              alt='image profil contact'
+            />
+          )}
         </div>
         <div className={styles.containerTextMessageRecu}>
           <div className={styles.blocMessageRecu}>
@@ -438,26 +445,44 @@ function Response({ item }: { item: Chat }) {
 }
 
 type PropsType = {
-	message: string;
-};
+  message: string
+}
 export function AlertInfo({ message }: PropsType) {
-	return (
-		<div className="px-3">
-			<div className={styles.messengerAlert} role="alert">
-				{/* <FiAlertCircle style={{ fontSize: 24 }} /> */}
-				<h4>{message}</h4>
-			</div>
-		</div>
-	);
+  return (
+    <div className='px-3'>
+      <div className={styles.messengerAlert} role='alert'>
+        {/* <FiAlertCircle style={{ fontSize: 24 }} /> */}
+        <h4>{message}</h4>
+      </div>
+    </div>
+  )
 }
 
-function ChatInput({ userId, AddChat, me, conversationID, conversation, allConversation, setConversation, setSelectedChat }: { userId: number, AddChat: any, me: IUser, conversationID: any, conversation: any, allConversation: any, setConversation: any, setSelectedChat: any }) {
+function ChatInput({
+  userId,
+  AddChat,
+  me,
+  conversationID,
+  conversation,
+  allConversation,
+  setConversation,
+  setSelectedChat
+}: {
+  userId: number
+  AddChat: any
+  me: IUser
+  conversationID: any
+  conversation: any
+  allConversation: any
+  setConversation: any
+  setSelectedChat: any
+}) {
   // const user = useAppSelector((s) => s.user.user);
   // const addChat
   //   // , { isLoading, isError, isSuccess }
   //  = AddChat();
   console.log('setSelectedChat', setSelectedChat)
-  const [message, setMessage] = React.useState("");
+  const [message, setMessage] = React.useState('')
   // React.useEffect(() => {
   //   if (isError) {
   //     Swal.fire({
@@ -482,10 +507,10 @@ function ChatInput({ userId, AddChat, me, conversationID, conversation, allConve
         conversationID: conversationID
       })
 
-      console.log("message", message);
-      console.log("receverId", userId);
-      console.log("senderId", me?.id);
-      console.log("conversationID", conversationID);
+      console.log('message', message)
+      console.log('receverId', userId)
+      console.log('senderId', me?.id)
+      console.log('conversationID', conversationID)
       // let allMessages = conversation?.messages;
       // let lastMessageId = allMessages[allMessages?.length - 1]?.id;
       // let newMessage = {
@@ -494,22 +519,22 @@ function ChatInput({ userId, AddChat, me, conversationID, conversation, allConve
       //   sender: me?.id,
       //   conversationID: conversationID
 
-        
       // }
 
       let newMessage = {
         id: 10,
         content: message,
         date: '09:04 PM',
-        type: "send",
+        type: 'send',
         sender: {
           id: me?.id
         },
         avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
       }
-      let index = allConversation.findIndex(({ id }: any) => id === conversationID);
+      let index = allConversation.findIndex(
+        ({ id }: any) => id === conversationID
+      )
 
-      
       conversation.messages.push(newMessage)
       // allConversation[index] = {
       //   ...allConversation[index]?.messages,
@@ -517,67 +542,56 @@ function ChatInput({ userId, AddChat, me, conversationID, conversation, allConve
       // };
       setConversation(allConversation)
       setSelectedChat(conversation.messages)
-      console.log("conversation.messages", conversation.messages);
-      console.log("index", index);
-      setMessage("");
-
-      // {
-      //   id: 1,
-      //   content:
-      //     'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
-      //   date: '09:04 PM',
-      //   type: 'send',
-      //   sender: {
-      //     id: 1
-      //   },
-      //   avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
-      // }
+      console.log('conversation.messages', conversation.messages)
+      console.log('index', index)
+      setMessage('')
     }
   }, [
-    message, 
-    // user, 
-    me, 
-    userId]);
+    message,
+    // user,
+    me,
+    userId
+  ])
   return (
-      <div className={styles.containerChatInput}>
-        <form
+    <div className={styles.containerChatInput}>
+      <form
         onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
+          e.preventDefault()
+          onSubmit()
         }}
-        >
-          <div className={styles.leftFooter}>
-            <div className={styles.leftFooterContainer}>
-              <div className={styles.inputGroup}>
-                <div className={styles.inputContainer}>
-                  <div className={styles.containerDisplayInputMessage}>
-                    <span className={styles.share}>
-                      <i className='fa-solid fa-link img-icon-chat'></i>
-                    </span>
-                    <div className={styles.containerTextarea}>
-                      <textarea
-                        className={styles.textarreaMessageCustomChat}
-                        rows={1}
-                        value={message}
-                        required
-                        onChange={(e) => setMessage(e.target.value)}
-                        name="reponse"
-                        placeholder='Type your message here...'
-                      ></textarea>
-                    </div>
+      >
+        <div className={styles.leftFooter}>
+          <div className={styles.leftFooterContainer}>
+            <div className={styles.inputGroup}>
+              <div className={styles.inputContainer}>
+                <div className={styles.containerDisplayInputMessage}>
+                  <span className={styles.share}>
+                    <i className='fa-solid fa-link img-icon-chat'></i>
+                  </span>
+                  <div className={styles.containerTextarea}>
+                    <textarea
+                      className={styles.textarreaMessageCustomChat}
+                      rows={1}
+                      value={message}
+                      required
+                      onChange={(e) => setMessage(e.target.value)}
+                      name='reponse'
+                      placeholder='Type your message here...'
+                    ></textarea>
                   </div>
                 </div>
               </div>
-              <div className={styles.customBtnChatContainer}>
-                <div className={styles.emoji}>
-                  <i className='fa-regular fa-face-smile' id="mytextarea"></i>
-                </div>
-                {/* {!isLoading && ( */}
-                  <button type='submit' className={styles.btnSendMessageTabs}>
-                    <i className='fa-solid fa-paper-plane'></i>
-                  </button>
-                {/* )} */}
-                {/* {isLoading && (
+            </div>
+            <div className={styles.customBtnChatContainer}>
+              <div className={styles.emoji}>
+                <i className='fa-regular fa-face-smile' id='mytextarea'></i>
+              </div>
+              {/* {!isLoading && ( */}
+              <button type='submit' className={styles.btnSendMessageTabs}>
+                <i className='fa-solid fa-paper-plane'></i>
+              </button>
+              {/* )} */}
+              {/* {isLoading && (
                   <button
                     disabled
                     type="button"
@@ -586,10 +600,10 @@ function ChatInput({ userId, AddChat, me, conversationID, conversation, allConve
                     <i class="fa-solid fa-spinner fa-spin-pulse"></i>
                   </button>
                 )} */}
-              </div>
             </div>
           </div>
-        </form>
-      </div>
-  );
+        </div>
+      </form>
+    </div>
+  )
 }
