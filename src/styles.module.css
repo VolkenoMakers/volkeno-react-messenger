@@ -1,6 +1,15 @@
 /* add css module styles here (optional) */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+:root{
+      --primary-color: #1f3cad;
+      --secondary-color:50px 0px 25px 0px;
+      --primary-bg: #f3f2f2;
+      --secondary-bg: #4c6fff0f;
+      --color-message-recu: #102844e5;
+      --color-message-envoyer: #fff;
+	 }
+
 .containerPage {
   margin: 2em;
   padding: 0.5em;
@@ -191,12 +200,13 @@
   list-style: none;
   border-bottom: 1px solid rgba(128, 128, 128, 0.349);
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .listGroupItemMeessage:last-child {
   border-bottom: 0 !important;
 }
 .listGroupItemMeessage.active {
-  background-color: #4c6fff0f;
+  background-color: #ffffff;
   border-radius: 10px;
   border-bottom: none;
 }
@@ -239,9 +249,9 @@
 }
 .btnSendMessageTabs {
   border: 0;
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   padding: 12px;
-  color: #fff;
+  color: #ffffff;
   border-radius: 10px;
 }
 .containerDetailMessage .leftFooterContainer {
@@ -313,10 +323,10 @@
   border: 3px solid transparent;
 }
 .btn-send-message-tabs {
-  color: #1f3cad;
+  color: var(--primary-color);
 }
 .btn-send-message-tabs:hover {
-  color: #1f3cad;
+  color: var(--primary-color);
 }
 .profilDetailMessage {
   font-family: "Poppins";
@@ -355,8 +365,8 @@ border-radius: 50%;
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.05em;
-  color: #102844e5;
-  background: #f3f2f2;
+  color: var(--color-message-recu);
+  background: var(--primary-bg);
   border-radius: 10px 10px 10px 0;
   padding: 10px;
   max-width: 50%;
@@ -369,8 +379,8 @@ border-radius: 50%;
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.05em;
-  color: #ffffff;
-  background: #1C208F;
+  color: var(--color-message-envoyer);
+  background: var(--primary-color);
   border-radius: 10px 10px 0px 10px;
   padding: 10px;
   max-width: 50%;
@@ -390,7 +400,7 @@ border-radius: 50%;
   background: #fff;
 }
 .blocDetails::-webkit-scrollbar-thumb {
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   border-radius: 20px;
   border: 3px solid transparent;
 }
@@ -516,7 +526,7 @@ border-radius: 50%;
   border: 0;
   outline: 0;
   cursor: pointer;
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   color: #fff;
   display: flex;
   justify-content: center;
@@ -551,9 +561,9 @@ button.btn.btn.btn-see-more.notif-disabled {
   position: relative;
 }
 .messengerAlert {
-  border-left: 6px solid #1C208F;
+  border-left: 6px solid var(--primary-color);
   border-radius: 0.4rem;
-  color: #1C208F;
+  color: var(--primary-color);
   padding: 2rem 1%;
   display: flex;
   align-items: center;
@@ -626,7 +636,7 @@ button.btn.btn.btn-see-more.notif-disabled {
     background: #fff;
   }
   .listGroupMessage::-webkit-scrollbar-thumb {
-    background-color: #1f3cad;
+    background-color: var(--primary-color);
     border-radius: 20px;
     border: 2px solid transparent;
   }
