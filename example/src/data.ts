@@ -17,16 +17,16 @@ export const chatData = [
       avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
     },
     messages: [
-      // {
-      //   id: 1,
-      //   content:
-      //     'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
-      //   date: '09:04 PM',
-      //   sender: {
-      //     id: 1
-      //   },
-      //   avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`
-      // },
+      {
+        id: 1,
+        content:
+          'Creation Ipsum is simply dummy text of the printing and typesetting industry.',
+        date: '09:04 PM',
+        sender: {
+          id: 1
+        },
+        avatar: `https://ui-avatars.com/api/?name=Paul+Gomis`,
+      },
       // {
       //   id: 2,
       //   content:
@@ -234,6 +234,3 @@ export const chatData = [
     count: 6
   }
 ]
-
-export const useAddChatMutation = () =>
-  console.log('message', 'message envoyer')

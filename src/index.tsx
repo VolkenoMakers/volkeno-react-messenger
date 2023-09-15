@@ -4,19 +4,15 @@ import { Chat, ChatData, IUser } from './chatType'
 import moment from 'moment'
 
 interface Props {
-  titlePage: string
-  chatData: any
+  title?: string
+  data: any
   me: IUser
-  AddChat: any
-  setConversation: any
 }
 
 export const VolkenoReactMessenger = ({
-  titlePage,
-  chatData,
-  me,
-  AddChat,
-  setConversation
+  title = 'Messagerie',
+  data,
+  me
 }: Props) => {
   const userId = me?.id
 
@@ -27,10 +23,16 @@ export const VolkenoReactMessenger = ({
     null
   )
 
+  const [conversation, setConversation] = React.useState<any>()
+
+  React.useEffect(() => {
+    setConversation(data)
+  }, [])
+
   const [count, setCount] = React.useState(0)
   React.useEffect(() => {
-    setFilteredChat(chatData)
-  }, [chatData])
+    setFilteredChat(conversation)
+  }, [conversation])
 
   React.useEffect(() => {
     let newCount = 0
@@ -48,19 +50,19 @@ export const VolkenoReactMessenger = ({
   React.useEffect(() => {
     if (selectedUser) {
       setSelectedChat(
-        chatData.find((l: any) => l.user.id === selectedUser.id) || null
+        conversation.find((l: any) => l.user.id === selectedUser.id) || null
       )
     } else {
       setSelectedChat(null)
     }
-  }, [selectedUser, chatData])
+  }, [selectedUser, conversation])
 
   return (
     <div className={styles.containerPage}>
       <div className={styles.containerMessenger}>
         <div className={styles.containerSectionDiscussion}>
           <div className={styles.contentTitleDiscussion}>
-            <p className={styles.titreMessagesBloc}>{titlePage}</p>
+            <p className={styles.titreMessagesBloc}>{title}</p>
           </div>
           <div className={styles.blocSearchMessage}>
             <form>
@@ -81,8 +83,8 @@ export const VolkenoReactMessenger = ({
             </form>
           </div>
           <ul className={styles.listGroupMessage}>
-            {chatData &&
-              chatData?.map((chat: any) => (
+            {conversation &&
+              conversation?.map((chat: any) => (
                 <Sommaire
                   active={selectedChat === chat}
                   item={chat}
@@ -101,8 +103,7 @@ export const VolkenoReactMessenger = ({
                 user={selectedUser}
                 me={me}
                 chat={selectedChat}
-                allConversation={chatData}
-                AddChat={AddChat}
+                allConversation={conversation}
                 conversationID={conversationID}
                 setConversation={setConversation}
                 setSelectedChat={setSelectedChat}
@@ -114,8 +115,7 @@ export const VolkenoReactMessenger = ({
           user={selectedUser}
           me={me}
           chat={selectedChat}
-          allConversation={chatData}
-          AddChat={AddChat}
+          allConversation={conversation}
           conversationID={conversationID}
           setConversation={setConversation}
           setSelectedChat={setSelectedChat}
@@ -172,7 +172,7 @@ function Sommaire({
               <div className={styles.blocMessageContact}>
                 <div className=''>
                   <p className={styles.contenuMessageContact}>
-                    {item?.messages[lastIndice]?.content?.slice(0, 10)}
+                    {item?.messages[lastIndice]?.content?.slice(0, 20)}
                   </p>
                 </div>
                 <div className=''>
@@ -210,7 +210,6 @@ function DetailsMessageTabsAdmin({
   chat,
   user,
   me,
-  AddChat,
   conversationID,
   allConversation,
   setConversation,
@@ -219,7 +218,7 @@ function DetailsMessageTabsAdmin({
   chat: ChatData | null
   user: IUser | null
   me: IUser
-  AddChat: any
+
   conversationID: any
   allConversation: any
   setConversation: any
@@ -277,7 +276,6 @@ function DetailsMessageTabsAdmin({
       </div>
       <ChatInput
         userId={user?.id}
-        AddChat={AddChat}
         me={me}
         conversationID={conversationID}
         conversation={chat}
@@ -293,7 +291,6 @@ function DetailsMessageMobile({
   chat,
   user,
   me,
-  AddChat,
   conversationID,
   allConversation,
   setConversation,
@@ -302,7 +299,7 @@ function DetailsMessageMobile({
   chat: ChatData | null
   user: IUser | null
   me: IUser
-  AddChat: any
+
   conversationID: any
   allConversation: any
   setConversation: any
@@ -361,7 +358,6 @@ function DetailsMessageMobile({
 
       <ChatInput
         userId={user?.id}
-        AddChat={AddChat}
         me={me}
         conversationID={conversationID}
         conversation={chat}
@@ -431,7 +427,6 @@ export function AlertInfo({ message }: PropsType) {
 
 function ChatInput({
   userId,
-  AddChat,
   me,
   conversationID,
   conversation,
@@ -440,7 +435,7 @@ function ChatInput({
   setSelectedChat
 }: {
   userId: number
-  AddChat: any
+
   me: IUser
   conversationID: any
   conversation: any
@@ -449,6 +444,8 @@ function ChatInput({
   setSelectedChat: any
 }) {
   const [message, setMessage] = React.useState('')
+
+  const AddChat = (data: any) => console.log('message envoyer', data)
 
   const onSubmit = async () => {
     if (message?.trim()?.length > 0) {
