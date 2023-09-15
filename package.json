@@ -34,6 +34,7 @@
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
+    "@types/react-modal": "^3.16.0",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "babel-eslint": "^10.0.3",
@@ -61,7 +62,10 @@
     "dist"
   ],
   "dependencies": {
-    "moment": "2.29.4",
+    "axios": "^1.5.0",
+    "moment": "^2.29.4",
+    "react-modal": "^3.16.1",
+    "socket.io-client": "^4.7.2",
     "yarn": "^1.22.19"
   }
 }

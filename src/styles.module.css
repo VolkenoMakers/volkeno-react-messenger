@@ -1,5 +1,5 @@
 /* add css module styles here (optional) */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root{
       --primary-color: #1f3cad;
@@ -26,11 +26,14 @@
   padding: 25px;
   width: 30%;
 }
-
+.headerSectionDiscussion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .container-header-message-list {
   display: flex;
   justify-content: space-between;
-
 }
 .formSearch {
   position: relative;
@@ -40,13 +43,13 @@
   border-radius: 10px;
   border: 0;
   padding: 20px 15px 20px 65px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
   letter-spacing: 0px;
   color: #767278;
-  background: #F8F8FB;
+  background: #f8f8fb;
 }
 .bloc-search-message i {
   color: #7c7c7c;
@@ -55,7 +58,7 @@
   background: transparent;
   position: absolute;
   left: 5%;
-    top: 39%;
+  top: 39%;
   border: none;
 }
 .btnSearchIcon:focus {
@@ -78,7 +81,7 @@
   justify-content: space-between;
 }
 .titreMessagesBloc {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 22.0454px;
@@ -99,7 +102,7 @@
   position: relative;
   transition: all 0.35s;
   border-radius: 4px;
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -110,7 +113,7 @@
 }
 .form-search-user {
   width: 100%;
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -126,7 +129,7 @@
 }
 
 .user-for-send-message-infos h3 {
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
@@ -135,7 +138,7 @@
   color: #303030;
 }
 .user-for-send-message-infos h4 {
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 13px;
@@ -153,7 +156,7 @@
 .input-send-messge {
   border: none;
   background: #fff;
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
@@ -216,6 +219,7 @@
   padding: 3%;
   border-radius: 20px;
   width: 90%;
+  position: relative;
 }
 .containerDetailMessageMobile {
   padding: 3%;
@@ -233,7 +237,7 @@
   border: 0;
   outline: 0;
   background-color: transparent;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -254,12 +258,27 @@
   color: #ffffff;
   border-radius: 10px;
 }
+.btnAddNewMessage {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 .containerDetailMessage .leftFooterContainer {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FAFAFB;
+  background: #fafafb;
   margin-top: 30px;
+  position: absolute;
+  bottom: 12px;
+  width: 92%;
 }
 .containerDetailMessage .img-icon-chat {
   cursor: pointer;
@@ -268,7 +287,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FAFAFB;
+  background: #fafafb;
   margin-top: 30px;
 }
 .containerDetailMessageMobile .img-icon-chat {
@@ -276,7 +295,7 @@
 }
 .statut-message-tabs-non-lu {
   background: #f45b64;
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
   font-size: 10px;
@@ -329,7 +348,7 @@
   color: var(--primary-color);
 }
 .profilDetailMessage {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -339,7 +358,7 @@
   margin-bottom: 3px;
 }
 .timeDetailMessage {
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 10px;
@@ -348,18 +367,18 @@
   color: #767278;
 }
 .conatinerReceivedMsgItem {
-display: flex;
-gap: 10px;
-align-items: flex-start;
-margin-bottom: 2%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 2%;
 }
 .imgReceivedMsg {
-width: 40px;
-height: 40px;
-border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 .textMessageRecu {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -373,7 +392,7 @@ border-radius: 50%;
 }
 
 .textMessageEnvoyer {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -416,7 +435,7 @@ border-radius: 50%;
   align-items: center;
 }
 .nomContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 12.3359px;
@@ -427,7 +446,7 @@ border-radius: 50%;
 }
 
 .timeMessageContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 10.6675px;
@@ -437,7 +456,7 @@ border-radius: 50%;
   margin: 0;
 }
 .contenuMessageContact {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 12.6675px;
@@ -466,7 +485,7 @@ border-radius: 50%;
     padding-left: 5%;
 } */
 .textDisconnectTime {
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 10px;
@@ -487,7 +506,7 @@ border-radius: 50%;
   background: transparent;
   width: 100%;
   border: none;
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-size: 15.8344px;
@@ -496,7 +515,7 @@ border-radius: 50%;
   width: 100%;
 }
 .btn-filter-message {
-  font-family: "Raleway";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -574,7 +593,7 @@ button.btn.btn.btn-see-more.notif-disabled {
 
 .messengerAlert h4 {
   margin: 0;
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   font-style: normal;
   font-size: 18px;
 }
@@ -585,7 +604,7 @@ button.btn.btn.btn-see-more.notif-disabled {
 .detailsMessagesMobile {
   min-height: 50%;
   width: 100%;
-} 
+}
 .statutMessageTabsTraite {
   font-size: 10px;
 }
@@ -595,6 +614,12 @@ button.btn.btn.btn-see-more.notif-disabled {
 .statutMessageTabsNonTraite {
   font-size: 10px;
 }
+@media (max-width: 767px) {
+  #contentModal {
+    width: 80% !important;
+  }
+}
+
 @media (min-width: 992px) {
   .noViewDesktop {
     display: none;
@@ -629,7 +654,8 @@ button.btn.btn.btn-see-more.notif-disabled {
   .listGroupMessage {
     height: 370px;
     overflow-y: scroll;
-  }.listGroupMessage::-webkit-scrollbar {
+  }
+  .listGroupMessage::-webkit-scrollbar {
     width: 3px;
   }
   .listGroupMessage::-webkit-scrollbar-track {
@@ -640,7 +666,11 @@ button.btn.btn.btn-see-more.notif-disabled {
     border-radius: 20px;
     border: 2px solid transparent;
   }
-
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  #contentModal {
+      width: 60% !important;
+    }
 }
 @media (min-width: 1000px) and (max-width: 1024px) {
   .containerSectionDiscussion {
@@ -666,3 +696,143 @@ button.btn.btn.btn-see-more.notif-disabled {
 .statutMessageTabsErreur {
   color: #ff3c5f;
 }
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.modalTitle {
+  color: #000;
+  font-family: "Poppins";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.authSubmitAnnuler {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  color: #4a4a68;
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.formSearchUser {
+  width: 88%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 12px;
+  letter-spacing: 0.01em;
+  color: rgba(37, 39, 51, 0.8);
+  padding: 15px 45px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  border-bottom: 1px solid #bdbdbd;
+}
+.formSearchUser:focus {
+  border-bottom: 1px solid #bdbdbd !important;
+  box-shadow: none !important;
+}
+.userForSendMessage {
+  list-style: none;
+}
+
+.userForSendMessageInfos h3 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  color: #303030;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.userForSendMessageInfos h4 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 15px;
+  letter-spacing: 0.05em;
+  color: #303030;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: left;
+}
+.containerRedirectNewMessage {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.imgProfilUserMessage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.formSearchUserContainer {
+  position: relative;
+}
+.BtnRedirectNewMessage {
+  background: transparent;
+  border: 0;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.userForSendMessageContainer {
+  padding-left: 0;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+}
+.ReactModal__Overlay .ReactModal__Overlay--after-open {
+  background-color: rgb(219 219 219 / 75%) !important;
+}
+.containerListUsersMessages {
+  height: 400px;
+  overflow-y: scroll;
+  margin: 15px 0;
+}
+.containerListUsersMessages::-webkit-scrollbar {
+  width: 3px;
+}
+
+.containerListUsersMessages::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.containerListUsersMessages::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  border: 2px solid transparent;
+}
+/* .contentModal {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height:80%;
+  z-index: 99999;
+  overflow: hidden;
+} */
