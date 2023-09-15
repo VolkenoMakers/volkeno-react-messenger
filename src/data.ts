@@ -27,7 +27,7 @@ export const usersList = [
         lastName: "Guissé",
         email: "paul.gomis@gmail.com",
         avatar: "https://ui-avatars.com/api/?rounded=true",
-    }
+    },
 ]
 
 export const recever = {

@@ -1,6 +1,15 @@
 /* add css module styles here (optional) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+:root{
+      --primary-color: #1f3cad;
+      --secondary-color:50px 0px 25px 0px;
+      --primary-bg: #f3f2f2;
+      --secondary-bg: #4c6fff0f;
+      --color-message-recu: #102844e5;
+      --color-message-envoyer: #fff;
+	 }
+
 .containerPage {
   margin: 2em;
   padding: 0.5em;
@@ -17,7 +26,11 @@
   padding: 25px;
   width: 30%;
 }
-
+.headerSectionDiscussion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .container-header-message-list {
   display: flex;
   justify-content: space-between;
@@ -89,7 +102,7 @@
   position: relative;
   transition: all 0.35s;
   border-radius: 4px;
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -100,7 +113,7 @@
 }
 .form-search-user {
   width: 100%;
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -116,7 +129,7 @@
 }
 
 .user-for-send-message-infos h3 {
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
@@ -125,7 +138,7 @@
   color: #303030;
 }
 .user-for-send-message-infos h4 {
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 13px;
@@ -143,7 +156,7 @@
 .input-send-messge {
   border: none;
   background: #fff;
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
@@ -196,7 +209,7 @@
   border-bottom: 0 !important;
 }
 .listGroupItemMeessage.active {
-  background-color: #4c6fff0f;
+  background-color: #ffffff;
   border-radius: 10px;
   border-bottom: none;
 }
@@ -240,10 +253,22 @@
 }
 .btnSendMessageTabs {
   border: 0;
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   padding: 12px;
-  color: #fff;
+  color: #ffffff;
   border-radius: 10px;
+}
+.btnAddNewMessage {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 .containerDetailMessage .leftFooterContainer {
   display: flex;
@@ -270,7 +295,7 @@
 }
 .statut-message-tabs-non-lu {
   background: #f45b64;
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
   font-size: 10px;
@@ -317,10 +342,10 @@
   border: 3px solid transparent;
 }
 .btn-send-message-tabs {
-  color: #1f3cad;
+  color: var(--primary-color);
 }
 .btn-send-message-tabs:hover {
-  color: #1f3cad;
+  color: var(--primary-color);
 }
 .profilDetailMessage {
   font-family: 'Poppins';
@@ -359,8 +384,8 @@
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.05em;
-  color: #102844e5;
-  background: #f3f2f2;
+  color: var(--color-message-recu);
+  background: var(--primary-bg);
   border-radius: 10px 10px 10px 0;
   padding: 10px;
   max-width: 50%;
@@ -373,8 +398,8 @@
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.05em;
-  color: #ffffff;
-  background: #1c208f;
+  color: var(--color-message-envoyer);
+  background: var(--primary-color);
   border-radius: 10px 10px 0px 10px;
   padding: 10px;
   max-width: 50%;
@@ -394,7 +419,7 @@
   background: #fff;
 }
 .blocDetails::-webkit-scrollbar-thumb {
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   border-radius: 20px;
   border: 3px solid transparent;
 }
@@ -490,7 +515,7 @@
   width: 100%;
 }
 .btn-filter-message {
-  font-family: 'Raleway';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -520,7 +545,7 @@
   border: 0;
   outline: 0;
   cursor: pointer;
-  background-color: #1f3cad;
+  background-color: var(--primary-color);
   color: #fff;
   display: flex;
   justify-content: center;
@@ -555,9 +580,9 @@ button.btn.btn.btn-see-more.notif-disabled {
   position: relative;
 }
 .messengerAlert {
-  border-left: 6px solid #1c208f;
+  border-left: 6px solid var(--primary-color);
   border-radius: 0.4rem;
-  color: #1c208f;
+  color: var(--primary-color);
   padding: 2rem 1%;
   display: flex;
   align-items: center;
@@ -589,6 +614,12 @@ button.btn.btn.btn-see-more.notif-disabled {
 .statutMessageTabsNonTraite {
   font-size: 10px;
 }
+@media (max-width: 767px) {
+  #contentModal {
+    width: 80% !important;
+  }
+}
+
 @media (min-width: 992px) {
   .noViewDesktop {
     display: none;
@@ -631,10 +662,15 @@ button.btn.btn.btn-see-more.notif-disabled {
     background: #fff;
   }
   .listGroupMessage::-webkit-scrollbar-thumb {
-    background-color: #1f3cad;
+    background-color: var(--primary-color);
     border-radius: 20px;
     border: 2px solid transparent;
   }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  #contentModal {
+      width: 60% !important;
+    }
 }
 @media (min-width: 1000px) and (max-width: 1024px) {
   .containerSectionDiscussion {
@@ -660,3 +696,143 @@ button.btn.btn.btn-see-more.notif-disabled {
 .statutMessageTabsErreur {
   color: #ff3c5f;
 }
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.modalTitle {
+  color: #000;
+  font-family: "Poppins";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.authSubmitAnnuler {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  color: #4a4a68;
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.formSearchUser {
+  width: 88%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 12px;
+  letter-spacing: 0.01em;
+  color: rgba(37, 39, 51, 0.8);
+  padding: 15px 45px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  border-bottom: 1px solid #bdbdbd;
+}
+.formSearchUser:focus {
+  border-bottom: 1px solid #bdbdbd !important;
+  box-shadow: none !important;
+}
+.userForSendMessage {
+  list-style: none;
+}
+
+.userForSendMessageInfos h3 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  color: #303030;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.userForSendMessageInfos h4 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 15px;
+  letter-spacing: 0.05em;
+  color: #303030;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: left;
+}
+.containerRedirectNewMessage {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.imgProfilUserMessage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.formSearchUserContainer {
+  position: relative;
+}
+.BtnRedirectNewMessage {
+  background: transparent;
+  border: 0;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.userForSendMessageContainer {
+  padding-left: 0;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+}
+.ReactModal__Overlay .ReactModal__Overlay--after-open {
+  background-color: rgb(219 219 219 / 75%) !important;
+}
+.containerListUsersMessages {
+  height: 400px;
+  overflow-y: scroll;
+  margin: 15px 0;
+}
+.containerListUsersMessages::-webkit-scrollbar {
+  width: 3px;
+}
+
+.containerListUsersMessages::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.containerListUsersMessages::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  border: 2px solid transparent;
+}
+/* .contentModal {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height:80%;
+  z-index: 99999;
+  overflow: hidden;
+} */

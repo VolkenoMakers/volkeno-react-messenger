@@ -2,6 +2,8 @@ import * as React from 'react'
 import styles from './styles.module.css'
 import { Chat, ChatData, IUser } from './chatType'
 import moment from 'moment'
+import Modal from "react-modal";
+import { usersList } from './data';
 
 interface Props {
   title?: string
@@ -24,6 +26,7 @@ export const VolkenoReactMessenger = ({
   )
 
   const [conversation, setConversation] = React.useState<any>()
+  const [modalNewChat, setModalNewChat] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setConversation(data)
@@ -57,12 +60,27 @@ export const VolkenoReactMessenger = ({
     }
   }, [selectedUser, conversation])
 
+function openModalNewChat(e: any) {
+  e.preventDefault();
+  setModalNewChat(true);
+}
   return (
     <div className={styles.containerPage}>
       <div className={styles.containerMessenger}>
         <div className={styles.containerSectionDiscussion}>
-          <div className={styles.contentTitleDiscussion}>
-            <p className={styles.titreMessagesBloc}>{title}</p>
+          <div className={styles.headerSectionDiscussion}>
+            <div className={styles.contentTitleDiscussion}>
+              <p className={styles.titreMessagesBloc}>{title}</p>
+            </div>
+            <div className={styles.containerBtnAddNewMessage}>
+              <button className={styles.btnAddNewMessage}  onClick={openModalNewChat}>
+                <i className="fa-solid fa-plus"></i>
+              </button>
+              <NewChatModal
+                  modalNewChat={modalNewChat}
+                  setModalNewChat={setModalNewChat}
+                />
+            </div>
           </div>
           <div className={styles.blocSearchMessage}>
             <form>
@@ -656,3 +674,101 @@ function ChatInput({
 //     </div>
 //   )
 // }
+
+function NewChatModal  ({ modalNewChat, setModalNewChat}:{ modalNewChat: boolean, setModalNewChat:any } ) {
+
+ 
+  function closeModalNewChat() {
+    setModalNewChat(false);
+  }
+
+
+  return (
+    <Modal
+      isOpen={modalNewChat}
+      onRequestClose={closeModalNewChat}
+      style={customStyles}
+      contentLabel="Example Modal"
+      ariaHideApp={false}
+      id="contentModal"
+    >
+      <div className={styles.modalHeader}>
+        <h5 className={styles.modalTitle}>
+          Nouvelle discussion
+        </h5>
+         <button
+            className={styles.authSubmitAnnuler}
+            type="button"
+            onClick={closeModalNewChat}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+      </div>
+      {/* <div className="content-btn-send-message flex-r">
+        <button className="btn btn-send-message-modal disabled">Suivant</button>
+      </div> */}
+      <div className="pt-3">
+        <div className={styles.formSearchUserContainer}>
+          <input
+            type="text"
+            className={styles.formSearchUser}
+            placeholder="Rechercher des personnes"
+          />
+          <i className='fa fa-search' aria-hidden='true'
+            style={{
+              color: "#919EAB",
+              fontSize: 22,
+              position: "absolute",
+              top: "25%",
+              left: "2%",
+            }}
+          ></i>
+        </div>
+      </div>
+     <div className={styles.containerListUsersMessages}>
+       <ul className={styles.userForSendMessageContainer}>
+          {usersList?.map((item: any) => (
+
+            <li
+            className={styles.userForSendMessage}
+            key={item.id} 
+            >
+              <button
+                  className={styles.BtnRedirectNewMessage}
+                >
+                  <div className={styles.containerRedirectNewMessage}>
+                    <div>
+                      <img
+                        src={item?.avatar}
+                        alt="user-avatar"
+                        className={styles.imgProfilUserMessage}
+                      />
+                    </div>
+                    <div className={styles.userForSendMessageInfos}>
+                      <h3>{item?.name} {item?.lastName}</h3>
+                      <h4>Online - Last seen, 2.02pm</h4>
+                    </div>
+                  </div>
+                </button>
+            </li>
+          ))}
+        </ul>
+     </div>
+    </Modal>
+  );
+};
+
+export const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    height:"80%",
+    zIndex: 99999,
+    overflow: "hidden",
+  },
+};
