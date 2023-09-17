@@ -20,6 +20,7 @@
     "moment": "^2.29.4",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
+    "react-modal": "^3.16.1",
     "react-scripts": "link:../node_modules/react-scripts",
     "typescript": "link:../node_modules/typescript",
     "volkeno-react-messenger": "link:.."

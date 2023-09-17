@@ -2,8 +2,8 @@ import * as React from 'react'
 import styles from './styles.module.css'
 import { Chat, ChatData, IUser } from './chatType'
 import moment from 'moment'
-import Modal from "react-modal";
 import { usersList } from './data';
+import Modal from 'react-modal';
 
 interface Props {
   title?: string
