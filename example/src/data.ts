@@ -1,10 +1,12 @@
-export const user = {
-  id: 1,
-  nom: 'User',
-  prenom: 'Current',
-  slug: 'me_slug',
-  avatar: `https://ui-avatars.com/api/?name=Me`
-}
+
+
+// export const user = {
+//   id: 1,
+//   nom: 'User',
+//   prenom: 'Current',
+//   slug: 'me_slug',
+//   avatar: `https://ui-avatars.com/api/?name=Me`
+// }
 
 export const chatData = [
   {
@@ -234,3 +236,21 @@ export const chatData = [
     count: 6
   }
 ]
+
+export const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDE2ODYzNCwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NDk2ODYzNH0.Gkt3VVG0Uw4puz4PvkLxlsRW2tAUUtUYOykGDYuGDvU"
+export const ApiBaseUrl = "https://yaay-ak-doom-api.volkeno-engineering.click/"
+
+
+
+
+
+// axios.get(ApiBaseUrl+ `user/${user?.slug}/conversations/?page=1&limit=1000`, config)
+// .then((response) => {
+//   setConversationsUser(response.data)
+//   console.log('Réponse de l\'API :', response.data);
+// })
+// .catch((error) => {
+//   console.error('Erreur lors de la requête :', error);
+// });
+
+// console.log("conversationsUser", conversationsUser)
