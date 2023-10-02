@@ -8,9 +8,6 @@ const token =
 const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
 
 const App = () => {
-  const socket =
-    'https://yaay-ak-doom-socket.withvolkeno.com' /* initialize your socket */
-
   const config = {
     headers: {
       Authorization: `Bearer ${token}`
@@ -59,20 +56,16 @@ const App = () => {
       })
   }, [])
 
-  console.log(user)
-  console.log(conversationsUser)
+  // console.log(user)
+  // console.log(conversationsUser)
 
   return (
     <VolkenoReactMessenger
       user={user}
-      socket={socket}
       token={token}
       conversationsUser={conversationsUser}
       showProfil={showProfil}
       setShowProfil={setShowProfil}
-      // onSendMessage={onSendMessage}
-      // onTyping={onTyping}
-      // onChooseConversation={onChooseConversation}
       ApiBaseUrl={ApiBaseUrl}
       config={config}
       userList={userList}

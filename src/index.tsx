@@ -9,26 +9,18 @@ import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
 
 const VolkenoReactMessenger = ({
-  socket,
   user,
   token,
   conversationsUser,
   showProfil,
   setShowProfil,
-  onSendMessage,
-  onTyping,
-  onChooseConversation,
   ApiBaseUrl,
   config,
   userList
 }: any) => {
   let isLogged = false
   if (isLogged) {
-    console.log(socket)
     console.log(token)
-    console.log(onSendMessage)
-    console.log(onTyping)
-    console.log(onChooseConversation)
   }
   console.log('user', user)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
@@ -38,25 +30,14 @@ const VolkenoReactMessenger = ({
   const [conversationActive, setConversationActive] = React.useState<any>(null)
   const [message, setMessage] = React.useState('')
   const [messages, setMessages] = React.useState<any>([])
-  //   const [typingStatus, setTypingStatus] = React.useState<any>('');
   const lastMessageRef = React.useRef<any>(null)
 
   console.log('messages', messages)
 
-  //   const getApiAndEmit = async (socket, datas) => {
-  //     socket.emit("all_conversations", datas)
-  //   };
-
   React.useEffect(() => {
-    // getApiAndEmit(socket, conversationsUser?.results);
     setConversations(conversationsUser)
-    console.log('conversations', conversations)
-    // setConversations("")
+    // console.log('conversations', conversations)
   }, [conversationsUser])
-
-  // useEffect(()=> {
-  //     socket.on("allConversations", data => setConversations(data));
-  // }, [socket]);
 
   const handleSendMessage = (e: any) => {
     e.preventDefault()
@@ -79,13 +60,10 @@ const VolkenoReactMessenger = ({
         }
       }
       axios
-        .post(ApiBaseUrl + 'api/messages/', data, config)
+        .post(ApiBaseUrl + '/api/messages/', data, config)
         .then((response) => {
           setConversationActive(response?.data?.conversation)
           setMessages(response?.data?.conversation?.messages)
-
-          //   socket.emit("message", data)
-          //   socket.emit("typing",``)
         })
         .catch((error) => {
           console.error(`Error: ${error}`)
@@ -95,34 +73,12 @@ const VolkenoReactMessenger = ({
   }
 
   const handleTyping = () => console.log('typing')
-  // socket.emit('typing', `${FullName} est en train d'écrire`);
 
-  // const getApiAndEmitMessage = async (socket, data) => {
-  //   socket.emit("message", data?.messages)
-  // };
-
-  // useEffect(() => {
-  //   getApiAndEmitMessage(socket, conversationActive);
-  // }, [conversationActive])
-
-  // React.useEffect(() => {
-  //   socket.on('messageResponse', (data) => {
-  //     if([data?.sender, data?.receiver].includes(me?.id))
-  //     {
-  //       refetch()
-  //     }}
-  //   );
-  //   return () => socket.off('messageResponse')
-  // }, [socket]);
 
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
-
-  // useEffect(() => {
-  //   socket.on('typingResponse', (data) => setTypingStatus(data));
-  // }, [socket]);
 
   function openModalNewChat(e: any) {
     e.preventDefault()
@@ -132,11 +88,12 @@ const VolkenoReactMessenger = ({
   const onChoseConvesation = (x: any) => {
     setReceiver(null)
     setConversationActive(x)
-    setMessages(x?.messages)
+    setMessages(x?.messages.reverse())
   }
-  console.log('conversations', conversations)
 
-  console.log('conversationsUser', conversationsUser)
+  // console.log('conversations', conversations)
+
+  // console.log('conversationsUser', conversationsUser)
   return (
     <div className='dashbord-admin-component'>
       <div className='container dash-admin-page-content-container mb-3'>
@@ -655,7 +612,6 @@ const VolkenoReactMessenger = ({
 //   setShowProfil: PropTypes.bool, // Whether to show user profiles (optional)
 //   onSendMessage: PropTypes.func, // Function for sending messages
 //   onTyping: PropTypes.func, // Function for handling typing status
-//   onChooseConversation: PropTypes.func, // Function for choosing a conversation
 // };
 VolkenoReactMessenger.propTypes = {
   socket: PropTypes.any, // Socket connection (optional)
@@ -667,7 +623,6 @@ VolkenoReactMessenger.propTypes = {
   setShowProfil: PropTypes.any, // Whether to show user profiles (optional)
   onSendMessage: PropTypes.any, // Function for sending messages
   onTyping: PropTypes.any, // Function for handling typing status
-  onChooseConversation: PropTypes.any, // Function for choosing a conversation
   config: PropTypes.any, // Function for choosing a conversation
   userList: PropTypes.any // Function for choosing a conversation
 }
