@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/self-closing-comp */
 import axios from 'axios'
 import styles from './styles.module.css'
 import * as React from 'react'
@@ -12,17 +15,21 @@ const VolkenoReactMessenger = ({
   user,
   token,
   conversationsUser,
-  showProfil,
-  setShowProfil,
   ApiBaseUrl,
-  config,
-  userList
+  userList,
+  socket,
+  config
 }: any) => {
-  let isLogged = false
+  const isLogged = false
   if (isLogged) {
     console.log(token)
   }
-  console.log('user', user)
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // }
+  const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
 
   const [conversations, setConversations] = React.useState<any>([])
@@ -30,13 +37,12 @@ const VolkenoReactMessenger = ({
   const [conversationActive, setConversationActive] = React.useState<any>(null)
   const [message, setMessage] = React.useState('')
   const [messages, setMessages] = React.useState<any>([])
+  const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
-  console.log('messages', messages)
-
+  // console.log(typingStatus)
   React.useEffect(() => {
     setConversations(conversationsUser)
-    // console.log('conversations', conversations)
   }, [conversationsUser])
 
   const handleSendMessage = (e: any) => {
@@ -54,7 +60,7 @@ const VolkenoReactMessenger = ({
           content: message,
           sender: user?.id,
           receiver: conversationActive?.participants?.find(
-            (item: any) => item?.id != user?.id
+            (item: any) => item?.id !== user?.id
           )?.id,
           conversation: conversationActive?.id
         }
@@ -64,6 +70,10 @@ const VolkenoReactMessenger = ({
         .then((response) => {
           setConversationActive(response?.data?.conversation)
           setMessages(response?.data?.conversation?.messages)
+
+          socket.emit(`'message'`, response?.data)
+          socket.emit('typing', ``)
+          console.log('ok socket')
         })
         .catch((error) => {
           console.error(`Error: ${error}`)
@@ -72,14 +82,27 @@ const VolkenoReactMessenger = ({
     setMessage('')
   }
 
-  const handleTyping = () => console.log('typing')
+  React.useEffect(() => {
+    socket.on('messageResponse', (data: any) => {
+      if ([data?.sender, data?.receiver].includes(user?.id)) {
+        // setFetchData(true)
+      }
+    })
+    return () => socket.off('messageResponse')
+  }, [socket])
 
+  const handleTyping = () => console.log('typing')
 
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  React.useEffect(() => {
+    socket.on('typingResponse', (data: any) => {
+      setTypingStatus(data)
+    })
+  }, [socket])
   function openModalNewChat(e: any) {
     e.preventDefault()
     setModalNewChat(true)
@@ -88,12 +111,9 @@ const VolkenoReactMessenger = ({
   const onChoseConvesation = (x: any) => {
     setReceiver(null)
     setConversationActive(x)
-    setMessages(x?.messages.reverse())
+    setMessages(x?.messages)
   }
 
-  // console.log('conversations', conversations)
-
-  // console.log('conversationsUser', conversationsUser)
   return (
     <div className='dashbord-admin-component'>
       <div className='container dash-admin-page-content-container mb-3'>
@@ -103,11 +123,9 @@ const VolkenoReactMessenger = ({
               <div
                 className={`${styles.yadMessagerieTitreMessageContainer}  mb-4`}
               >
-                <div className={`${styles.yadMessagerieTitreMessage}`}>
-                  Message
-                </div>
+                <div className={styles.yadMessagerieTitreMessage}>Message</div>
                 <button
-                  onClick={openModalNewChat}
+                  onClick={(e) => openModalNewChat(e)}
                   className={`btn ${styles.yadMessagerieBtnAjout} ${styles.btnAddNewChat}`}
                 >
                   <AiFillPlusCircle />
@@ -121,7 +139,7 @@ const VolkenoReactMessenger = ({
                   ApiBaseUrl={ApiBaseUrl}
                 />
               </div>
-              <div className={`input-group mb-4`}>
+              <div className='input-group mb-4'>
                 <span
                   className={`input-group-text ${styles.yadMessagerieCustomInputAddon}`}
                   id='basic-addon1'
@@ -164,17 +182,17 @@ const VolkenoReactMessenger = ({
                       className={styles.yadMessagerieListGroupAvatarContainer}
                     >
                       {item?.participants?.find(
-                        (item: any) => item?.id != user?.id
+                        (item: any) => item?.id !== user?.id
                       )?.avatar &&
                       showProfil &&
                       item?.participants?.find(
-                        (item: any) => item?.id != user?.id
-                      )?.avatar != '/mediafiles/avatars/default.png' ? (
+                        (item: any) => item?.id !== user?.id
+                      )?.avatar !== '/mediafiles/avatars/default.png' ? (
                         <img
                           src={
                             ApiBaseUrl +
                             item?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )?.avatar
                           }
                           className={styles.yadMessagerieListGroupAvatar}
@@ -185,7 +203,7 @@ const VolkenoReactMessenger = ({
                         <div className={styles.formatPseudo}>
                           {getUserPseudo(
                             item?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )
                           )}
                         </div>
@@ -245,12 +263,12 @@ const VolkenoReactMessenger = ({
                         >
                           {
                             item?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )?.prenom
                           }{' '}
                           {
                             item?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )?.nom
                           }
                         </div>
@@ -283,7 +301,7 @@ const VolkenoReactMessenger = ({
               </div>
             </div>
           </div>
-          <div className='col-md-8 col-right-messagerie d-flex mb-3'>
+          <div className={`col-md-8 ${styles.colRightMessagerie} d-flex mb-3`}>
             {conversationActive != null || receiver != null ? (
               <div className={`${styles.dtailsMessagesTabsComponent} w-100`}>
                 <div
@@ -296,7 +314,7 @@ const VolkenoReactMessenger = ({
                       {conversationActive == null ? (
                         receiver?.avatar &&
                         showProfil &&
-                        receiver?.avatar !=
+                        receiver?.avatar !==
                           '/mediafiles/avatars/default.png' ? (
                           <img
                             src={ApiBaseUrl + receiver?.avatar}
@@ -310,17 +328,17 @@ const VolkenoReactMessenger = ({
                           </div>
                         )
                       ) : conversationActive?.participants?.find(
-                          (item: any) => item?.id != user?.id
+                          (item: any) => item?.id !== user?.id
                         )?.avatar &&
                         showProfil &&
                         conversationActive?.participants?.find(
-                          (item: any) => item?.id != user?.id
-                        )?.avatar != '/mediafiles/avatars/default.png' ? (
+                          (item: any) => item?.id !== user?.id
+                        )?.avatar !== '/mediafiles/avatars/default.png' ? (
                         <img
                           src={
                             ApiBaseUrl +
                             conversationActive?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )?.avatar
                           }
                           className={`${styles.imageProfilEntete} image_responsive`}
@@ -331,7 +349,7 @@ const VolkenoReactMessenger = ({
                         <div className={styles.formatPseudo}>
                           {getUserPseudo(
                             conversationActive?.participants?.find(
-                              (item: any) => item?.id != user?.id
+                              (item: any) => item?.id !== user?.id
                             )
                           )}
                         </div>
@@ -364,11 +382,11 @@ const VolkenoReactMessenger = ({
                             {conversationActive == null
                               ? receiver?.prenom + ' ' + receiver?.nom
                               : conversationActive?.participants?.find(
-                                  (item: any) => item?.id != user?.id
+                                  (item: any) => item?.id !== user?.id
                                 )?.prenom +
                                 ' ' +
                                 conversationActive?.participants?.find(
-                                  (item: any) => item?.id != user?.id
+                                  (item: any) => item?.id !== user?.id
                                 )?.nom}
                           </p>
                         </div>
@@ -483,14 +501,14 @@ const VolkenoReactMessenger = ({
                 </div>
                 <div className='bloc-details pb-5'>
                   {messages?.map((message: any) => (
-                    <div>
-                      {message?.sender?.id != user?.id ? (
+                    <div key={message?.id}>
+                      {message?.sender?.id !== user?.id ? (
                         <div className='position-relative received-msg-item m-b-2'>
                           <div className={`${styles.blocMessageRecu} p-3`}>
                             <div className='content-img-pp-message-recieve'>
                               {message?.receiver?.avatar &&
                               showProfil &&
-                              message?.receiver?.avatar !=
+                              message?.receiver?.avatar !==
                                 '/mediafiles/avatars/default.png' ? (
                                 <img
                                   src={ApiBaseUrl + message?.receiver?.avatar}
@@ -519,7 +537,7 @@ const VolkenoReactMessenger = ({
                       ) : (
                         <div className={styles.blocReponse}>
                           <div className='position-relative sending-msg-item'>
-                            <div className='bloc-message-envoyer'>
+                            <div className={styles.blocMessageEnvoyer}>
                               <span className={styles.textMessageEnvoyer}>
                                 {message?.content}
                               </span>
@@ -536,7 +554,7 @@ const VolkenoReactMessenger = ({
                       )}
                     </div>
                   ))}
-                  <div className=''>{/* <p>{typingStatus}</p> */}</div>
+                  <div className=''>{typingStatus}</div>
                   <div ref={lastMessageRef} />
                 </div>
                 <div className='p-3 border-top'>
@@ -643,9 +661,6 @@ function NewChatModal({
   // React.useEffect(() => {
   //   setListUser(userList)
   // }, [])
-  console.log('userList for chat', userList)
-  console.log('ApiBaseUrl', ApiBaseUrl)
-  // console.log('userList for list', listUser)
 
   function closeModalNewChat() {
     setModalNewChat(false)
@@ -660,7 +675,7 @@ function NewChatModal({
   return (
     <Modal
       isOpen={modalNewChat}
-      onRequestClose={closeModalNewChat}
+      onRequestClose={() => closeModalNewChat()}
       style={customStyles}
       contentLabel='Example Modal'
       ariaHideApp={false}
@@ -672,7 +687,7 @@ function NewChatModal({
         <button
           className={`${styles.noStyleBtnModal} btn`}
           type='button'
-          onClick={closeModalNewChat}
+          onClick={() => closeModalNewChat()}
         >
           <i className='fa-solid fa-xmark'></i>
         </button>
@@ -708,7 +723,7 @@ function NewChatModal({
             >
               <div className='d-flex align-items-center gap-2'>
                 <div>
-                  {item?.avatar != '/mediafiles/avatars/default.png' ? (
+                  {item?.avatar !== '/mediafiles/avatars/default.png' ? (
                     <img
                       src={ApiBaseUrl + item?.avatar}
                       alt='user-avatar'

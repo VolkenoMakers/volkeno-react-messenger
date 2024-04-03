@@ -42,8 +42,11 @@
   flex-shrink: 0;
   border-radius: 10px;
   border: none;
-  background-color: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important;
+  /* background-color: rgb(246, 248, 255) !important;
+  border-color: rgb(246, 248, 255) !important; */
+  border-radius: 10px !important;
+  opacity: 0.05 !important;
+  background: var(--Main--Color, #4C6FFF) !important;
 }
 .yadMessagerieCustomListGroup button.listGroupItem.listGroupItemAction {
   display: flex;
@@ -108,15 +111,20 @@
   border-radius: 10px;
 
   border: none;
-  background-color: rgb(42, 61, 128) !important;
-  border-color: rgb(246, 248, 255) !important;
+  /* background-color: rgb(42, 61, 128) !important;
+  border-color: rgb(246, 248, 255) !important; */
 }
 button.list-group-item.active,
 button.listGroupItem.active,
 button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__listGroupItemAction__V2RJm.active {
-  background-color: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important;
+  /* background-color: rgb(246, 248, 255) !important;
+  border-color: rgb(246, 248, 255) !important; */
 }
+/* .list-group-item.active {
+  border-radius: 10px !important;
+  opacity: 0.05 !important;
+  background: red !important;
+} */
 .yadMessagerieCustomListGroup .yadMessagerieListGroupApercu {
   color: var(--paragraph, #767278);
   font-family: 'DM Sans';
@@ -488,6 +496,9 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
         right: 0%;
         bottom: 23%;
     } */
+.blocMessageEnvoyer {
+  display: flex;
+}
 .textMessageEnvoyer {
   letter-spacing: 0.05em;
   border-radius: 10px 10px 0px 10px;
@@ -703,6 +714,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
     padding: 0;
   } */
 .customContentMessageLeft {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.07));
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   background: #fff;
@@ -878,4 +890,26 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
 .noStyleBtnModal {
   background: none;
   border: none;
+}
+.colRightMessagerie {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.07));
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  background: #FFF;
+}
+
+.listGroupItemMeessage {
+  padding: 20px 15px;
+  list-style: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.349);
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.listGroupItemMeessage:last-child {
+  border-bottom: 0 !important;
+}
+.listGroupItemMeessage.active {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border-bottom: none;
 }
