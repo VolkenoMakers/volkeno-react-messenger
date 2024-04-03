@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import VolkenoReactMessenger from 'volkeno-react-messenger'
 import 'volkeno-react-messenger/dist/index.css'
 import axios from 'axios'
+import { io } from 'socket.io-client'
 
-const token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
+const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
+const SOCKET_URL = '164.92.136.142:4026'
 const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
 
 const App = () => {
@@ -13,7 +14,8 @@ const App = () => {
       Authorization: `Bearer ${token}`
     }
   }
-  const [showProfil, setShowProfil] = React.useState(true)
+  const socket = io(SOCKET_URL)
+
   const [user, setUser] = React.useState(null)
   const [conversationsUser, setConversationsUser] = React.useState(null)
   const [userList, setUserList] = React.useState(null)
@@ -24,6 +26,10 @@ const App = () => {
       .then((response) => {
         const userData = response.data.data
         setUser(userData)
+        socket.emit('newUser', {
+          userName: userData?.prenom + ' ' + userData?.nom,
+          socketID: socket.id
+        })
 
         if (userData) {
           axios
@@ -43,7 +49,7 @@ const App = () => {
       .catch((error) => {
         console.error('Error:', error)
       })
-  }, [])
+  }, [socket])
   useEffect(() => {
     axios
       .get(ApiBaseUrl + '/api/medecins/?limit=1000', config)
@@ -56,19 +62,15 @@ const App = () => {
       })
   }, [])
 
-  // console.log(user)
-  // console.log(conversationsUser)
-
   return (
     <VolkenoReactMessenger
+      socket={socket}
       user={user}
       token={token}
       conversationsUser={conversationsUser}
-      showProfil={showProfil}
-      setShowProfil={setShowProfil}
       ApiBaseUrl={ApiBaseUrl}
-      config={config}
       userList={userList}
+      config={config}
     />
   )
 }
