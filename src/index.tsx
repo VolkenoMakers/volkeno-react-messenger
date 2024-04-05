@@ -1,15 +1,17 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/self-closing-comp */
 import axios from 'axios'
 import styles from './styles.module.css'
 import * as React from 'react'
-import Modal from 'react-modal'
+import Modal from 'react-bootstrap/Modal'
 import { formatDateHour, getUserPseudo, truncateCaractere } from './Utils'
 import PropTypes from 'prop-types'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
+import { ListGroup } from 'react-bootstrap'
 
 const VolkenoReactMessenger = ({
   user,
@@ -24,11 +26,7 @@ const VolkenoReactMessenger = ({
   if (isLogged) {
     console.log(token)
   }
-  // const config = {
-  //   headers: {
-  //     Authorization: `Bearer ${token}`
-  //   }
-  // }
+
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
 
@@ -45,7 +43,7 @@ const VolkenoReactMessenger = ({
     setConversations(conversationsUser)
   }, [conversationsUser])
 
-  const handleSendMessage = (e: any) => {
+  const handleSendMessage = async (e: any) => {
     e.preventDefault()
     if (message.trim()) {
       let data = {}
@@ -65,21 +63,22 @@ const VolkenoReactMessenger = ({
           conversation: conversationActive?.id
         }
       }
-      axios
-        .post(ApiBaseUrl + '/api/messages/', data, config)
-        .then((response) => {
-          setConversationActive(response?.data?.conversation)
-          setMessages(response?.data?.conversation?.messages)
-
-          socket.emit(`'message'`, response?.data)
-          socket.emit('typing', ``)
-          console.log('ok socket')
-        })
-        .catch((error) => {
-          console.error(`Error: ${error}`)
-        })
+      try {
+        const response = await axios.post(
+          ApiBaseUrl + '/api/messages/',
+          data,
+          config
+        )
+        setConversationActive(response?.data?.conversation)
+        setMessages(response?.data?.conversation?.messages)
+        socket.emit(`'message'`, response?.data)
+        socket.emit('typing', ``)
+        console.log('ok socket')
+      } catch (error) {
+        console.error(`Error: ${error}`)
+      }
+      setMessage('')
     }
-    setMessage('')
   }
 
   React.useEffect(() => {
@@ -114,6 +113,12 @@ const VolkenoReactMessenger = ({
     setMessages(x?.messages)
   }
 
+  const [search, setSearch] = React.useState('')
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value)
+  }
+
   return (
     <div className='dashbord-admin-component'>
       <div className='container dash-admin-page-content-container mb-3'>
@@ -137,6 +142,8 @@ const VolkenoReactMessenger = ({
                   setConversationActive={setConversationActive}
                   userList={userList}
                   ApiBaseUrl={ApiBaseUrl}
+                  conversations={conversations}
+                  setMessages={setMessages}
                 />
               </div>
               <div className='input-group mb-4'>
@@ -163,142 +170,155 @@ const VolkenoReactMessenger = ({
                   placeholder='Recherche'
                   aria-label='Username'
                   aria-describedby='basic-addon1'
+                  value={search}
+                  onChange={handleSearch}
                 />
               </div>
-              <div
+              <ListGroup
                 className={`list-group list-group-flush ${styles.yadMessagerieCustomListGroup}`}
               >
-                {conversations?.map((item: any) => (
-                  <button
-                    type='button'
-                    className={`btn list-group-item ${styles.listGroupItem} ${
-                      styles.listGroupItemAction
-                    } ${item?.id === conversationActive?.id && 'active'}`}
-                    aria-current='true'
-                    key={item?.id}
-                    onClick={() => onChoseConvesation(item)}
-                  >
-                    <div
-                      className={styles.yadMessagerieListGroupAvatarContainer}
+                {conversations
+                  ?.filter((item: any) =>
+                    `${
+                      item?.participants?.find((p: any) => p.id !== user?.id)
+                        ?.prenom
+                    } ${
+                      item?.participants?.find((p: any) => p.id !== user?.id)
+                        ?.nom
+                    }`
+                      .toLowerCase()
+                      .includes(search.toLowerCase())
+                  )
+                  ?.map((item: any) => (
+                    <ListGroup.Item
+                      type='button'
+                      className={`btn  ${styles.listGroupItem} ${
+                        styles.listGroupItemAction
+                      } ${item?.id === conversationActive?.id && 'active'}`}
+                      aria-current='true'
+                      key={item?.id}
+                      onClick={() => onChoseConvesation(item)}
                     >
-                      {item?.participants?.find(
-                        (item: any) => item?.id !== user?.id
-                      )?.avatar &&
-                      showProfil &&
-                      item?.participants?.find(
-                        (item: any) => item?.id !== user?.id
-                      )?.avatar !== '/mediafiles/avatars/default.png' ? (
-                        <img
-                          src={
-                            ApiBaseUrl +
-                            item?.participants?.find(
-                              (item: any) => item?.id !== user?.id
-                            )?.avatar
-                          }
-                          className={styles.yadMessagerieListGroupAvatar}
-                          alt='Photo'
-                          onError={() => setShowProfil(false)}
-                        />
-                      ) : (
-                        <div className={styles.formatPseudo}>
-                          {getUserPseudo(
-                            item?.participants?.find(
-                              (item: any) => item?.id !== user?.id
-                            )
-                          )}
-                        </div>
-                      )}
-                      {item?.en_ligne ? (
-                        <div
-                          className={
-                            styles.yadMessagerieListGroupAvatarIndicator
-                          }
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='10'
-                            height='10'
-                            viewBox='0 0 10 10'
-                            fill='none'
-                          >
-                            <circle
-                              cx='5'
-                              cy='4.99976'
-                              r='4.5'
-                              fill='#2CC84A'
-                              stroke='white'
-                            />
-                          </svg>
-                        </div>
-                      ) : (
-                        <div
-                          className={
-                            styles.yadMessagerieListGroupAvatarIndicator
-                          }
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='10'
-                            height='10'
-                            viewBox='0 0 10 10'
-                            fill='none'
-                          >
-                            <circle
-                              cx='5'
-                              cy='4.99976'
-                              r='4.5'
-                              fill='#F2F2F2'
-                              stroke='white'
-                            />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className='w-100'>
                       <div
-                        className={styles.yadMessagerieListGroupNameContainer}
+                        className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
                       >
-                        <div
-                          className={`${styles.yadMessagerieListGroupName} m-r-7`}
-                        >
-                          {
-                            item?.participants?.find(
-                              (item: any) => item?.id !== user?.id
-                            )?.prenom
-                          }{' '}
-                          {
-                            item?.participants?.find(
-                              (item: any) => item?.id !== user?.id
-                            )?.nom
-                          }
-                        </div>
-                        <div className={styles.yadMessagerieListGroupHeure}>
-                          {formatDateHour(
-                            item?.messages[item?.messages?.length - 1]
-                              ?.created_at
-                          )}
-                        </div>
-                      </div>
-                      <div className={styles.yadMessagerieListGroupApercu}>
-                        {truncateCaractere(
-                          item?.messages[item?.messages?.length - 1]?.content,
-                          18
+                        {item?.participants?.find(
+                          (item: any) => item?.id !== user?.id
+                        )?.avatar &&
+                        showProfil &&
+                        item?.participants?.find(
+                          (item: any) => item?.id !== user?.id
+                        )?.avatar !== '/mediafiles/avatars/default.png' ? (
+                          <img
+                            src={
+                              ApiBaseUrl +
+                              item?.participants?.find(
+                                (item: any) => item?.id !== user?.id
+                              )?.avatar
+                            }
+                            className={styles.yadMessagerieListGroupAvatar}
+                            alt='Photo'
+                            onError={() => setShowProfil(false)}
+                          />
+                        ) : (
+                          <div className={styles.formatPseudo}>
+                            {getUserPseudo(
+                              item?.participants?.find(
+                                (item: any) => item?.id !== user?.id
+                              )
+                            )}
+                          </div>
+                        )}
+                        {item?.en_ligne ? (
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
+                            >
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill='#2CC84A'
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
+                            >
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill='#F2F2F2'
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         )}
                       </div>
-                    </div>
-                    <div
-                      className={
-                        styles.yadMessagerieListGroupCheckIconContainer
-                      }
-                    >
-                      <BsCheck2All
-                        className={styles.yadMessagerieListGroupCheckIcon}
-                      />
-                      {/* <i className={`fa-solid fa-check-double ${styles.yadMessagerieListGroupCheckIcon}`}></i> */}
-                    </div>
-                  </button>
-                ))}
-              </div>
+                      <div className='w-100'>
+                        <div
+                          className={styles.yadMessagerieListGroupNameContainer}
+                        >
+                          <div
+                            className={`${styles.yadMessagerieListGroupName} m-r-7`}
+                          >
+                            {
+                              item?.participants?.find(
+                                (item: any) => item?.id !== user?.id
+                              )?.prenom
+                            }{' '}
+                            {
+                              item?.participants?.find(
+                                (item: any) => item?.id !== user?.id
+                              )?.nom
+                            }
+                          </div>
+                          <div className={styles.yadMessagerieListGroupHeure}>
+                            {formatDateHour(
+                              item?.messages[item?.messages?.length - 1]
+                                ?.created_at
+                            )}
+                          </div>
+                        </div>
+                        <div className={styles.yadMessagerieListGroupApercu}>
+                          {truncateCaractere(
+                            item?.messages[item?.messages?.length - 1]?.content,
+                            18
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          styles.yadMessagerieListGroupCheckIconContainer
+                        }
+                      >
+                        <BsCheck2All
+                          className={styles.yadMessagerieListGroupCheckIcon}
+                        />
+                      </div>
+                    </ListGroup.Item>
+                  ))}
+              </ListGroup>
             </div>
           </div>
           <div className={`col-md-8 ${styles.colRightMessagerie} d-flex mb-3`}>
@@ -557,7 +577,9 @@ const VolkenoReactMessenger = ({
                   <div className=''>{typingStatus}</div>
                   <div ref={lastMessageRef} />
                 </div>
-                <div className='p-3 border-top'>
+                <div
+                  className={`${styles.textAreaFormContainer} p-3 border-top`}
+                >
                   <form onSubmit={handleSendMessage}>
                     <div className='left-footer'>
                       <div className={styles.leftFooterContainer}>
@@ -618,19 +640,6 @@ const VolkenoReactMessenger = ({
   )
 }
 
-// Define the prop types to document what users should provide.
-
-// VolkenoReactMessenger.propTypes = {
-//   socket: PropTypes.object, // Socket connection (optional)
-//   user: PropTypes.object, // User data (optional)
-//   token: PropTypes.string, // Authentication token (optional)
-//   ApiBaseUrl: PropTypes.string, // Authentication token (optional)
-//   conversationsUser: PropTypes.object, // Conversations data (optional)
-//   showProfil: PropTypes.bool, // Whether to show user profiles (optional)
-//   setShowProfil: PropTypes.bool, // Whether to show user profiles (optional)
-//   onSendMessage: PropTypes.func, // Function for sending messages
-//   onTyping: PropTypes.func, // Function for handling typing status
-// };
 VolkenoReactMessenger.propTypes = {
   socket: PropTypes.any, // Socket connection (optional)
   user: PropTypes.any, // User data (optional)
@@ -653,114 +662,109 @@ function NewChatModal({
   setReceiver,
   setConversationActive,
   userList,
-  ApiBaseUrl
+  ApiBaseUrl,
+  conversations,
+  setMessages
 }: any) {
-  // const { data, isLoading } = useGetMedecinListQuery();
-  // const [listUser, setListUser] = React.useState<any>()
+  const [searchValue, setSearchValue] = React.useState('')
 
-  // React.useEffect(() => {
-  //   setListUser(userList)
-  // }, [])
+  const filteredUserList = userList?.filter((item: any) =>
+    `${item?.prenom} ${item?.nom}`
+      .toLowerCase()
+      .includes(searchValue.toLowerCase())
+  )
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value)
+  }
 
   function closeModalNewChat() {
     setModalNewChat(false)
   }
 
   const onChoseReceiver = (x: any) => {
-    setReceiver(x)
-    setConversationActive(null)
-    closeModalNewChat()
+    // Vérifier si l'utilisateur sélectionné a déjà une conversation active
+    const existingConversation = conversations.find((conversation: any) =>
+      conversation.participants.some(
+        (participant: any) => participant.id === x.id
+      )
+    )
+
+    if (existingConversation) {
+      // Si une conversation existe déjà avec cet utilisateur, afficher les messages de cette conversation
+      setConversationActive(existingConversation)
+      setReceiver(null) // Réinitialiser le destinataire
+      setMessages(existingConversation?.messages) // afficher l'historique de messages
+      closeModalNewChat() // Fermer la modal de nouvelle conversation
+    } else {
+      // Si aucune conversation active avec cet utilisateur, définir le destinataire et réinitialiser la conversation active et l'historique de messages
+      setReceiver(x)
+      setConversationActive(null)
+      setMessages(null)
+      closeModalNewChat() // Fermer la modal de nouvelle conversation
+    }
   }
 
   return (
-    <Modal
-      isOpen={modalNewChat}
-      onRequestClose={() => closeModalNewChat()}
-      style={customStyles}
-      contentLabel='Example Modal'
-      ariaHideApp={false}
-    >
-      <div className='modal-header border-0 pe-2 py-1'>
-        <h5 className='modal-title' id='ChangePasswordModalLabel'>
-          Nouvelle discussion
-        </h5>
-        <button
-          className={`${styles.noStyleBtnModal} btn`}
-          type='button'
-          onClick={() => closeModalNewChat()}
-        >
-          <i className='fa-solid fa-xmark'></i>
-        </button>
-      </div>
-      <div className='pt-3'>
-        <div className='form-search-user-container position-relative'>
-          <input
-            type='text'
-            className={`${styles.formSearchUser} form-control`}
-            placeholder='Rechercher des personnes'
-          />
-          <FiSearch
-            style={{
-              color: '#919EAB',
-              fontSize: 22,
-              position: 'absolute',
-              top: '25%',
-              left: '2%'
-            }}
-          />
+    <Modal show={modalNewChat} onHide={() => closeModalNewChat()}>
+      <Modal.Header className='modal-header border-0 p-3' closeButton>
+        <Modal.Title>Nouvelle discussion</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className='pt-3'>
+          <div className='form-search-user-container position-relative'>
+            <input
+              type='text'
+              className={`${styles.formSearchUser} form-control`}
+              placeholder='Rechercher des personnes'
+              value={searchValue}
+              onChange={handleSearchChange}
+            />
+            <FiSearch
+              style={{
+                color: '#919EAB',
+                fontSize: 22,
+                position: 'absolute',
+                top: '25%',
+                left: '2%'
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <ul className={`${styles.userForSendMessageContainer} mt-3  px-2`}>
-        {userList?.map((item: any) => (
-          <li
-            className={`${styles.userForSendMessage}  mb-3 px-3 py-1`}
-            data-bs-dismiss='modal'
-            key={'chatable_user_' + item.id}
-          >
-            <button
-              className='btn no-link'
+        <ul className={`${styles.userForSendMessageContainer} mt-3  px-2`}>
+          {filteredUserList?.map((item: any) => (
+            <li
+              className={`${styles.userForSendMessage}  mb-3 px-3 py-1`}
+              data-bs-dismiss='modal'
+              key={'chatable_user_' + item.id}
               onClick={() => onChoseReceiver(item)}
             >
-              <div className='d-flex align-items-center gap-2'>
-                <div>
-                  {item?.avatar !== '/mediafiles/avatars/default.png' ? (
-                    <img
-                      src={ApiBaseUrl + item?.avatar}
-                      alt='user-avatar'
-                      className={`w-fluid ${styles.imgProfilUserMessage}`}
-                    />
-                  ) : (
-                    <div className={styles.formatPseudo}>
-                      {getUserPseudo(item)}
-                    </div>
-                  )}
+              <button className='btn no-link'>
+                <div className='d-flex align-items-center gap-2'>
+                  <div>
+                    {item?.avatar !== '/mediafiles/avatars/default.png' ? (
+                      <img
+                        src={ApiBaseUrl + item?.avatar}
+                        alt='user-avatar'
+                        className={`w-fluid ${styles.imgProfilUserMessage}`}
+                      />
+                    ) : (
+                      <div className={styles.formatPseudo}>
+                        {getUserPseudo(item)}
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.userForSendMessageInfos}>
+                    <h3 className='mb-0'>
+                      {item?.prenom} {item?.nom}
+                    </h3>
+                  </div>
                 </div>
-                <div className={styles.userForSendMessageInfos}>
-                  <h3 className='mb-0'>
-                    {item?.prenom} {item?.nom}
-                  </h3>
-                  {/* <h4 className="mb-0">Online - Last seen, 2.02pm</h4> */}
-                </div>
-              </div>
-            </button>
-          </li>
-        ))}
-      </ul>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Modal.Body>
     </Modal>
   )
-}
-
-export const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '80%',
-    zIndex: 99999,
-    overflow: 'auto'
-  }
 }

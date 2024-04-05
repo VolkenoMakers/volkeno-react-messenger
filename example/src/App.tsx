@@ -3,6 +3,7 @@ import VolkenoReactMessenger from 'volkeno-react-messenger'
 import 'volkeno-react-messenger/dist/index.css'
 import axios from 'axios'
 import { io } from 'socket.io-client'
+import { useAppSelector } from "../../src/redux/hook";
 
 const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
 const SOCKET_URL = '164.92.136.142:4026'
@@ -15,7 +16,7 @@ const App = () => {
     }
   }
   const socket = io(SOCKET_URL)
-
+  // const { user, token } = useAppSelector((state) => state.user);
   const [user, setUser] = React.useState(null)
   const [conversationsUser, setConversationsUser] = React.useState(null)
   const [userList, setUserList] = React.useState(null)

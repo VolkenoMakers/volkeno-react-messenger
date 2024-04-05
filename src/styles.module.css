@@ -42,11 +42,11 @@
   flex-shrink: 0;
   border-radius: 10px;
   border: none;
-  /* background-color: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important; */
+  background: rgb(246, 248, 255) !important;
+  border-color: rgb(246, 248, 255) !important;
   border-radius: 10px !important;
   opacity: 0.05 !important;
-  background: var(--Main--Color, #4C6FFF) !important;
+  /* background: var(--Main--Color, #4C6FFF) !important; */
 }
 .yadMessagerieCustomListGroup button.listGroupItem.listGroupItemAction {
   display: flex;
@@ -117,8 +117,8 @@
 button.list-group-item.active,
 button.listGroupItem.active,
 button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__listGroupItemAction__V2RJm.active {
-  /* background-color: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important; */
+  background-color: rgb(246, 248, 255) !important;
+  border-color: rgb(246, 248, 255) !important;
 }
 /* .list-group-item.active {
   border-radius: 10px !important;
@@ -359,6 +359,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.03);
   background: #fff;
+  position: relative;
 }
 .dtailsMessagesTabsComponent .dropdown-toggle::after {
   display: none;
@@ -678,6 +679,13 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
 .userForSendMessage {
   list-style: none;
 }
+.userForSendMessage:hover, 
+.userForSendMessage:active
+{
+  background-color: #F5F6FD;
+  border-color: #F5F6FD;
+  color: #102844
+}
 .userForSendMessageInfos h3 {
   font-family: 'Raleway';
   font-style: normal;
@@ -912,4 +920,35 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   background-color: #ffffff;
   border-radius: 10px;
   border-bottom: none;
+}
+/* ._styles-module__yadMessagerieCustomListGroup__2iSfb button._styles-module__listGroupItem__3sqmx._styles-module__listGroupItemAction__V2RJm {
+
+  color: red !important;
+  background-color: #F5F6FD !important;
+  border-color: #F5F6FD !important;
+} */
+.listGroupItem.active {
+  color: red !important;
+  background-color: #F5F6FD !important;
+  border-color: #F5F6FD !important;
+}
+.list-group-flush>.list-group-item {
+  color: red !important;
+  background-color: #F5F6FD !important;
+  border-color: #F5F6FD !important;
+}
+ul.list-group li.list-group-item.active {
+  background-color: red; /* Définit le fond comme transparent */
+  /* Autres styles si nécessaire */
+}
+.list-group-flush>.list-group-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: red !important;
+}
+.textAreaFormContainer {
+  position: absolute;
+  bottom: 10px;
+  width: 95%;
 }
