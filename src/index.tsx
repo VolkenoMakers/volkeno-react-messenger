@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-expressions */
@@ -6,12 +7,19 @@ import axios from 'axios'
 import styles from './styles.module.css'
 import * as React from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { formatDateHour, getUserPseudo, truncateCaractere } from './Utils'
+import {
+  formatDateHour,
+  getAvatar,
+  getUserPseudo,
+  truncateCaractere
+} from './Utils'
 import PropTypes from 'prop-types'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
 import { ListGroup } from 'react-bootstrap'
+// import messageSound from './assets/messageSound.wav'
+import { getName } from './utils/Utils'
 
 const VolkenoReactMessenger = ({
   user,
@@ -37,6 +45,16 @@ const VolkenoReactMessenger = ({
   const [messages, setMessages] = React.useState<any>([])
   const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
+  // const [messagePosted, setMessagePosted] = React.useState(false)
+  // const audioRef = React.useRef<HTMLAudioElement | null>(null)
+
+  // Utilisez useEffect pour jouer le son lorsque le message est posté
+  // React.useEffect(() => {
+  //   // Si le message a été posté, jouer le son
+  //   if (messagePosted) {
+  //     audioRef.current?.play()
+  //   }
+  // }, [messagePosted])
 
   // console.log(typingStatus)
   React.useEffect(() => {
@@ -69,6 +87,7 @@ const VolkenoReactMessenger = ({
           data,
           config
         )
+        // setMessagePosted(true)
         setConversationActive(response?.data?.conversation)
         setMessages(response?.data?.conversation?.messages)
         socket.emit(`'message'`, response?.data)
@@ -90,7 +109,9 @@ const VolkenoReactMessenger = ({
     return () => socket.off('messageResponse')
   }, [socket])
 
-  const handleTyping = () => console.log('typing')
+  // const handleTyping = () => console.log('typing')
+  const handleTyping = () =>
+    socket.emit('typing', `${getName(user)} est en train d'écrire`)
 
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
@@ -102,6 +123,7 @@ const VolkenoReactMessenger = ({
       setTypingStatus(data)
     })
   }, [socket])
+
   function openModalNewChat(e: any) {
     e.preventDefault()
     setModalNewChat(true)
@@ -121,9 +143,9 @@ const VolkenoReactMessenger = ({
 
   return (
     <div className='dashbord-admin-component'>
-      <div className='container dash-admin-page-content-container mb-3'>
+      <div className='container dash-admin-page-content-container mb-3 py-2'>
         <div className='row'>
-          <div className='col-md-4 col-left-messagerie d-flex mb-3'>
+          <div className='col-lg-4 col-left-messagerie d-flex mb-3'>
             <div className={`${styles.customContentMessageLeft} w-100`}>
               <div
                 className={`${styles.yadMessagerieTitreMessageContainer}  mb-4`}
@@ -177,151 +199,172 @@ const VolkenoReactMessenger = ({
               <ListGroup
                 className={`list-group list-group-flush ${styles.yadMessagerieCustomListGroup}`}
               >
-                {conversations
-                  ?.filter((item: any) =>
-                    `${
-                      item?.participants?.find((p: any) => p.id !== user?.id)
-                        ?.prenom
-                    } ${
-                      item?.participants?.find((p: any) => p.id !== user?.id)
-                        ?.nom
-                    }`
-                      .toLowerCase()
-                      .includes(search.toLowerCase())
-                  )
-                  ?.map((item: any) => (
-                    <ListGroup.Item
-                      type='button'
-                      className={`btn  ${styles.listGroupItem} ${
-                        styles.listGroupItemAction
-                      } ${item?.id === conversationActive?.id && 'active'}`}
-                      aria-current='true'
-                      key={item?.id}
-                      onClick={() => onChoseConvesation(item)}
-                    >
-                      <div
-                        className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
-                      >
-                        {item?.participants?.find(
-                          (item: any) => item?.id !== user?.id
-                        )?.avatar &&
-                        showProfil &&
-                        item?.participants?.find(
-                          (item: any) => item?.id !== user?.id
-                        )?.avatar !== '/mediafiles/avatars/default.png' ? (
-                          <img
-                            src={
-                              ApiBaseUrl +
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.avatar
-                            }
-                            className={styles.yadMessagerieListGroupAvatar}
-                            alt='Photo'
-                            onError={() => setShowProfil(false)}
-                          />
-                        ) : (
-                          <div className={styles.formatPseudo}>
-                            {getUserPseudo(
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )
-                            )}
-                          </div>
-                        )}
-                        {item?.en_ligne ? (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#2CC84A'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#F2F2F2'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      <div className='w-100'>
-                        <div
-                          className={styles.yadMessagerieListGroupNameContainer}
+                {conversations?.length > 0
+                  ? conversations
+                      ?.filter((item: any) =>
+                        `${
+                          item?.participants?.find(
+                            (p: any) => p.id !== user?.id
+                          )?.prenom
+                        } ${
+                          item?.participants?.find(
+                            (p: any) => p.id !== user?.id
+                          )?.nom
+                        }`
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                      )
+                      ?.map((item: any) => (
+                        <ListGroup.Item
+                          type='button'
+                          className={`btn  ${styles.listGroupItem} ${
+                            styles.listGroupItemAction
+                          } ${item?.id === conversationActive?.id && 'active'}`}
+                          aria-current='true'
+                          key={item?.id}
+                          onClick={() => onChoseConvesation(item)}
                         >
                           <div
-                            className={`${styles.yadMessagerieListGroupName} m-r-7`}
+                            className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
                           >
-                            {
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.prenom
-                            }{' '}
-                            {
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.nom
-                            }
-                          </div>
-                          <div className={styles.yadMessagerieListGroupHeure}>
-                            {formatDateHour(
-                              item?.messages[item?.messages?.length - 1]
-                                ?.created_at
+                            {item?.participants?.find(
+                              (item: any) => item?.id !== user?.id
+                            )?.avatar &&
+                            showProfil &&
+                            item?.participants?.find(
+                              (item: any) => item?.id !== user?.id
+                            )?.avatar !== '/mediafiles/avatars/default.png' ? (
+                              <img
+                                // src={
+                                //   ApiBaseUrl +
+                                //   item?.participants?.find(
+                                //     (item: any) => item?.id !== user?.id
+                                //   )?.avatar
+                                // }
+                                src={getAvatar(
+                                  item?.participants?.find(
+                                    (item: any) => item?.id !== user?.id
+                                  )?.avatar
+                                )}
+                                className={styles.yadMessagerieListGroupAvatar}
+                                alt='Photo'
+                                onError={() => setShowProfil(false)}
+                              />
+                            ) : (
+                              <div className={styles.formatPseudo}>
+                                {getUserPseudo(
+                                  item?.participants?.find(
+                                    (item: any) => item?.id !== user?.id
+                                  )
+                                )}
+                              </div>
+                            )}
+                            {item?.en_ligne ? (
+                              <div
+                                className={
+                                  styles.yadMessagerieListGroupAvatarIndicator
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  width='10'
+                                  height='10'
+                                  viewBox='0 0 10 10'
+                                  fill='none'
+                                >
+                                  <circle
+                                    cx='5'
+                                    cy='4.99976'
+                                    r='4.5'
+                                    fill='#2CC84A'
+                                    stroke='white'
+                                  />
+                                </svg>
+                              </div>
+                            ) : (
+                              <div
+                                className={
+                                  styles.yadMessagerieListGroupAvatarIndicator
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  width='10'
+                                  height='10'
+                                  viewBox='0 0 10 10'
+                                  fill='none'
+                                >
+                                  <circle
+                                    cx='5'
+                                    cy='4.99976'
+                                    r='4.5'
+                                    fill='#F2F2F2'
+                                    stroke='white'
+                                  />
+                                </svg>
+                              </div>
                             )}
                           </div>
-                        </div>
-                        <div className={styles.yadMessagerieListGroupApercu}>
-                          {truncateCaractere(
-                            item?.messages[item?.messages?.length - 1]?.content,
-                            18
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          styles.yadMessagerieListGroupCheckIconContainer
-                        }
-                      >
-                        <BsCheck2All
-                          className={styles.yadMessagerieListGroupCheckIcon}
-                        />
-                      </div>
-                    </ListGroup.Item>
-                  ))}
+                          <div className='w-100'>
+                            <div
+                              className={
+                                styles.yadMessagerieListGroupNameContainer
+                              }
+                            >
+                              <div
+                                className={`${styles.yadMessagerieListGroupName} m-r-7`}
+                              >
+                                {
+                                  item?.participants?.find(
+                                    (item: any) => item?.id !== user?.id
+                                  )?.prenom
+                                }{' '}
+                                {
+                                  item?.participants?.find(
+                                    (item: any) => item?.id !== user?.id
+                                  )?.nom
+                                }
+                              </div>
+                              <div
+                                className={styles.yadMessagerieListGroupHeure}
+                              >
+                                {formatDateHour(
+                                  item?.messages[item?.messages?.length - 1]
+                                    ?.created_at
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              className={styles.yadMessagerieListGroupApercu}
+                            >
+                              {truncateCaractere(
+                                item?.messages[item?.messages?.length - 1]
+                                  ?.content,
+                                18
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupCheckIconContainer
+                            }
+                          >
+                            <BsCheck2All
+                              className={styles.yadMessagerieListGroupCheckIcon}
+                            />
+                          </div>
+                        </ListGroup.Item>
+                      ))
+                  : 'No data'}
               </ListGroup>
+              {/* <audio
+                ref={audioRef}
+                src={messageSound}
+                style={{ display: 'none' }}
+              /> */}
             </div>
           </div>
-          <div className={`col-md-8 ${styles.colRightMessagerie} d-flex mb-3`}>
+          <div className={`col-lg-8 ${styles.colRightMessagerie} d-flex mb-3`}>
             {conversationActive != null || receiver != null ? (
               <div className={`${styles.dtailsMessagesTabsComponent} w-100`}>
                 <div
@@ -519,7 +562,7 @@ const VolkenoReactMessenger = ({
                     </div>
                   )}
                 </div>
-                <div className='bloc-details pb-5'>
+                <div className={`${styles.blocDetails} pb-5`}>
                   {messages?.map((message: any) => (
                     <div key={message?.id}>
                       {message?.sender?.id !== user?.id ? (
@@ -710,7 +753,7 @@ function NewChatModal({
       <Modal.Header className='modal-header border-0 p-3' closeButton>
         <Modal.Title>Nouvelle discussion</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={styles.modalBodyMessenger}>
         <div className='pt-3'>
           <div className='form-search-user-container position-relative'>
             <input

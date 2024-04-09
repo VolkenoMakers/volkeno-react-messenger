@@ -7,7 +7,6 @@ import { ApiBaseUrl } from './http'
 import Avatar1 from '../assets/avatar.png'
 // import Avatar from '../assets/appImages/avatar.png'
 // import Avatars from '../assets/appImages/avatar.png'
-import defaultImage from '../assets/appImages/defaultImg.png'
 import { IUser } from './api/user/user.type'
 import moment from 'moment'
 
@@ -116,13 +115,13 @@ export function useLocationState<T>(
   return state || defaultValue
 }
 
-export const getImage = (img: string | any) => {
-  if (img && !img.includes('default.png') && !img.includes('static/media/')) {
-    if (img.indexOf('http') === 0) return img
-    return ApiBaseUrl + img
-  }
-  return defaultImage
-}
+// export const getImage = (img: string | any) => {
+//   if (img && !img.includes('default.png') && !img.includes('static/media/')) {
+//     if (img.indexOf('http') === 0) return img
+//     return ApiBaseUrl + img
+//   }
+//   return defaultImage
+// }
 
 export const getAvatar = (avatar: string | any) => {
   if (avatar && !avatar.includes('default.png')) {
@@ -138,13 +137,13 @@ export function getAvatarFromUser(user: any) {
   return av1
 }
 
-export const getImageProfil = (avatar: string | any) => {
-  if (avatar && !avatar.includes('default.png')) {
-    if (avatar.indexOf('http') === 0) return avatar
-    return ApiBaseUrl + avatar
-  }
-  return Avatar1
-}
+// export const getImageProfil = (avatar: string | any) => {
+//   if (avatar && !avatar.includes('default.png')) {
+//     if (avatar.indexOf('http') === 0) return avatar
+//     return ApiBaseUrl + avatar
+//   }
+//   return Avatar1
+// }
 
 export function createUrl(image: File) {
   return URL.createObjectURL(image)
@@ -277,9 +276,4 @@ export const formatTime = (inputTime: string): string => {
     }
   }
   return 'Invalid Time'
-}
-
-export function addDays(date: Date) {
-  // let day = moment(date).add(7, "d").format("DD-MM-YYYY");
-  return moment().endOf('week').toDate()
 }

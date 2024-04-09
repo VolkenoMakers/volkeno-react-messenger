@@ -1,13 +1,18 @@
 const express = require('express')
 const app = express()
-const PORT = 4000
+const PORT = process.env.PORT || 4000
 const http = require('http').Server(app)
 const cors = require('cors')
 const socketIO = require('socket.io')(http, {
   cors: {
     origin: [
       'http://localhost:3000',
-      'https://yaay-ak-doom-app.volkeno-engineering.click'
+      'https://yaay-ak-doom-app.volkeno-engineering.click',
+      'https://yaay-ak-doom-socket.withvolkeno.com',
+      'www.socket.io.volkeno.com/',
+      '164.92.136.142:4026',
+      'wss://echo.websocket.org',
+      'https://www.medsain-socket.withvolkeno.com'
     ]
   }
 })
@@ -16,9 +21,9 @@ let users = []
 
 app.use(cors())
 
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.json({
-    message: 'Hello world'
+    message: 'Serveur de socket fonctionne correctement.'
   })
 })
 

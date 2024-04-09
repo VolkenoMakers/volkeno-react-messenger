@@ -3,11 +3,17 @@ import VolkenoReactMessenger from 'volkeno-react-messenger'
 import 'volkeno-react-messenger/dist/index.css'
 import axios from 'axios'
 import { io } from 'socket.io-client'
-import { useAppSelector } from "../../src/redux/hook";
 
 const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
-const SOCKET_URL = '164.92.136.142:4026'
+// const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk3MTg2ODE1NCwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTcxMjY2ODE1NH0.0aWxx1HDpTcdtkqijMR7DY3rY8yH414PHTOS0NarpgQ' /* provide the token */
+// const SOCKET_URL = '164.92.136.142:4026'
+// const SOCKET_URL = 'https://yaay-ak-doom-socket.withvolkeno.com'
+// const SOCKET_URL = 'socket.io.volkeno.com'
+// const SOCKET_URL = 'www.socket.io.volkeno.com/'
+// const SOCKET_URL = 'wss://echo.websocket.org'
+const SOCKET_URL = 'https://www.medsain-socket.withvolkeno.com'
 const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
+// const ApiBaseUrl = 'https://medsain-api.withvolkeno.com'
 
 const App = () => {
   const config = {
@@ -29,8 +35,9 @@ const App = () => {
         setUser(userData)
         socket.emit('newUser', {
           userName: userData?.prenom + ' ' + userData?.nom,
-          socketID: socket.id
+          socketID: socket.id,
         })
+        console.log('newUser', socket.id)
 
         if (userData) {
           axios

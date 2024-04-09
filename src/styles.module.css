@@ -1,5 +1,5 @@
 .yadMessagerieTitreMessage {
-  color: var(--title, #102844);
+  color: #102844;
   font-family: 'DM Sans';
   font-size: 16px;
   font-style: normal;
@@ -21,14 +21,14 @@
 .yadMessagerieCustomInputSearch,
 .yadMessagerieCustomInputAddon {
   border-radius: 10px;
-  background: var(--gray-shade, #f8f8fb);
+  background: #f8f8fb;
   height: 48px;
   border: none;
   display: flex;
   align-items: center;
 }
 .yadMessagerieCustomInputSearch::placeholder {
-  color: var(--paragraph, #767278);
+  color: #767278;
   font-family: 'Poppins';
   font-size: 12px;
   font-style: normal;
@@ -36,17 +36,17 @@
   line-height: 18px;
   opacity: 0.6;
 }
+.yadMessagerieCustomListGroup {
+  height: auto;
+  max-height: 75vh;
+  overflow: auto;
+}
 .yadMessagerieCustomListGroup button.listGroupItem.listGroupItemAction.active {
   width: 100%;
   height: 100px;
   flex-shrink: 0;
   border-radius: 10px;
   border: none;
-  background: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important;
-  border-radius: 10px !important;
-  opacity: 0.05 !important;
-  /* background: var(--Main--Color, #4C6FFF) !important; */
 }
 .yadMessagerieCustomListGroup button.listGroupItem.listGroupItemAction {
   display: flex;
@@ -77,15 +77,16 @@
   border: 1px solid rgba(76, 111, 255, 0.1);
 }
 .yadMessagerieListGroupName {
-  color: var(--title, #102844);
+  color: #102844;
   font-family: 'DM Sans';
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  text-align: left;
 }
 .yadMessagerieListGroupHeure {
-  color: var(--title, #102844);
+  color: #102844;
   text-align: right;
   font-family: 'DM Sans';
   font-size: 10px;
@@ -97,36 +98,15 @@
 .yadMessagerieCustomListGroup
   button.listGroupItem.listGroupItemAction.active
   .yadMessagerieListGroupApercu {
-  color: var(--title, #102844);
-  font-family: 'DM Sans';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-align: left;
-
   width: 100%;
   height: 100px;
   flex-shrink: 0;
   border-radius: 10px;
-
   border: none;
-  /* background-color: rgb(42, 61, 128) !important;
-  border-color: rgb(246, 248, 255) !important; */
 }
-button.list-group-item.active,
-button.listGroupItem.active,
-button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__listGroupItemAction__V2RJm.active {
-  background-color: rgb(246, 248, 255) !important;
-  border-color: rgb(246, 248, 255) !important;
-}
-/* .list-group-item.active {
-  border-radius: 10px !important;
-  opacity: 0.05 !important;
-  background: red !important;
-} */
+
 .yadMessagerieCustomListGroup .yadMessagerieListGroupApercu {
-  color: var(--paragraph, #767278);
+  color: #767278;
   font-family: 'DM Sans';
   font-size: 14px;
   font-style: normal;
@@ -357,7 +337,6 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
 .dtailsMessagesTabsComponent {
   padding: 2%;
   border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.03);
   background: #fff;
   position: relative;
 }
@@ -368,7 +347,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   padding: 10px;
   height: 60px;
   border-radius: 10px;
-  background: var(--gray, #fafafb);
+  background: #fafafb;
   width: 100%;
 }
 .dtailsMessagesTabsComponent .inputContainer {
@@ -447,7 +426,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   color: #4845e5;
 }
 .profilDetailMessage {
-  color: var(--title, #102844);
+  color: #102844;
   font-family: 'DM Sans';
   font-size: 16px;
   font-style: normal;
@@ -455,7 +434,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   line-height: normal;
 }
 .timeDetailMessage {
-  color: var(--paragraph, #767278);
+  color: #767278;
   font-family: 'Nunito';
   font-size: 10px;
   font-style: normal;
@@ -479,12 +458,11 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   background: #fafafa;
   border-radius: 10px 10px 10px 0px;
   padding: 10px 15px;
-  color: var(--title, #102844);
   font-family: 'DM Sans';
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   max-width: 100%;
 }
 /* .bloc-message-envoyer::after {
@@ -503,7 +481,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
 .textMessageEnvoyer {
   letter-spacing: 0.05em;
   border-radius: 10px 10px 0px 10px;
-  background: var(--bleu, #1c208f);
+  background: #1c208f;
   color: #fff;
   font-family: 'DM Sans';
   font-size: 14px;
@@ -580,7 +558,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
           padding-left: 5%;
       } */
 .textDisconnectTime {
-  color: var(--title, #102844);
+  color: #102844;
   font-family: 'DM Sans';
   font-size: 12px;
   font-style: normal;
@@ -739,7 +717,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   border-radius: 0px;
 }
 .messagerieCustomTextarrea::placeholder {
-  color: var(--title, #102844);
+  color: #102844;
   font-family: 'DM Sans';
   font-size: 12px;
   font-style: normal;
@@ -771,7 +749,7 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   height: 36px;
   border-radius: 50%;
   border: none;
-  background: var(--gray-shade, #f8f8fb);
+  background: #f8f8fb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -902,8 +880,8 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
 .colRightMessagerie {
   filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.07));
   border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  background: #FFF;
+  /* border: 1px solid rgba(0, 0, 0, 0.03);
+  background: #FFF; */
 }
 
 .listGroupItemMeessage {
@@ -921,34 +899,29 @@ button.btn.list-group-item._styles-module__listGroupItem__3sqmx._styles-module__
   border-radius: 10px;
   border-bottom: none;
 }
-/* ._styles-module__yadMessagerieCustomListGroup__2iSfb button._styles-module__listGroupItem__3sqmx._styles-module__listGroupItemAction__V2RJm {
 
-  color: red !important;
-  background-color: #F5F6FD !important;
-  border-color: #F5F6FD !important;
-} */
-.listGroupItem.active {
-  color: red !important;
-  background-color: #F5F6FD !important;
-  border-color: #F5F6FD !important;
-}
-.list-group-flush>.list-group-item {
-  color: red !important;
-  background-color: #F5F6FD !important;
-  border-color: #F5F6FD !important;
-}
-ul.list-group li.list-group-item.active {
-  background-color: red; /* Définit le fond comme transparent */
-  /* Autres styles si nécessaire */
-}
-.list-group-flush>.list-group-item {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  background: red !important;
-}
 .textAreaFormContainer {
   position: absolute;
   bottom: 10px;
-  width: 95%;
+  left: 0px;
+  width: 100%;
+  background: #FFF;
+}
+.blocDetails {
+  height: 80vh;
+  overflow: auto;
+  margin-bottom: 25px;
+}
+.blocDetails::-webkit-scrollbar,
+.modalBodyMessenger::-webkit-scrollbar {
+  display: none;
+}
+.modalBodyMessenger {
+  height: 85vh;
+  overflow: auto;
+}
+@media (min-width: 1024px) {
+  .customContentMessageLeft {
+    height: 97vh;
+  }
 }
