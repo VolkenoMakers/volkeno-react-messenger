@@ -12,3 +12,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.list-group-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+.list-group-item.active,
+.list-group-item:hover {
+  background-color: #F5F6FD;
+  border-color: #F5F6FD;
+  color: #102844;
+  cursor: pointer !important;
+}

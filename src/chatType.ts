@@ -3,7 +3,7 @@ export interface IUser {
   slug: string | any
   nom: string
   prenom: string
-  avatar: string
+  avatar: string | null
 }
 
 export type Chat = {
