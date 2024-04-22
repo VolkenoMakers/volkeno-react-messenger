@@ -52,9 +52,12 @@ socketIO.on('connection', (socket) => {
 
   // sends the message to all the users on the server
   socket.on('message', (data) => {
-    socketIO.emit('messageResponse', data)
-    console.log('message envoyé')
+    // socket.emit('messageResponse', data)
+    console.log('message envoyé', data)
   })
+  // socket.on('message', (msg) => {
+  //   console.log('message: ' + msg)
+  // })
 
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected')
