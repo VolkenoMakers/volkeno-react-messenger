@@ -84,8 +84,8 @@ const VolkenoReactMessenger = ({
         // setMessages([...messages, response?.data?.conversation?.messages])
         socket.emit('message', response?.data)
         socket.emit('typing', ``)
-        console.log('response?.data', response?.data)
-        console.log('socket socket', socket)
+        // console.log('response?.data', response?.data)
+        // console.log('socket socket', socket)
       } catch (error) {
         console.error(`Error: ${error}`)
       }
@@ -103,8 +103,8 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('typingResponse', (data: any) => {
-      console.log('typingResponse', data)
       setTypingStatus(data)
+      console.log('typingResponse', data)
       console.log('TypingStatus', typingStatus)
     })
   }, [])
