@@ -34,6 +34,7 @@ const VolkenoReactMessenger = ({
       userName: user?.prenom + ' ' + user?.nom,
       socketID: socket.id
     })
+    console.log('socket socket', socket)
   }
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
