@@ -25,10 +25,10 @@ class Example extends Component {
         user={user}
         token={token}
         ApiBaseUrl={ApiBaseUrl}
-        setApiPostEndpoint={'/api/messages/'}
-        setApiListUsersEndpoint={'/api/medecins/?limit=1000'}
-        setApiConversationUserEndpoint={`/api/user/${user?.slug}/conversations/`}
-        socketUrl={SOCKET_URL}
+        setApiPostEndpoint={setApiPostEndpoint}
+        setApiListUsersEndpoint={setApiListUsersEndpoint}
+        setApiConversationUserEndpoint={setApiConversationUserEndpoint}
+        socketUrl={socketUrl}
      />
     )
   }
