@@ -147,8 +147,8 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('typingResponse', (data: any) => {
-      console.log('typingResponse', data)
       setTypingStatus(data)
+      console.log('typingResponse', data)
       console.log('TypingStatus', typingStatus)
     })
   }, [socket])
