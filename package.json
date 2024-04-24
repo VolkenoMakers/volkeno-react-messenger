@@ -1,6 +1,6 @@
 {
   "name": "volkeno-react-messenger",
-  "version": "0.0.2",
+  "version": "0.0.20",
   "description": "The 'volkeno-react-messenger' module is a powerful and flexible messaging solution designed specifically for Volkeno's internal needs. Seamlessly integrating with Volkeno's internal data structure, this module provides a smooth and intuitive messaging experience for users",
   "author": "Papaul-msibiii",
   "license": "MIT",
