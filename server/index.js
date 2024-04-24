@@ -5,15 +5,7 @@ const http = require('http').Server(app)
 const cors = require('cors')
 const socketIO = require('socket.io')(http, {
   cors: {
-    origin: [
-      'http://localhost:3000',
-      'https://yaay-ak-doom-app.volkeno-engineering.click',
-      'https://yaay-ak-doom-socket.withvolkeno.com',
-      'www.socket.io.volkeno.com/',
-      '164.92.136.142:4026',
-      'wss://echo.websocket.org',
-      'https://www.medsain-socket.withvolkeno.com'
-    ]
+    origin: ['http://localhost:3000', '164.92.136.142:4026']
   }
 })
 

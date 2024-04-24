@@ -23,12 +23,14 @@ class Example extends Component {
     return (
       <VolkenoReactMessenger
         user={user}
-        token={token}
-        ApiBaseUrl={ApiBaseUrl}
-        setApiPostEndpoint={setApiPostEndpoint}
-        setApiListUsersEndpoint={setApiListUsersEndpoint}
-        setApiConversationUserEndpoint={setApiConversationUserEndpoint}
-        socketUrl={socketUrl}
+        token={'token'}
+        apiBaseUrl={'api_base_url'}
+        setApiPostEndpoint={'/api/messages'}
+        setApiListUsersEndpoint={'/api/List_user_url'}
+        setApiConversationUserEndpoint={'/api/List_conversation_user_url'}
+        socketUrl
+        title
+        newMessageTitle
      />
     )
   }
@@ -40,17 +42,17 @@ class Example extends Component {
 
 **Props require**
 
-| Property                        |   Type   | Default | Description                                                                       |
-| ------------------------------- | :------: | :-----: | --------------------------------------------------------------------------------- |
-| user                            |  object  |  true   | Provide logged in user data                                                       |
-| token                           |  string  |  true   | Provide logged in user token                                                      |
-| ApiBaseUrl                      |  string  |  true   | Provide api base url                                                              |
-| setApiPostEndpoint              |  string  |  true   | Provide the endpoint to post messages                                             |
-| setApiListUsersEndpoint         |  string  |  true   | Provide the endpoint for users list                                               |
-| setApiConversationUserEndpoint  |  string  |  true   | Provide the endpoint for user conversations                                       |
-| socketUrl                       |  string  |  true   | Provide socket url                                                                |
-| title                           |  string  |  false  | Set the name of the chat                                                          |
-| newMessageTitle                 |  string  |  false  | Set the name of new discussion modal                                              |
+| Property                        |   Type   | Required |  Default | Description                                                            |
+| ------------------------------- | :------: | :------: | :------: | ---------------------------------------------------------------------- |
+| user                            |  object  |  true    |    { }   | Provide logged in user data                                            |
+| token                           |  string  |  true    |    ' '   | Provide logged in user token                                           |
+| apiBaseUrl                      |  string  |  true    |    ' '   | Provide api base url                                                   |
+| setApiPostEndpoint              |  string  |  true    |    '/api/messages'   | Provide the endpoint to post messages                      |
+| setApiListUsersEndpoint         |  string  |  true    |    ' '   | Provide endpoint for list of all users that user can chat              |
+| setApiConversationUserEndpoint  |  string  |  true    |    ' '   | Provide the endpoint for the user's list of all conversations          |
+| socketUrl                       |  string  |  true    |    '164.92.136.142:4026'   | Provide socket url                                   |
+| title                           |  string  |  false   |    'Messagerie'   | Set the name of the chat                                      |
+| newMessageTitle                 |  string  |  false   |     'Nouvelle discussion'   | Set the name of new discussion modal                |
 
 ## License
 

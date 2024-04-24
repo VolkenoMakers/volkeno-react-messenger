@@ -24,7 +24,7 @@ import { io } from 'socket.io-client'
 interface IVolkenoReactMessenger {
   user: any
   token: string
-  ApiBaseUrl: string
+  apiBaseUrl: string
   setApiPostEndpoint: string
   setApiListUsersEndpoint: string
   setApiConversationUserEndpoint: string
@@ -35,8 +35,8 @@ interface IVolkenoReactMessenger {
 const VolkenoReactMessenger = ({
   user,
   token,
-  ApiBaseUrl,
-  setApiPostEndpoint,
+  apiBaseUrl,
+  setApiPostEndpoint = '/api/messages',
   setApiListUsersEndpoint,
   setApiConversationUserEndpoint,
   socketUrl,
@@ -69,7 +69,7 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     axios
-      .get(ApiBaseUrl + setApiListUsersEndpoint, config)
+      .get(apiBaseUrl + setApiListUsersEndpoint, config)
       .then((response) => {
         const listUserData = response.data.results
         setListUser(listUserData)
@@ -81,7 +81,7 @@ const VolkenoReactMessenger = ({
   React.useEffect(() => {
     if (user) {
       axios
-        .get(ApiBaseUrl + setApiConversationUserEndpoint, config)
+        .get(apiBaseUrl + setApiConversationUserEndpoint, config)
         .then((response) => {
           const conversationsData = response.data.results
           setConversations(conversationsData)
@@ -115,7 +115,7 @@ const VolkenoReactMessenger = ({
       }
       try {
         const response = await axios.post(
-          ApiBaseUrl + setApiPostEndpoint,
+          apiBaseUrl + setApiPostEndpoint,
           data,
           config
         )
@@ -147,8 +147,8 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('typingResponse', (data: any) => {
-      console.log('typingResponse', data)
       setTypingStatus(data)
+      console.log('typingResponse', data)
       console.log('TypingStatus', typingStatus)
     })
   }, [socket])
@@ -204,7 +204,7 @@ const VolkenoReactMessenger = ({
                 setReceiver={setReceiver}
                 setConversationActive={setConversationActive}
                 userList={listUser}
-                ApiBaseUrl={ApiBaseUrl}
+                ApiBaseUrl={apiBaseUrl}
                 conversations={conversations}
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
@@ -396,7 +396,7 @@ const VolkenoReactMessenger = ({
                       showProfil &&
                       receiver?.avatar !== '/mediafiles/avatars/default.png' ? (
                         <img
-                          src={ApiBaseUrl + receiver?.avatar}
+                          src={apiBaseUrl + receiver?.avatar}
                           className={`${styles.imageProfilEntete} image_responsive`}
                           alt='Photo'
                           onError={() => setShowProfil(false)}
@@ -415,7 +415,7 @@ const VolkenoReactMessenger = ({
                       )?.avatar !== '/mediafiles/avatars/default.png' ? (
                       <img
                         src={
-                          ApiBaseUrl +
+                          apiBaseUrl +
                           conversationActive?.participants?.find(
                             (item: any) => item?.id !== user?.id
                           )?.avatar
@@ -590,7 +590,7 @@ const VolkenoReactMessenger = ({
                             message?.sender?.avatar !==
                               '/mediafiles/avatars/default.png' ? (
                               <img
-                                src={ApiBaseUrl + message?.sender?.avatar}
+                                src={apiBaseUrl + message?.sender?.avatar}
                                 className={styles.imgPpMessageRecieve}
                                 alt='Photo'
                                 onError={() => setShowProfil(false)}
@@ -705,7 +705,7 @@ VolkenoReactMessenger.propTypes = {
   socketUrl: PropTypes.string, // Socket url connection
   user: PropTypes.object, // User data
   token: PropTypes.string, // Authentication token
-  ApiBaseUrl: PropTypes.string, // Api base url
+  apiBaseUrl: PropTypes.string, // Api base url
   setApiPostEndpoint: PropTypes.string, // Post endpoint
   setApiConversationUserEndpoint: PropTypes.string, // User's conversations endpoint
   setApiListUsersEndpoint: PropTypes.string, // Users list endpoint
