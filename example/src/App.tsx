@@ -10,7 +10,7 @@ const App = () => {
     <VolkenoReactMessenger
       user={{ }}
       token={ '' }
-      ApiBaseUrl={ '' }
+      apiBaseUrl={ '' }
       setApiPostEndpoint={ '' }
       setApiListUsersEndpoint={ '' }
       setApiConversationUserEndpoint={ '' }
