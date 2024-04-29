@@ -78,6 +78,7 @@
 .yadMessagerieListGroupAvatar {
   width: 50px;
   height: 53px;
+  object-fit: cover;
   border-radius: 53px;
   border: 1px solid rgba(76, 111, 255, 0.1);
 }
@@ -608,11 +609,13 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .imageProfilEntete {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .img-expediteur {
   width: 24px;
@@ -705,6 +708,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
 /* .btnAddNewChat {
     width: 24px;

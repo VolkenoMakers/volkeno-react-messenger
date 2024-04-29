@@ -17,18 +17,18 @@ import { AiFillPlusCircle } from 'react-icons/ai'
 import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
 import { ListGroup } from 'react-bootstrap'
-import { getName } from './utils/Utils'
+// import { getName } from './utils/Utils'
 import Spinner from 'react-bootstrap/Spinner'
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 
 interface IVolkenoReactMessenger {
   user: any
-  token: string
+  token: string | undefined | null
   apiBaseUrl: string
   setApiPostEndpoint: string
   setApiListUsersEndpoint: string
   setApiConversationUserEndpoint: string
-  socketUrl: string
+  // socketUrl: string
   title?: string
   newMessageTitle?: string
 }
@@ -39,7 +39,7 @@ const VolkenoReactMessenger = ({
   setApiPostEndpoint = '/api/messages',
   setApiListUsersEndpoint,
   setApiConversationUserEndpoint,
-  socketUrl,
+  // socketUrl,
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion'
 }: IVolkenoReactMessenger) => {
@@ -48,13 +48,13 @@ const VolkenoReactMessenger = ({
       Authorization: `Bearer ${token}`
     }
   } as AxiosRequestConfig
-  const socket = io(socketUrl)
-  if (user) {
-    socket.emit('newUser', {
-      userName: user?.prenom + ' ' + user?.nom,
-      socketID: socket.id
-    })
-  }
+  // const socket = io(socketUrl)
+  // if (user) {
+  //   socket.emit('newUser', {
+  //     userName: user?.prenom + ' ' + user?.nom,
+  //     socketID: socket.id
+  //   })
+  // }
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
   const [listUser, setListUser] = React.useState(null)
@@ -64,7 +64,7 @@ const VolkenoReactMessenger = ({
   const [message, setMessage] = React.useState('')
   const [messages, setMessages] = React.useState<any>([])
   const [sendingMessage, setSendingMessage] = React.useState(false)
-  const [typingStatus, setTypingStatus] = React.useState<any>('')
+  // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
   React.useEffect(() => {
@@ -121,8 +121,8 @@ const VolkenoReactMessenger = ({
         )
         setConversationActive(response?.data?.conversation)
         setMessages(response?.data?.conversation?.messages)
-        socket.emit('message', response?.data)
-        socket.emit('typing', ``)
+        // socket.emit('message', response?.data)
+        // socket.emit('typing', ``)
       } catch (error) {
         console.error(`Error: ${error}`)
       }
@@ -135,9 +135,10 @@ const VolkenoReactMessenger = ({
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage(e)
-    } else {
-      socket.emit('typing', `${getName(user)} est en train d'écrire`)
     }
+    // else {
+    //   socket.emit('typing', `${getName(user)} est en train d'écrire`)
+    // }
   }
 
   React.useEffect(() => {
@@ -145,13 +146,13 @@ const VolkenoReactMessenger = ({
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  React.useEffect(() => {
-    socket.on('typingResponse', (data: any) => {
-      setTypingStatus(data)
-      console.log('typingResponse', data)
-      console.log('TypingStatus', typingStatus)
-    })
-  }, [socket])
+  // React.useEffect(() => {
+  //   socket.on('typingResponse', (data: any) => {
+  //     setTypingStatus(data)
+  //     console.log('typingResponse', data)
+  //     console.log('TypingStatus', typingStatus)
+  //   })
+  // }, [socket])
   // React.useEffect(() => {
   //   socket.on('messageResponse', (data: any) => {
   //     console.log('messageResponse', data)
@@ -633,7 +634,7 @@ const VolkenoReactMessenger = ({
                     )}
                   </div>
                 ))}
-                <div className='bg-danger'>{typingStatus || null}</div>
+                {/* <div className='bg-danger'></div> */}
                 <div ref={lastMessageRef} />
               </div>
               <div className={`${styles.textAreaFormContainer} p-3 border-top`}>
@@ -702,7 +703,7 @@ const VolkenoReactMessenger = ({
 }
 
 VolkenoReactMessenger.propTypes = {
-  socketUrl: PropTypes.string, // Socket url connection
+  // socketUrl: PropTypes.string, // Socket url connection
   user: PropTypes.object, // User data
   token: PropTypes.string, // Authentication token
   apiBaseUrl: PropTypes.string, // Api base url
