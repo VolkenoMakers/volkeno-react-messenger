@@ -13,8 +13,6 @@ npm install --save volkeno-react-messenger
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
-
 import VolkenoReactMessenger from 'volkeno-react-messenger'
 import 'volkeno-react-messenger/dist/index.css'
 
@@ -28,9 +26,6 @@ class Example extends Component {
         setApiPostEndpoint={'/api/messages'}
         setApiListUsersEndpoint={'/api/List_user_url'}
         setApiConversationUserEndpoint={'/api/List_conversation_user_url'}
-        socketUrl
-        title
-        newMessageTitle
      />
     )
   }
@@ -53,6 +48,22 @@ class Example extends Component {
 | socketUrl                       |  string  |  true    |    '164.92.136.142:4026'   | Provide socket url                                   |
 | title                           |  string  |  false   |    'Messagerie'   | Set the name of the chat                                      |
 | newMessageTitle                 |  string  |  false   |     'Nouvelle discussion'   | Set the name of new discussion modal                |
+
+## Styles
+
+**Some attribute for custom css**
+
+| Attribute                       |  Target  | Description                                                                                  |
+| ------------------------------- | :------: | -------------------------------------------------------------------------------------------- |
+| ._3oISP                         |          |                                                                                              |
+| ._N0eEV                         |          |                                                                                              |
+| ._3-4mn                         |          |                                                                                              |
+| ._3rDVm                         |          |                                                                                              |
+| ._2uoEp                         |          |                                                                                              |
+| ._3nSUg                         |          |                                                                                              |
+| ._P9G0Y                         |          |                                                                                              |
+| ._1RfSY                         |          |                                                                                              |
+| ._3sqmx                         |          |                                                                                              |
 
 ## License
 

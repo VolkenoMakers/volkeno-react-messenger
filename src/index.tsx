@@ -68,16 +68,19 @@ const VolkenoReactMessenger = ({
   const lastMessageRef = React.useRef<any>(null)
 
   React.useEffect(() => {
-    axios
-      .get(apiBaseUrl + setApiListUsersEndpoint, config)
-      .then((response) => {
-        const listUserData = response.data.results
-        setListUser(listUserData)
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
+    if (user) {
+      axios
+        .get(apiBaseUrl + setApiListUsersEndpoint, config)
+        .then((response) => {
+          const listUserData = response.data.results
+          setListUser(listUserData)
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
   }, [config])
+
   React.useEffect(() => {
     if (user) {
       axios
@@ -119,8 +122,17 @@ const VolkenoReactMessenger = ({
           data,
           config
         )
+        setMessages(
+          response?.data?.conversation?.messages
+            ?.slice()
+            .sort((a: any, b: any) => {
+              const dateA = new Date(a.created_at).getTime()
+              const dateB = new Date(b.created_at).getTime()
+
+              return dateA - dateB
+            })
+        )
         setConversationActive(response?.data?.conversation)
-        setMessages(response?.data?.conversation?.messages)
         // socket.emit('message', response?.data)
         // socket.emit('typing', ``)
       } catch (error) {
@@ -184,6 +196,12 @@ const VolkenoReactMessenger = ({
       .includes(searchConv.toLowerCase())
   )
 
+  const sortedMessages = messages.slice().sort((a: any, b: any) => {
+    const dateA = new Date(a.created_at).getTime()
+    const dateB = new Date(b.created_at).getTime()
+
+    return dateA - dateB
+  })
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -265,12 +283,6 @@ const VolkenoReactMessenger = ({
                         (item: any) => item?.id !== user?.id
                       )?.avatar !== '/mediafiles/avatars/default.png' ? (
                         <img
-                          // src={
-                          //   ApiBaseUrl +
-                          //   item?.participants?.find(
-                          //     (item: any) => item?.id !== user?.id
-                          //   )?.avatar
-                          // }
                           src={getAvatar(
                             item?.participants?.find(
                               (item: any) => item?.id !== user?.id
@@ -355,14 +367,23 @@ const VolkenoReactMessenger = ({
                         </div>
                         <div className={styles.yadMessagerieListGroupHeure}>
                           {formatDateHour(
-                            item?.messages[item?.messages?.length - 1]
-                              ?.created_at
+                            item?.messages.slice().sort((a: any, b: any) => {
+                              const dateA = new Date(a.created_at).getTime()
+                              const dateB = new Date(b.created_at).getTime()
+
+                              return dateA - dateB
+                            })[item?.messages?.length - 1]?.created_at
                           )}
                         </div>
                       </div>
                       <div className={styles.yadMessagerieListGroupApercu}>
                         {truncateCaractere(
-                          item?.messages[item?.messages?.length - 1]?.content,
+                          item?.messages.slice().sort((a: any, b: any) => {
+                            const dateA = new Date(a.created_at).getTime()
+                            const dateB = new Date(b.created_at).getTime()
+
+                            return dateA - dateB
+                          })[item?.messages?.length - 1]?.content,
                           18
                         )}
                       </div>
@@ -479,7 +500,7 @@ const VolkenoReactMessenger = ({
                   </div>
                 </div>
 
-                {location?.pathname?.startsWith('/medecin/messages') ? (
+                {/* {location?.pathname?.startsWith('/medecin/messages') ? (
                   <div className={styles.yadMessageBtnPhotoContainer}>
                     <button
                       className={`btn ${styles.yadMessageBtnPhoto}`}
@@ -577,10 +598,10 @@ const VolkenoReactMessenger = ({
                       </svg>
                     </button>
                   </div>
-                )}
+                )} */}
               </div>
               <div className={`${styles.blocDetails} pb-5`}>
-                {messages?.map((message: any) => (
+                {sortedMessages?.map((message: any) => (
                   <div key={message?.id}>
                     {message?.sender?.id !== user?.id ? (
                       <div className='position-relative received-msg-item m-b-2'>
