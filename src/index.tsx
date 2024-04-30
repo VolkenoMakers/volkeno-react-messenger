@@ -14,9 +14,10 @@ import {
 } from './Utils'
 import PropTypes from 'prop-types'
 import { AiFillPlusCircle } from 'react-icons/ai'
+import { HiPlus } from 'react-icons/hi2'
 import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
-import { ListGroup } from 'react-bootstrap'
+import { Form, ListGroup } from 'react-bootstrap'
 // import { getName } from './utils/Utils'
 import Spinner from 'react-bootstrap/Spinner'
 // import { io } from 'socket.io-client'
@@ -31,6 +32,7 @@ interface IVolkenoReactMessenger {
   // socketUrl: string
   title?: string
   newMessageTitle?: string
+  setStyle?: 'yad' | 'dag'
 }
 const VolkenoReactMessenger = ({
   user,
@@ -41,7 +43,8 @@ const VolkenoReactMessenger = ({
   setApiConversationUserEndpoint,
   // socketUrl,
   title = 'Messagerie',
-  newMessageTitle = 'Nouvelle discussion'
+  newMessageTitle = 'Nouvelle discussion',
+  setStyle = 'dag'
 }: IVolkenoReactMessenger) => {
   const config = {
     headers: {
@@ -67,6 +70,14 @@ const VolkenoReactMessenger = ({
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
+  const isStyleYad = (setStyle: string) => {
+    return setStyle === 'yad'
+  }
+
+  const isStyleDag = (setStyle: string) => {
+    return setStyle === 'dag'
+  }
+
   React.useEffect(() => {
     if (user) {
       axios
@@ -79,7 +90,7 @@ const VolkenoReactMessenger = ({
           console.error('Error:', error)
         })
     }
-  }, [config])
+  }, [user])
 
   React.useEffect(() => {
     if (user) {
@@ -93,7 +104,7 @@ const VolkenoReactMessenger = ({
           console.error('Error:', error)
         })
     }
-  }, [config])
+  }, [user])
 
   const handleSendMessage = async (e: any) => {
     e.preventDefault()
@@ -206,17 +217,55 @@ const VolkenoReactMessenger = ({
     <div className='mb-3 p-2'>
       <div className='row'>
         <div className='col-lg-4 col-left-messagerie d-flex mb-3'>
-          <div className={`${styles.customContentMessageLeft} w-100`}>
+          <div
+            className={`${
+              isStyleYad(setStyle)
+                ? styles.customContentMessageLeft
+                : styles.customContentMessageLeftDag
+            } w-100`}
+          >
             <div
               className={`${styles.yadMessagerieTitreMessageContainer}  mb-4`}
             >
-              <div className={styles.yadMessagerieTitreMessage}>{title}</div>
-              <button
-                onClick={(e) => openModalNewChat(e)}
-                className={`btn ${styles.yadMessagerieBtnAjout} ${styles.btnAddNewChat}`}
+              <div
+                className={
+                  isStyleYad(setStyle)
+                    ? styles.yadMessagerieTitreMessage
+                    : styles.dagMessagerieTitreMessage
+                }
               >
-                <AiFillPlusCircle />
-              </button>
+                {title}
+              </div>
+              {isStyleYad(setStyle) && (
+                <button
+                  onClick={(e) => openModalNewChat(e)}
+                  className={`btn ${styles.yadMessagerieBtnAjout}`}
+                >
+                  <AiFillPlusCircle />
+                </button>
+              )}
+              {isStyleDag(setStyle) && (
+                <div className={styles.dagMessagerieBtnAjoutContainer}>
+                  <Form.Select
+                    className={styles.dagMessagerieInputSelectType}
+                    aria-label='Default select example'
+                  >
+                    <option
+                      value='1'
+                      className={styles.dagMessagerieInputSelectTypeOption}
+                    >
+                      Super admin
+                    </option>
+                    <option value='2'>Étudiants</option>
+                  </Form.Select>
+                  <button
+                    onClick={(e) => openModalNewChat(e)}
+                    className={`btn ${styles.dagMessagerieBtnAjout}`}
+                  >
+                    <HiPlus /> Compose
+                  </button>
+                </div>
+              )}
               <NewChatModal
                 modalNewChat={modalNewChat}
                 setModalNewChat={setModalNewChat}
@@ -229,7 +278,7 @@ const VolkenoReactMessenger = ({
                 newMessageTitle={newMessageTitle}
               />
             </div>
-            <div className='input-group mb-4'>
+            {/* <div className='input-group mb-4'>
               <span
                 className={`input-group-text ${styles.yadMessagerieCustomInputAddon}`}
                 id='basic-addon1'
@@ -249,12 +298,41 @@ const VolkenoReactMessenger = ({
               </span>
               <input
                 type='text'
-                className={`form-control ${styles.yadMessagerieCustomInputSearch}`}
+                className={`form-control ${
+                  isStyleYad(setStyle)
+                    ? styles.yadMessagerieCustomInputSearch
+                    : styles.dagMessagerieCustomInputSearch
+                }`}
                 placeholder='Recherche'
                 aria-label='Username'
                 aria-describedby='basic-addon1'
                 value={searchConv}
                 onChange={handleSearchConv}
+              />
+            </div> */}
+            <div className='form-search-user-container position-relative  mb-4'>
+              <input
+                type='text'
+                className={`form-control ${
+                  isStyleYad(setStyle)
+                    ? styles.yadMessagerieCustomInputSearch
+                    : styles.dagMessagerieCustomInputSearch
+                }`}
+                // className={`${styles.formSearchUser} form-control`}
+                placeholder='Recherche'
+                aria-label='Username'
+                aria-describedby='basic-addon1'
+                value={searchConv}
+                onChange={handleSearchConv}
+              />
+              <FiSearch
+                style={{
+                  color: isStyleYad(setStyle) ? '#919EAB' : 'rgb(27, 29, 34)',
+                  fontSize: 22,
+                  position: 'absolute',
+                  top: '25%',
+                  left: '2%'
+                }}
               />
             </div>
             <ListGroup
@@ -265,9 +343,13 @@ const VolkenoReactMessenger = ({
                 filteredConversationList?.map((item: any) => (
                   <ListGroup.Item
                     type='button'
-                    className={`btn ${styles.listGroupItem} ${
-                      styles.listGroupItemAction
-                    } ${item?.id === conversationActive?.id && 'active'}`}
+                    className={`btn ${
+                      isStyleYad(setStyle)
+                        ? styles.listGroupItem
+                        : styles.listGroupItemDag
+                    } ${styles.listGroupItemAction} ${
+                      item?.id === conversationActive?.id && 'active'
+                    }`}
                     aria-current='true'
                     key={item?.id}
                     onClick={() => onChoseConvesation(item)}
@@ -352,7 +434,11 @@ const VolkenoReactMessenger = ({
                         className={styles.yadMessagerieListGroupNameContainer}
                       >
                         <div
-                          className={`${styles.yadMessagerieListGroupName} m-r-7`}
+                          className={`${
+                            isStyleYad(setStyle)
+                              ? styles.yadMessagerieListGroupName
+                              : styles.dagMessagerieListGroupName
+                          } m-r-7`}
                         >
                           {
                             item?.participants?.find(
@@ -365,14 +451,21 @@ const VolkenoReactMessenger = ({
                             )?.nom
                           }
                         </div>
-                        <div className={styles.yadMessagerieListGroupHeure}>
+                        <div
+                          className={
+                            isStyleYad(setStyle)
+                              ? styles.yadMessagerieListGroupHeure
+                              : styles.dagMessagerieListGroupHeure
+                          }
+                        >
                           {formatDateHour(
                             item?.messages.slice().sort((a: any, b: any) => {
                               const dateA = new Date(a.created_at).getTime()
                               const dateB = new Date(b.created_at).getTime()
 
                               return dateA - dateB
-                            })[item?.messages?.length - 1]?.created_at
+                            })[item?.messages?.length - 1]?.created_at,
+                            isStyleYad(setStyle)
                           )}
                         </div>
                       </div>
@@ -405,9 +498,21 @@ const VolkenoReactMessenger = ({
             </ListGroup>
           </div>
         </div>
-        <div className={`col-lg-8 ${styles.colRightMessagerie} d-flex mb-3`}>
+        <div
+          className={`col-lg-8 ${
+            isStyleYad(setStyle)
+              ? styles.colRightMessagerie
+              : styles.colRightMessagerieDag
+          } d-flex mb-3`}
+        >
           {conversationActive != null || receiver != null ? (
-            <div className={`${styles.dtailsMessagesTabsComponent} w-100`}>
+            <div
+              className={`${
+                isStyleYad(setStyle)
+                  ? styles.dtailsMessagesTabsComponent
+                  : styles.dtailsMessagesTabsComponentDag
+              } w-100`}
+            >
               <div className={styles.contentContentDetailMessageInfoContainer}>
                 <div
                   className={`${styles.contentContentDetailMessageInfo} p-3`}
@@ -625,7 +730,13 @@ const VolkenoReactMessenger = ({
                           </div>
                           <div className='info-text-message-recu'>
                             <div className='d-flex flex-column'>
-                              <span className={styles.textMessageRecu}>
+                              <span
+                                className={
+                                  isStyleYad(setStyle)
+                                    ? styles.textMessageRecu
+                                    : styles.textMessageRecuDag
+                                }
+                              >
                                 {message?.content}
                               </span>
                             </div>
@@ -639,7 +750,13 @@ const VolkenoReactMessenger = ({
                       <div className={styles.blocReponse}>
                         <div className='position-relative sending-msg-item'>
                           <div className={styles.blocMessageEnvoyer}>
-                            <span className={styles.textMessageEnvoyer}>
+                            <span
+                              className={
+                                isStyleYad(setStyle)
+                                  ? styles.textMessageEnvoyer
+                                  : styles.textMessageEnvoyerDag
+                              }
+                            >
                               {message?.content}
                             </span>
                           </div>
@@ -662,7 +779,13 @@ const VolkenoReactMessenger = ({
                 <form onSubmit={handleSendMessage}>
                   <div className='left-footer'>
                     <div className={styles.leftFooterContainer}>
-                      <div className={styles.inputGroup}>
+                      <div
+                        className={
+                          isStyleYad(setStyle)
+                            ? styles.inputGroup
+                            : styles.inputGroupDag
+                        }
+                      >
                         <div className={styles.inputContainer}>
                           <div className={styles.containerDisplayInputMessage}>
                             <div className='share'>
@@ -703,9 +826,20 @@ const VolkenoReactMessenger = ({
                       >
                         <button type='submit' disabled={sendingMessage}>
                           {sendingMessage ? (
-                            <Spinner animation='border' size='sm' />
-                          ) : (
+                            isStyleYad(setStyle) ? (
+                              <Spinner animation='border' size='sm' />
+                            ) : (
+                              <span className='d-flex align-items-center gap-2'>
+                                Sending...{' '}
+                                <Spinner animation='border' size='sm' />
+                              </span>
+                            )
+                          ) : isStyleYad(setStyle) ? (
                             <i className='fa-solid fa-paper-plane' />
+                          ) : (
+                            <span className='d-flex align-items-center gap-2'>
+                              Send <i className='fa-solid fa-paper-plane' />
+                            </span>
                           )}
                         </button>
                       </div>
@@ -715,7 +849,13 @@ const VolkenoReactMessenger = ({
               </div>
             </div>
           ) : (
-            <div className={`${styles.dtailsMessagesTabsComponent} w-100`} />
+            <div
+              className={`${
+                isStyleYad(setStyle)
+                  ? styles.dtailsMessagesTabsComponent
+                  : styles.dtailsMessagesTabsComponentDag
+              } w-100`}
+            />
           )}
         </div>
       </div>
@@ -732,7 +872,8 @@ VolkenoReactMessenger.propTypes = {
   setApiConversationUserEndpoint: PropTypes.string, // User's conversations endpoint
   setApiListUsersEndpoint: PropTypes.string, // Users list endpoint
   title: PropTypes.string, // Module title (optional)
-  newMessageTitle: PropTypes.string // New discussion title (optional)
+  newMessageTitle: PropTypes.string, // New discussion title (optional)
+  setStyle: PropTypes.string // New discussion title (optional)
 }
 export default VolkenoReactMessenger
 
