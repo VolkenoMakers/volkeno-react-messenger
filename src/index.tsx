@@ -18,7 +18,6 @@ import { HiPlus } from 'react-icons/hi2'
 import { BsCheck2All } from 'react-icons/bs'
 import { FiSearch } from 'react-icons/fi'
 import { Form, ListGroup } from 'react-bootstrap'
-// import { getName } from './utils/Utils'
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select'
 // import { io } from 'socket.io-client'
@@ -34,6 +33,10 @@ interface IVolkenoReactMessenger {
   title?: string
   newMessageTitle?: string
   setStyle?: 'yad' | 'dag'
+  isMultiUserType?: boolean
+  setSecondListUsersEndpoint?: string
+  setFirstListLabel?: string
+  setSecondListLabel?: string
 }
 const VolkenoReactMessenger = ({
   user,
@@ -45,7 +48,11 @@ const VolkenoReactMessenger = ({
   // socketUrl,
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion',
-  setStyle = 'dag'
+  setStyle = 'dag',
+  isMultiUserType = true,
+  setSecondListUsersEndpoint,
+  setFirstListLabel = 'Première liste',
+  setSecondListLabel = 'Second liste'
 }: IVolkenoReactMessenger) => {
   const config = {
     headers: {
@@ -63,6 +70,7 @@ const VolkenoReactMessenger = ({
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
   const [modalNewChatDag, setModalNewChatDag] = React.useState<boolean>(false)
   const [listUser, setListUser] = React.useState(null)
+  const [secondListUser, setSecondListUser] = React.useState(null)
   const [conversations, setConversations] = React.useState<any>([])
   const [receiver, setReceiver] = React.useState<any>(null)
   const [conversationActive, setConversationActive] = React.useState<any>(null)
@@ -103,6 +111,20 @@ const VolkenoReactMessenger = ({
         .then((response) => {
           const conversationsData = response.data.results
           setConversations(conversationsData)
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
+  }, [user])
+
+  React.useEffect(() => {
+    if (user && isMultiUserType) {
+      axios
+        .get(apiBaseUrl + setSecondListUsersEndpoint, config)
+        .then((response) => {
+          const listUserData = response.data.results
+          setSecondListUser(listUserData)
         })
         .catch((error) => {
           console.error('Error:', error)
@@ -310,19 +332,27 @@ const VolkenoReactMessenger = ({
                 </button>
               )}
               {isStyleDag(setStyle) && (
-                <div className={styles.dagMessagerieBtnAjoutContainer}>
-                  <Form.Select
-                    className={styles.dagMessagerieInputSelectType}
-                    aria-label='Default select example'
-                  >
-                    <option
-                      value='1'
-                      className={styles.dagMessagerieInputSelectTypeOption}
+                <div
+                  className={
+                    isMultiUserType
+                      ? styles.dagMessagerieBtnAjoutContainer
+                      : `${styles.dagMessagerieBtnAjoutContainer} justify-content-end`
+                  }
+                >
+                  {isMultiUserType && (
+                    <Form.Select
+                      className={styles.dagMessagerieInputSelectType}
+                      aria-label='Default select example'
                     >
-                      Super admin
-                    </option>
-                    <option value='2'>Étudiants</option>
-                  </Form.Select>
+                      <option
+                        value='1'
+                        className={styles.dagMessagerieInputSelectTypeOption}
+                      >
+                        {setFirstListLabel}
+                      </option>
+                      <option value='2'>{setSecondListLabel}</option>
+                    </Form.Select>
+                  )}
                   <button
                     onClick={(e) => openModalNewChatDag(e)}
                     className={`btn ${styles.dagMessagerieBtnAjout}`}
@@ -348,6 +378,7 @@ const VolkenoReactMessenger = ({
                 setReceiver={setReceiver}
                 setConversationActive={setConversationActive}
                 userList={listUser}
+                secondListUser={secondListUser}
                 ApiBaseUrl={apiBaseUrl}
                 handleSendMessageModal={handleSendMessageModal}
                 messageDag={messageDag}
@@ -357,40 +388,11 @@ const VolkenoReactMessenger = ({
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
                 sendingMessage={sendingMessageDag}
+                isMulti={isMultiUserType}
+                setFirstListLabel={setFirstListLabel}
+                setSecondListLabel={setSecondListLabel}
               />
             </div>
-            {/* <div className='input-group mb-4'>
-              <span
-                className={`input-group-text ${styles.yadMessagerieCustomInputAddon}`}
-                id='basic-addon1'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width='18'
-                  height='18'
-                  viewBox='0 0 18 18'
-                  fill='none'
-                >
-                  <path
-                    d='M12.8645 11.3205H12.0515L11.7633 11.0426C12.7719 9.8694 13.3791 8.34624 13.3791 6.68929C13.3791 2.99461 10.3842 -0.000244141 6.68954 -0.000244141C2.99485 -0.000244141 0 2.99461 0 6.68929C0 10.384 2.99485 13.3788 6.68954 13.3788C8.34648 13.3788 9.86964 12.7716 11.0429 11.7631L11.3208 12.0512V12.8643L16.4666 17.9998L18 16.4663L12.8645 11.3205ZM6.68954 11.3205C4.12693 11.3205 2.05832 9.2519 2.05832 6.68929C2.05832 4.12669 4.12693 2.05807 6.68954 2.05807C9.25214 2.05807 11.3208 4.12669 11.3208 6.68929C11.3208 9.2519 9.25214 11.3205 6.68954 11.3205Z'
-                    fill='#C9CED6'
-                  />
-                </svg>
-              </span>
-              <input
-                type='text'
-                className={`form-control ${
-                  isStyleYad(setStyle)
-                    ? styles.yadMessagerieCustomInputSearch
-                    : styles.dagMessagerieCustomInputSearch
-                }`}
-                placeholder='Recherche'
-                aria-label='Username'
-                aria-describedby='basic-addon1'
-                value={searchConv}
-                onChange={handleSearchConv}
-              />
-            </div> */}
             <div className='form-search-user-container position-relative  mb-4'>
               <input
                 type='text'
@@ -399,7 +401,6 @@ const VolkenoReactMessenger = ({
                     ? styles.yadMessagerieCustomInputSearch
                     : styles.dagMessagerieCustomInputSearch
                 }`}
-                // className={`${styles.formSearchUser} form-control`}
                 placeholder='Recherche'
                 aria-label='Username'
                 aria-describedby='basic-addon1'
@@ -895,7 +896,7 @@ const VolkenoReactMessenger = ({
                     )}
                   </div>
                 ))}
-                {/* <div className='bg-danger'></div> */}
+                {/* <div className='text-danger'></div> */}
                 <div ref={lastMessageRef} />
               </div>
               <div className={`${styles.textAreaFormContainer} p-3 border-top`}>
@@ -941,7 +942,6 @@ const VolkenoReactMessenger = ({
                             ) : (
                               <span className='d-flex align-items-center gap-2'>
                                 Sending...{' '}
-                                {/* <Spinner animation='border' size='sm' /> */}
                               </span>
                             )
                           ) : isStyleYad(setStyle) ? (
@@ -1112,7 +1112,7 @@ function NewChatModalDag({
   setReceiver,
   setConversationActive,
   userList,
-  ApiBaseUrl,
+  secondListUser,
   conversations,
   handleSendMessageModal,
   messageDag,
@@ -1122,7 +1122,7 @@ function NewChatModalDag({
   newMessageTitle,
   sendingMessage
 }: any) {
-  console.log(ApiBaseUrl)
+  console.log(secondListUser)
 
   function closeModalNewChat() {
     setModalNewChat(false)
@@ -1137,12 +1137,10 @@ function NewChatModalDag({
     )
 
     if (existingConversation) {
-      // Si une conversation existe déjà avec cet utilisateur, afficher les messages de cette conversation
       setConversationActive(existingConversation)
       setReceiver(null) // Réinitialiser le destinataire
       setMessages(existingConversation?.messages) // afficher l'historique de messages
     } else {
-      // Si aucune conversation active avec cet utilisateur, définir le destinataire et réinitialiser la conversation active et l'historique de messages
       setReceiver(x.value)
       setConversationActive(null)
       setMessages(null)
@@ -1163,7 +1161,11 @@ function NewChatModalDag({
             <label className='form-label form-label-add-rv-praticien'>
               Élèves
             </label>
-            <Select options={options} onChange={onChoseReceiver} />
+            <Select
+              options={options}
+              onChange={onChoseReceiver}
+              closeMenuOnSelect
+            />
           </div>
           <div className='mb-3'>
             <Form.Group

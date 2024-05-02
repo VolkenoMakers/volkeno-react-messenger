@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 .yadMessagerieBtnAjout {
   background: none;

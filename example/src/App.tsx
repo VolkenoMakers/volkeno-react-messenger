@@ -41,6 +41,10 @@ const App = () => {
       setApiPostEndpoint={'/api/messages/'}
       setApiListUsersEndpoint={'/api/medecins/?limit=1000'}
       setApiConversationUserEndpoint={`/api/user/${user?.slug}/conversations/`}
+      isMultiUserType={true}
+      setSecondListUsersEndpoint={'/api/medecins'}
+      setFirstListLabel ='Admin'
+      setSecondListLabel ='Medecins'
     />
   )
 }
