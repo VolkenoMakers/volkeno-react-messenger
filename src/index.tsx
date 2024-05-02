@@ -20,6 +20,7 @@ import { FiSearch } from 'react-icons/fi'
 import { Form, ListGroup } from 'react-bootstrap'
 // import { getName } from './utils/Utils'
 import Spinner from 'react-bootstrap/Spinner'
+import Select from 'react-select'
 // import { io } from 'socket.io-client'
 
 interface IVolkenoReactMessenger {
@@ -60,13 +61,16 @@ const VolkenoReactMessenger = ({
   // }
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
+  const [modalNewChatDag, setModalNewChatDag] = React.useState<boolean>(false)
   const [listUser, setListUser] = React.useState(null)
   const [conversations, setConversations] = React.useState<any>([])
   const [receiver, setReceiver] = React.useState<any>(null)
   const [conversationActive, setConversationActive] = React.useState<any>(null)
   const [message, setMessage] = React.useState('')
+  const [messageDag, setMessageDag] = React.useState('')
   const [messages, setMessages] = React.useState<any>([])
   const [sendingMessage, setSendingMessage] = React.useState(false)
+  const [sendingMessageDag, setSendingMessageDag] = React.useState(false)
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
@@ -153,11 +157,68 @@ const VolkenoReactMessenger = ({
       setMessage('')
     }
   }
+  const handleSendMessageModal = async (e: any) => {
+    e.preventDefault()
+    if (messageDag.trim()) {
+      setSendingMessageDag(true)
+      let data = {}
+      if (receiver != null) {
+        data = {
+          content: messageDag,
+          sender: user?.id,
+          receiver: receiver?.id
+        }
+      } else {
+        data = {
+          content: messageDag,
+          sender: user?.id,
+          receiver: conversationActive?.participants?.find(
+            (item: any) => item?.id !== user?.id
+          )?.id,
+          conversation: conversationActive?.id
+        }
+      }
+      try {
+        const response = await axios.post(
+          apiBaseUrl + setApiPostEndpoint,
+          data,
+          config
+        )
+        setMessages(
+          response?.data?.conversation?.messages
+            ?.slice()
+            .sort((a: any, b: any) => {
+              const dateA = new Date(a.created_at).getTime()
+              const dateB = new Date(b.created_at).getTime()
+
+              return dateA - dateB
+            })
+        )
+        setConversationActive(response?.data?.conversation)
+        // socket.emit('message', response?.data)
+        // socket.emit('typing', ``)
+      } catch (error) {
+        console.error(`Error: ${error}`)
+      }
+      setSendingMessageDag(false)
+      setMessage('')
+      setModalNewChatDag(false)
+    }
+  }
 
   const handleTyping = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage(e)
+    }
+    // else {
+    //   socket.emit('typing', `${getName(user)} est en train d'écrire`)
+    // }
+  }
+  const handleTypingModal = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessageModal(e)
     }
     // else {
     //   socket.emit('typing', `${getName(user)} est en train d'écrire`)
@@ -187,6 +248,10 @@ const VolkenoReactMessenger = ({
     e.preventDefault()
     setModalNewChat(true)
   }
+  function openModalNewChatDag(e: any) {
+    e.preventDefault()
+    setModalNewChatDag(true)
+  }
 
   const onChoseConvesation = async (x: any) => {
     setReceiver(null)
@@ -207,7 +272,7 @@ const VolkenoReactMessenger = ({
       .includes(searchConv.toLowerCase())
   )
 
-  const sortedMessages = messages.slice().sort((a: any, b: any) => {
+  const sortedMessages = messages?.slice().sort((a: any, b: any) => {
     const dateA = new Date(a.created_at).getTime()
     const dateB = new Date(b.created_at).getTime()
 
@@ -259,7 +324,7 @@ const VolkenoReactMessenger = ({
                     <option value='2'>Étudiants</option>
                   </Form.Select>
                   <button
-                    onClick={(e) => openModalNewChat(e)}
+                    onClick={(e) => openModalNewChatDag(e)}
                     className={`btn ${styles.dagMessagerieBtnAjout}`}
                   >
                     <HiPlus /> Compose
@@ -276,6 +341,22 @@ const VolkenoReactMessenger = ({
                 conversations={conversations}
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
+              />
+              <NewChatModalDag
+                modalNewChat={modalNewChatDag}
+                setModalNewChat={setModalNewChatDag}
+                setReceiver={setReceiver}
+                setConversationActive={setConversationActive}
+                userList={listUser}
+                ApiBaseUrl={apiBaseUrl}
+                handleSendMessageModal={handleSendMessageModal}
+                messageDag={messageDag}
+                setMessageDag={setMessageDag}
+                handleTypingModal={handleTypingModal}
+                conversations={conversations}
+                setMessages={setMessages}
+                newMessageTitle={newMessageTitle}
+                sendingMessage={sendingMessageDag}
               />
             </div>
             {/* <div className='input-group mb-4'>
@@ -710,18 +791,42 @@ const VolkenoReactMessenger = ({
                   <div key={message?.id}>
                     {message?.sender?.id !== user?.id ? (
                       <div className='position-relative received-msg-item m-b-2'>
-                        <div className={`${styles.blocMessageRecu} p-3`}>
+                        <div
+                          className={`${
+                            isStyleYad(setStyle)
+                              ? styles.blocMessageRecu
+                              : styles.blocMessageRecuDag
+                          } p-3`}
+                        >
                           <div className='content-img-pp-message-recieve'>
                             {message?.sender?.avatar &&
                             showProfil &&
                             message?.sender?.avatar !==
                               '/mediafiles/avatars/default.png' ? (
-                              <img
-                                src={apiBaseUrl + message?.sender?.avatar}
-                                className={styles.imgPpMessageRecieve}
-                                alt='Photo'
-                                onError={() => setShowProfil(false)}
-                              />
+                              isStyleYad(setStyle) ? (
+                                <img
+                                  src={apiBaseUrl + message?.sender?.avatar}
+                                  className={styles.imgPpMessageRecieve}
+                                  alt='user avatar'
+                                  onError={() => setShowProfil(false)}
+                                />
+                              ) : (
+                                <div className='d-flex align-items-center gap-2'>
+                                  <img
+                                    src={apiBaseUrl + message?.sender?.avatar}
+                                    className={styles.imgPpMessageRecieve}
+                                    alt='user avatar'
+                                    onError={() => setShowProfil(false)}
+                                  />{' '}
+                                  <span
+                                    className={styles.userNameMessageRecieveDag}
+                                  >
+                                    {message?.sender?.prenom +
+                                      ' ' +
+                                      message?.sender?.prenom}
+                                  </span>
+                                </div>
+                              )
                             ) : (
                               <div className={styles.formatPseudo}>
                                 {getUserPseudo(message?.sender)}
@@ -740,8 +845,17 @@ const VolkenoReactMessenger = ({
                                 {message?.content}
                               </span>
                             </div>
-                            <p className={`${styles.timeDetailMessage} mt-3`}>
-                              {formatDateHour(message?.created_at)}
+                            <p
+                              className={`${
+                                isStyleYad(setStyle)
+                                  ? styles.timeDetailMessageRecu
+                                  : styles.timeDetailMessageRecuDag
+                              } mt-3`}
+                            >
+                              {formatDateHour(
+                                message?.created_at,
+                                isStyleYad(setStyle)
+                              )}
                             </p>
                           </div>
                         </div>
@@ -760,8 +874,17 @@ const VolkenoReactMessenger = ({
                               {message?.content}
                             </span>
                           </div>
-                          <p className={`${styles.timeDetailMessage} mt-3`}>
-                            {formatDateHour(message?.created_at)}
+                          <p
+                            className={`${
+                              isStyleYad(setStyle)
+                                ? styles.timeDetailMessageEnvoyer
+                                : styles.timeDetailMessageEnvoyerDag
+                            } mt-3`}
+                          >
+                            {formatDateHour(
+                              message?.created_at,
+                              isStyleYad(setStyle)
+                            )}
                           </p>
                           {/* <p className="time-detail-message mt-3 text-right">
                           Delivered{" "}
@@ -802,19 +925,6 @@ const VolkenoReactMessenger = ({
                               />
                             </div>
                           </div>
-                          {/* <div className='d-flex gap-2'>
-                            <div className='emoji'>
-                              <i
-                                className={`fa-regular fa-face-smile ${styles.imgIconChat} send`}
-                                id='mytextarea'
-                              ></i>
-                            </div>
-                          </div> */}
-                          {/* <div className="emoji">
-                              <button type="submit">
-                                <RiSendPlaneFill className="img-icon-chat send" />
-                              </button>
-                            </div> */}
                         </div>
                       </div>
                       <div
@@ -831,13 +941,15 @@ const VolkenoReactMessenger = ({
                             ) : (
                               <span className='d-flex align-items-center gap-2'>
                                 Sending...{' '}
-                                <Spinner animation='border' size='sm' />
+                                {/* <Spinner animation='border' size='sm' /> */}
                               </span>
                             )
                           ) : isStyleYad(setStyle) ? (
                             <i className='fa-solid fa-paper-plane' />
                           ) : (
-                            <span className='d-flex align-items-center gap-2'>
+                            <span
+                              className={`${styles.btnSendDag} d-flex align-items-center`}
+                            >
                               Send <i className='fa-solid fa-paper-plane' />
                             </span>
                           )}
@@ -990,6 +1102,116 @@ function NewChatModal({
             <div>Pas de donnée</div>
           )}
         </ul>
+      </Modal.Body>
+    </Modal>
+  )
+}
+function NewChatModalDag({
+  modalNewChat,
+  setModalNewChat,
+  setReceiver,
+  setConversationActive,
+  userList,
+  ApiBaseUrl,
+  conversations,
+  handleSendMessageModal,
+  messageDag,
+  setMessageDag,
+  handleTypingModal,
+  setMessages,
+  newMessageTitle,
+  sendingMessage
+}: any) {
+  console.log(ApiBaseUrl)
+
+  function closeModalNewChat() {
+    setModalNewChat(false)
+  }
+
+  const onChoseReceiver = (x: any) => {
+    console.log({ x })
+    const existingConversation = conversations.find((conversation: any) =>
+      conversation.participants.some(
+        (participant: any) => participant.id === x.value.id
+      )
+    )
+
+    if (existingConversation) {
+      // Si une conversation existe déjà avec cet utilisateur, afficher les messages de cette conversation
+      setConversationActive(existingConversation)
+      setReceiver(null) // Réinitialiser le destinataire
+      setMessages(existingConversation?.messages) // afficher l'historique de messages
+    } else {
+      // Si aucune conversation active avec cet utilisateur, définir le destinataire et réinitialiser la conversation active et l'historique de messages
+      setReceiver(x.value)
+      setConversationActive(null)
+      setMessages(null)
+    }
+  }
+  const options = userList?.map((user: any) => {
+    return { value: user, label: user?.prenom + ' ' + user?.nom }
+  })
+
+  return (
+    <Modal show={modalNewChat} onHide={() => closeModalNewChat()}>
+      <Modal.Header className='modal-header p-3' closeButton>
+        <Modal.Title>{newMessageTitle}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={styles.modalBodyMessengerDag}>
+        <form onSubmit={handleSendMessageModal}>
+          <div className='my-3'>
+            <label className='form-label form-label-add-rv-praticien'>
+              Élèves
+            </label>
+            <Select options={options} onChange={onChoseReceiver} />
+          </div>
+          <div className='mb-3'>
+            <Form.Group
+              className='mb-3'
+              controlId='exampleForm.ControlTextarea1'
+            >
+              <Form.Label>Message</Form.Label>
+              <Form.Control
+                as='textarea'
+                placeholder='Écrivez votre message ici...'
+                style={{ height: '150px' }}
+                value={messageDag}
+                onChange={(e) => setMessageDag(e.target.value)}
+                onKeyDown={handleTypingModal}
+              />
+            </Form.Group>
+          </div>
+          <div className='d-flex align-items-center justify-content-between mt-4'>
+            <button
+              type='button'
+              className={styles.btnCancelModalDag}
+              onClick={() => closeModalNewChat()}
+            >
+              Annuler
+            </button>
+            <div
+              className={
+                sendingMessage ? styles.btnDisabledModal : styles.btnContainer
+              }
+            >
+              <button
+                type='submit'
+                disabled={sendingMessage}
+                className={styles.btnSendModalDag}
+              >
+                {sendingMessage ? (
+                  <span className='d-flex align-items-center gap-2'>
+                    Sending...
+                  </span>
+                ) : (
+                  <span className='d-flex align-items-center gap-2'>
+                    Send Message <i className='fa-solid fa-paper-plane' />
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </form>
       </Modal.Body>
     </Modal>
   )

@@ -467,10 +467,9 @@
   align-items: center;
 }
 .dtailsMessagesTabsComponentDag .btnContainer button {
-  /* width: 60px; */
   height: 60px;
-  padding: 19px;
-  border-radius: 0px, 24px;
+  padding: 18px;
+  border-radius: 12px;
   border: 0;
   outline: 0;
   cursor: pointer;
@@ -479,19 +478,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-family: "Poppins";
   font-size: 16px;
   font-weight: 600;
   line-height: 48px;
   letter-spacing: -0.008em;
 }
-.dtailsMessagesTabsComponent .btnDisabled button,
-.dtailsMessagesTabsComponentDag .btnDisabled button {
+.dtailsMessagesTabsComponent .btnDisabled button {
   width: 60px;
   height: 60px;
   padding: 19px;
   border-radius: 20px;
+  border: 0;
+  outline: 0;
+  cursor: not-allowed;
+  background-color: rgba(128, 128, 128, 0.478);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dtailsMessagesTabsComponentDag .btnDisabled button,
+.btnDisabledModal button {
+  height: 60px;
+  padding: 19px;
+  border-radius: 6px;
   border: 0;
   outline: 0;
   cursor: not-allowed;
@@ -549,7 +561,7 @@
   font-weight: 500;
   line-height: normal;
 }
-.timeDetailMessage {
+.timeDetailMessageEnvoyer {
   color: #767278;
   font-family: 'Nunito';
   font-size: 10px;
@@ -557,6 +569,33 @@
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
+  text-align: right;
+}
+.timeDetailMessageEnvoyerDag {
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #6E7485;
+  text-align: right;
+}
+.timeDetailMessageRecu {
+  color: #767278;
+  font-family: 'Nunito';
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+  text-align: left;
+}
+.timeDetailMessageRecuDag {
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+  color: #6E7485;
 }
 /* .bloc-message-recu::after {
         background: #fafafa;
@@ -579,13 +618,13 @@
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
-  max-width: 100%;
+  max-width: 90%;
 }
 .textMessageRecuDag {
   border-radius: 0px;
   padding: 8px 12px;
   font-style: normal;
-  max-width: 100%;
+  max-width: 90%;
 
   background: #F2F2F2B2;
   font-family: "Poppins";
@@ -608,6 +647,7 @@
     } */
 .blocMessageEnvoyer {
   display: flex;
+  justify-content: flex-end;
 }
 .textMessageEnvoyer {
   letter-spacing: 0.05em;
@@ -620,6 +660,8 @@
   font-weight: 400;
   line-height: 24px;
   padding: 10px 15px;
+  max-width: 90%;
+  text-align: left;
 }
 .textMessageEnvoyerDag {
   border-radius: 0px;
@@ -633,6 +675,7 @@
   text-align: left;
   color: #4F4F4F;
   padding: 8px 12px;
+  max-width: 90%;
 }
 .bloc-details {
   width: 100%;
@@ -755,6 +798,12 @@
 .blocMessageRecu {
   display: flex;
   align-items: flex-start;
+  gap: 10px;
+}
+.blocMessageRecuDag {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   gap: 10px;
 }
 .btnSendMessageModal {
@@ -1065,6 +1114,10 @@
   height: 85vh;
   overflow: auto;
 }
+.modalBodyMessengerDag {
+  height: auto;
+  overflow: auto;
+}
 .listGroupItem {
   display: flex;
   align-items: center;
@@ -1122,6 +1175,12 @@
   color: #00C2CB;
   
 }
+.btnSendDag {
+  background: #00C2CB;
+  border-radius: 6px;
+  gap: 12px;
+  color: #FFFFFF;
+}
 .dagMessagerieInputSelectType {
   border: 1px solid #E9EAF0;
   background-color: #FFFFFF;
@@ -1133,6 +1192,52 @@
   line-height: 24px;
   text-align: left;
   color: #4E5566;
+}
+.userNameMessageRecieveDag {
+  font-family: "Poppins";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+  color: #6E7485;
+}
+.btnSendModalDag {
+  height: 60px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: #00C2CB;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -0.008em;
+}
+.btnCancelModalDag {
+  height: 60px;
+  padding: 15px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: #F5F7FA;
+  color: #1D2026;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -0.008em;
 }
 @media (min-width: 1024px) {
   .customContentMessageLeft,
