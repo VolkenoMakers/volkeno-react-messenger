@@ -71,6 +71,8 @@ const VolkenoReactMessenger = ({
   const [modalNewChatDag, setModalNewChatDag] = React.useState<boolean>(false)
   const [listUser, setListUser] = React.useState(null)
   const [secondListUser, setSecondListUser] = React.useState(null)
+  const [listToShow, setListToShow] = React.useState(null)
+  const [listlabel, setListLabel] = React.useState('')
   const [conversations, setConversations] = React.useState<any>([])
   const [receiver, setReceiver] = React.useState<any>(null)
   const [conversationActive, setConversationActive] = React.useState<any>(null)
@@ -247,6 +249,16 @@ const VolkenoReactMessenger = ({
     // }
   }
 
+  const handleSelectList = (e: any) => {
+    if (e.target.value === '1') {
+      setListToShow(listUser)
+      setListLabel(setFirstListLabel)
+    } else {
+      setListToShow(secondListUser)
+      setListLabel(setSecondListLabel)
+    }
+  }
+
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -343,6 +355,7 @@ const VolkenoReactMessenger = ({
                     <Form.Select
                       className={styles.dagMessagerieInputSelectType}
                       aria-label='Default select example'
+                      onChange={handleSelectList}
                     >
                       <option
                         value='1'
@@ -377,7 +390,7 @@ const VolkenoReactMessenger = ({
                 setModalNewChat={setModalNewChatDag}
                 setReceiver={setReceiver}
                 setConversationActive={setConversationActive}
-                userList={listUser}
+                // userList={listUser}
                 secondListUser={secondListUser}
                 ApiBaseUrl={apiBaseUrl}
                 handleSendMessageModal={handleSendMessageModal}
@@ -388,9 +401,9 @@ const VolkenoReactMessenger = ({
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
                 sendingMessage={sendingMessageDag}
-                isMulti={isMultiUserType}
-                setFirstListLabel={setFirstListLabel}
-                setSecondListLabel={setSecondListLabel}
+                // isMulti={isMultiUserType}
+                listToShow={listToShow}
+                listlabel={listlabel}
               />
             </div>
             <div className='form-search-user-container position-relative  mb-4'>
@@ -1111,7 +1124,7 @@ function NewChatModalDag({
   setModalNewChat,
   setReceiver,
   setConversationActive,
-  userList,
+  // userList,
   secondListUser,
   conversations,
   handleSendMessageModal,
@@ -1120,7 +1133,9 @@ function NewChatModalDag({
   handleTypingModal,
   setMessages,
   newMessageTitle,
-  sendingMessage
+  sendingMessage,
+  listToShow,
+  listlabel
 }: any) {
   console.log(secondListUser)
 
@@ -1146,7 +1161,7 @@ function NewChatModalDag({
       setMessages(null)
     }
   }
-  const options = userList?.map((user: any) => {
+  const options = listToShow?.map((user: any) => {
     return { value: user, label: user?.prenom + ' ' + user?.nom }
   })
 
@@ -1159,7 +1174,7 @@ function NewChatModalDag({
         <form onSubmit={handleSendMessageModal}>
           <div className='my-3'>
             <label className='form-label form-label-add-rv-praticien'>
-              Élèves
+              {listlabel}
             </label>
             <Select
               options={options}
