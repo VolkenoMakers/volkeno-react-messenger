@@ -1174,7 +1174,11 @@
   letter-spacing: -0.004em;
   text-align: left;
   color: #00C2CB;
-  
+  border: .6px solid #00C2CB1A;
+}
+.dagMessagerieBtnAjout:hover {
+  color: #00C2CB;
+  border: .6px solid #00C2CB;
 }
 .btnSendDag {
   background: #00C2CB;
@@ -1239,6 +1243,47 @@
   font-weight: 600;
   line-height: 48px;
   letter-spacing: -0.008em;
+}
+.yadAlert {
+  border-left: 6px solid #09132d;
+  border-radius: 0.4rem;
+  color: #09132d;
+  padding: 2rem 1%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.yadAlertInfo {
+  background-color: rgba(50, 175, 239, 0.1);
+}
+
+.yadAlert h4 {
+  margin: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-size: 18px;
+}
+
+.dagAlert {
+  border-left: 6px solid #00C2CB;
+  border-radius: 0.4rem;
+  color: #09132d;
+  padding: 2rem 1%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dagAlertInfo {
+  background-color: #00C2CB1A;
+}
+
+.dagAlert h4 {
+  margin: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-size: 18px;
 }
 @media (min-width: 1024px) {
   .customContentMessageLeft,

@@ -20,6 +20,7 @@ import { FiSearch } from 'react-icons/fi'
 import { Form, ListGroup } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select'
+import { AlertInfo } from './Alert'
 // import { io } from 'socket.io-client'
 
 interface IVolkenoReactMessenger {
@@ -81,6 +82,7 @@ const VolkenoReactMessenger = ({
   const [messages, setMessages] = React.useState<any>([])
   const [sendingMessage, setSendingMessage] = React.useState(false)
   const [sendingMessageDag, setSendingMessageDag] = React.useState(false)
+  const [disableBtn, setDisableBtn] = React.useState(true)
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
@@ -257,8 +259,15 @@ const VolkenoReactMessenger = ({
       setListToShow(secondListUser)
       setListLabel(setSecondListLabel)
     }
+    setDisableBtn(false)
   }
 
+  // React.useEffect(() => {
+  //   if (isMultiUserType === false) {
+  //     setListToShow(listUser)
+  //     setListLabel(setFirstListLabel)
+  //   }
+  // }, [isMultiUserType])
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -284,6 +293,10 @@ const VolkenoReactMessenger = ({
   }
   function openModalNewChatDag(e: any) {
     e.preventDefault()
+    if (!isMultiUserType) {
+      setListToShow(listUser)
+      setListLabel(setFirstListLabel)
+    }
     setModalNewChatDag(true)
   }
 
@@ -377,6 +390,7 @@ const VolkenoReactMessenger = ({
                   <button
                     onClick={(e) => openModalNewChatDag(e)}
                     className={`btn ${styles.dagMessagerieBtnAjout}`}
+                    disabled={disableBtn}
                   >
                     <HiPlus /> Compose
                   </button>
@@ -596,7 +610,10 @@ const VolkenoReactMessenger = ({
                   </ListGroup.Item>
                 ))
               ) : (
-                <div>Pas de donnée</div>
+                <AlertInfo
+                  message='Pas de données'
+                  isStyleYad={isStyleYad(setStyle)}
+                />
               )}
             </ListGroup>
           </div>
@@ -1120,7 +1137,7 @@ function NewChatModal({
               </li>
             ))
           ) : (
-            <div>Pas de donnée</div>
+            <AlertInfo message='Pas de données' isStyleYad />
           )}
         </ul>
       </Modal.Body>
