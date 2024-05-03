@@ -49,11 +49,11 @@ const VolkenoReactMessenger = ({
   // socketUrl,
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion',
-  setStyle = 'dag',
+  setStyle = 'yad',
   isMultiUserType = false,
   setSecondListUsersEndpoint,
-  setFirstListLabel = 'Première liste',
-  setSecondListLabel = 'Second liste'
+  setFirstListLabel = 'Liste utilisateurs',
+  setSecondListLabel = 'Liste utilisateur 2'
 }: IVolkenoReactMessenger) => {
   const config = {
     headers: {
