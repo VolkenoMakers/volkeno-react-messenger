@@ -49,7 +49,7 @@ const VolkenoReactMessenger = ({
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion',
   setStyle = 'dag',
-  isMultiUserType = true,
+  isMultiUserType = false,
   setSecondListUsersEndpoint,
   setFirstListLabel = 'Première liste',
   setSecondListLabel = 'Second liste'
@@ -71,8 +71,8 @@ const VolkenoReactMessenger = ({
   const [modalNewChatDag, setModalNewChatDag] = React.useState<boolean>(false)
   const [listUser, setListUser] = React.useState(null)
   const [secondListUser, setSecondListUser] = React.useState(null)
-  const [listToShow, setListToShow] = React.useState(null)
-  const [listlabel, setListLabel] = React.useState('')
+  const [listToShow, setListToShow] = React.useState(listUser)
+  const [listlabel, setListLabel] = React.useState(setFirstListLabel)
   const [conversations, setConversations] = React.useState<any>([])
   const [receiver, setReceiver] = React.useState<any>(null)
   const [conversationActive, setConversationActive] = React.useState<any>(null)
@@ -358,6 +358,14 @@ const VolkenoReactMessenger = ({
                       onChange={handleSelectList}
                     >
                       <option
+                        value=''
+                        className={styles.dagMessagerieInputSelectTypeOption}
+                        disabled
+                        selected
+                      >
+                        Choisir une liste
+                      </option>
+                      <option
                         value='1'
                         className={styles.dagMessagerieInputSelectTypeOption}
                       >
@@ -391,7 +399,7 @@ const VolkenoReactMessenger = ({
                 setReceiver={setReceiver}
                 setConversationActive={setConversationActive}
                 // userList={listUser}
-                secondListUser={secondListUser}
+                // secondListUser={secondListUser}
                 ApiBaseUrl={apiBaseUrl}
                 handleSendMessageModal={handleSendMessageModal}
                 messageDag={messageDag}
@@ -1125,7 +1133,7 @@ function NewChatModalDag({
   setReceiver,
   setConversationActive,
   // userList,
-  secondListUser,
+  // secondListUser,
   conversations,
   handleSendMessageModal,
   messageDag,
@@ -1137,8 +1145,6 @@ function NewChatModalDag({
   listToShow,
   listlabel
 }: any) {
-  console.log(secondListUser)
-
   function closeModalNewChat() {
     setModalNewChat(false)
   }
