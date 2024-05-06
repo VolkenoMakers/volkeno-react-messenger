@@ -53,7 +53,7 @@ class Example extends Component {
 | ------------------------------- | :------: | :------: | :---: | :------: | ---------------------------------------------------------------------- |
 | title                           |  string  |  false   |   -   |    'Messagerie'   | Set the name of the chat                                      |
 | newMessageTitle                 |  string  |  false   |   -   |    'Nouvelle discussion'   | Set the name of new discussion modal                 |
-| setStyle                        |  string  |  false   | 'yad' / 'dag' |    'yad'  | Set the messaging style                                       |
+| setStyle                        |  string  |  false   | 'yad' \| 'dag' |    'yad'  | Set the messaging style                                       |
 | isMultiList                     |  boolean |  false   |   -   |    'false'   | Define whether the list of users for chat is multiple or not       |
 | setSecondListUsersEndpoint      |  string  |  false   |   -   |    ' '   | Provide an endpoint for the second list the user can chat with         |
 | setFirstListLabel               |  string  |  false   |   -   |    'Liste utilisateurs'   | Set label for first user list                         |
