@@ -34,7 +34,7 @@ interface IVolkenoReactMessenger {
   title?: string
   newMessageTitle?: string
   setStyle?: 'yad' | 'dag'
-  isMultiUserType?: boolean
+  isMultiList?: boolean
   setSecondListUsersEndpoint?: string
   setFirstListLabel?: string
   setSecondListLabel?: string
@@ -50,7 +50,7 @@ const VolkenoReactMessenger = ({
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion',
   setStyle = 'yad',
-  isMultiUserType = false,
+  isMultiList = false,
   setSecondListUsersEndpoint,
   setFirstListLabel = 'Liste utilisateurs',
   setSecondListLabel = 'Liste utilisateur 2'
@@ -123,7 +123,7 @@ const VolkenoReactMessenger = ({
   }, [user])
 
   React.useEffect(() => {
-    if (user && isMultiUserType) {
+    if (user && isMultiList) {
       axios
         .get(apiBaseUrl + setSecondListUsersEndpoint, config)
         .then((response) => {
@@ -135,6 +135,11 @@ const VolkenoReactMessenger = ({
         })
     }
   }, [user])
+  React.useEffect(() => {
+    if (!isMultiList) {
+      setDisableBtn(false)
+    }
+  }, [isMultiList])
 
   const handleSendMessage = async (e: any) => {
     e.preventDefault()
@@ -263,11 +268,11 @@ const VolkenoReactMessenger = ({
   }
 
   // React.useEffect(() => {
-  //   if (isMultiUserType === false) {
+  //   if (isMultiList === false) {
   //     setListToShow(listUser)
   //     setListLabel(setFirstListLabel)
   //   }
-  // }, [isMultiUserType])
+  // }, [isMultiList])
   React.useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -293,7 +298,7 @@ const VolkenoReactMessenger = ({
   }
   function openModalNewChatDag(e: any) {
     e.preventDefault()
-    if (!isMultiUserType) {
+    if (!isMultiList) {
       setListToShow(listUser)
       setListLabel(setFirstListLabel)
     }
@@ -359,12 +364,12 @@ const VolkenoReactMessenger = ({
               {isStyleDag(setStyle) && (
                 <div
                   className={
-                    isMultiUserType
+                    isMultiList
                       ? styles.dagMessagerieBtnAjoutContainer
                       : `${styles.dagMessagerieBtnAjoutContainer} justify-content-end`
                   }
                 >
-                  {isMultiUserType && (
+                  {isMultiList && (
                     <Form.Select
                       className={styles.dagMessagerieInputSelectType}
                       aria-label='Default select example'
@@ -423,7 +428,7 @@ const VolkenoReactMessenger = ({
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
                 sendingMessage={sendingMessageDag}
-                // isMulti={isMultiUserType}
+                // isMulti={isMultiList}
                 listToShow={listToShow}
                 listlabel={listlabel}
               />

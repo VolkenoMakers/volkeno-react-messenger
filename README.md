@@ -42,12 +42,22 @@ class Example extends Component {
 | user                            |  object  |  true    |    { }   | Provide logged in user data                                            |
 | token                           |  string  |  true    |    ' '   | Provide logged in user token                                           |
 | apiBaseUrl                      |  string  |  true    |    ' '   | Provide api base url                                                   |
-| setApiPostEndpoint              |  string  |  true    |    '/api/messages'   | Provide the endpoint to post messages                      |
-| setApiListUsersEndpoint         |  string  |  true    |    ' '   | Provide endpoint for list of all users that user can chat              |
+| setApiPostEndpoint              |  string  |  false   |    '/api/messages'   | Provide the endpoint to post messages                      |
+| setApiListUsersEndpoint         |  string  |  true    |    ' '   | Provide an endpoint for the first list or list of all users the user can chat with              |
 | setApiConversationUserEndpoint  |  string  |  true    |    ' '   | Provide the endpoint for the user's list of all conversations          |
-| socketUrl                       |  string  |  true    |    '164.92.136.142:4026'   | Provide socket url                                   |
+<!-- | socketUrl                       |  string  |  true    |    '164.92.136.142:4026'   | Provide socket url                                   | -->
+
+**Other props**
+
+| Property                        |   Type   | Required |  Default | Description                                                            |
+| ------------------------------- | :------: | :------: | :------: | ---------------------------------------------------------------------- |
 | title                           |  string  |  false   |    'Messagerie'   | Set the name of the chat                                      |
-| newMessageTitle                 |  string  |  false   |     'Nouvelle discussion'   | Set the name of new discussion modal                |
+| newMessageTitle                 |  string  |  false   |    'Nouvelle discussion'   | Set the name of new discussion modal                 |
+| setStyle                        |  string  |  false   |    'yad'   | Set the messaging style                                              |
+| isMultiList                     |  boolean |  false   |    'false'   | Define whether the list of users for chat is multiple or not       |
+| setSecondListUsersEndpoint      |  string  |  false   |    ' '   | Provide an endpoint for the second list the user can chat with              |
+| setFirstListLabel               |  string  |  false   |    'Liste utilisateurs'   | Set label for first user list                             |
+| setSecondListLabel              |  string  |  false   |    'Liste utilisateur 2'   | Set label for second user list                            |
 
 ## Styles
 
