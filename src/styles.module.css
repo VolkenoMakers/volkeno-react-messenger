@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .yadMessagerieTitreMessage {
   color: #102844;
   font-family: 'DM Sans';
@@ -6,10 +9,21 @@
   font-weight: 500;
   line-height: 22px;
 }
+.dagMessagerieTitreMessage {
+  font-style: normal;
+  font-family: "Inter";
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #1D2026;
+
+}
 .yadMessagerieTitreMessageContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 .yadMessagerieBtnAjout {
   background: none;
@@ -30,7 +44,8 @@
   display: flex;
   align-items: center;
   outline: none;
-  border-color: transparent
+  border-color: transparent;
+  padding: 15px 45px;
 }
 .yadMessagerieCustomInputSearch::placeholder {
   color: #767278;
@@ -40,6 +55,27 @@
   font-weight: 400;
   line-height: 18px;
   opacity: 0.6;
+}
+.dagMessagerieCustomInputSearch,
+.yadMessagerieCustomInputAddon,
+.dagMessagerieCustomInputSearch:hover,
+.dagMessagerieCustomInputSearch:active,
+.dagMessagerieCustomInputSearch:focus {
+  border-radius: 0px;
+  border: 1px solid #E9EAF0;
+  background-color: #FFFFFF;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  outline: none;
+  padding: 15px 45px;
+}
+.dagMessagerieCustomInputSearch::placeholder {
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #8C94A3;
 }
 .yadMessagerieCustomListGroup {
   height: auto;
@@ -78,6 +114,7 @@
 .yadMessagerieListGroupAvatar {
   width: 50px;
   height: 53px;
+  object-fit: cover;
   border-radius: 53px;
   border: 1px solid rgba(76, 111, 255, 0.1);
 }
@@ -90,6 +127,15 @@
   line-height: normal;
   text-align: left;
 }
+.dagMessagerieListGroupName {
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: #1D2026;
+}
 .yadMessagerieListGroupHeure {
   color: #102844;
   text-align: right;
@@ -99,6 +145,15 @@
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
+}
+.dagMessagerieListGroupHeure {
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  text-align: right;
+  color: #4E5566;
 }
 .yadMessagerieCustomListGroup
   button.listGroupItem.listGroupItemAction.active
@@ -345,7 +400,15 @@
   background: #fff;
   position: relative;
 }
-.dtailsMessagesTabsComponent .dropdown-toggle::after {
+.dtailsMessagesTabsComponentDag {
+  padding: 2%;
+  border-radius: 5px;
+  background: #fff;
+  position: relative;
+  border: 1px solid #E9EAF0;
+}
+.dtailsMessagesTabsComponent .dropdown-toggle::after,
+.dtailsMessagesTabsComponentDag .dropdown-toggle::after {
   display: none;
 }
 .dtailsMessagesTabsComponent .inputGroup {
@@ -355,19 +418,30 @@
   background: #fafafb;
   width: 100%;
 }
-.dtailsMessagesTabsComponent .inputContainer {
+.dtailsMessagesTabsComponentDag .inputGroupDag {
+  padding: 10px;
+  height: 60px;
+  border-radius: 3px;
+  background-color: #FFFFFF;
+  width: 100%;
+  border: 1px solid #E9EAF0
+}
+.dtailsMessagesTabsComponent .inputContainer,
+.dtailsMessagesTabsComponentDag .inputContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   gap: 20px;
 }
-.dtailsMessagesTabsComponent .inputContainer :nth-child(1) {
+.dtailsMessagesTabsComponent .inputContainer :nth-child(1),
+.dtailsMessagesTabsComponentDag .inputContainer :nth-child(1) {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.dtailsMessagesTabsComponent input {
+.dtailsMessagesTabsComponent input,
+.dtailsMessagesTabsComponentDag input {
   border: 0;
   outline: 0;
   background-color: transparent;
@@ -379,7 +453,7 @@
   letter-spacing: 0.05em;
   color: #303030;
 }
-.dtailsMessagesTabsComponent .btnContainer button {
+.dtailsMessagesTabsComponent .btnContainer button{
   width: 60px;
   height: 60px;
   padding: 19px;
@@ -392,6 +466,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.dtailsMessagesTabsComponentDag .btnContainer button {
+  height: 60px;
+  padding: 18px;
+  border-radius: 12px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: #00C2CB;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -0.008em;
 }
 .dtailsMessagesTabsComponent .btnDisabled button {
   width: 60px;
@@ -407,15 +500,32 @@
   justify-content: center;
   align-items: center;
 }
-.dtailsMessagesTabsComponent .leftFooterContainer {
+.dtailsMessagesTabsComponentDag .btnDisabled button,
+.btnDisabledModal button {
+  height: 60px;
+  padding: 19px;
+  border-radius: 6px;
+  border: 0;
+  outline: 0;
+  cursor: not-allowed;
+  background-color: rgba(128, 128, 128, 0.478);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dtailsMessagesTabsComponent .leftFooterContainer,
+.dtailsMessagesTabsComponentDag .leftFooterContainer {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.dtailsMessagesTabsComponent .imgIconChat {
+.dtailsMessagesTabsComponent .imgIconChat,
+.dtailsMessagesTabsComponentDag .imgIconChat {
   cursor: pointer;
 }
-.dtailsMessagesTabsComponent .imgIconChat.send {
+.dtailsMessagesTabsComponent .imgIconChat.send,
+.dtailsMessagesTabsComponentDag .imgIconChat.send {
   color: #1c208f;
   font-size: 20px;
 }
@@ -452,7 +562,7 @@
   font-weight: 500;
   line-height: normal;
 }
-.timeDetailMessage {
+.timeDetailMessageEnvoyer {
   color: #767278;
   font-family: 'Nunito';
   font-size: 10px;
@@ -460,6 +570,33 @@
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
+  text-align: right;
+}
+.timeDetailMessageEnvoyerDag {
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #6E7485;
+  text-align: right;
+}
+.timeDetailMessageRecu {
+  color: #767278;
+  font-family: 'Nunito';
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+  text-align: left;
+}
+.timeDetailMessageRecuDag {
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+  color: #6E7485;
 }
 /* .bloc-message-recu::after {
         background: #fafafa;
@@ -482,7 +619,22 @@
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
-  max-width: 100%;
+  max-width: 90%;
+}
+.textMessageRecuDag {
+  border-radius: 0px;
+  padding: 8px 12px;
+  font-style: normal;
+  max-width: 90%;
+
+  background: #F2F2F2B2;
+  font-family: "Poppins";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: #4F4F4F;
 }
 /* .bloc-message-envoyer::after {
         background: #4845E5;
@@ -496,6 +648,7 @@
     } */
 .blocMessageEnvoyer {
   display: flex;
+  justify-content: flex-end;
 }
 .textMessageEnvoyer {
   letter-spacing: 0.05em;
@@ -508,6 +661,22 @@
   font-weight: 400;
   line-height: 24px;
   padding: 10px 15px;
+  max-width: 90%;
+  text-align: left;
+}
+.textMessageEnvoyerDag {
+  border-radius: 0px;
+  background: #E5F9FA;
+  font-style: normal;
+  font-family: "Poppins";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: #4F4F4F;
+  padding: 8px 12px;
+  max-width: 90%;
 }
 .bloc-details {
   width: 100%;
@@ -608,11 +777,13 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .imageProfilEntete {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .img-expediteur {
   width: 24px;
@@ -628,6 +799,12 @@
 .blocMessageRecu {
   display: flex;
   align-items: flex-start;
+  gap: 10px;
+}
+.blocMessageRecuDag {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   gap: 10px;
 }
 .btnSendMessageModal {
@@ -705,25 +882,20 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
-/* .btnAddNewChat {
-    width: 24px;
-    height: 24px;
-    background: #126251;
-    border-radius: 50%;
-    font-size: 18px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-  } */
 .customContentMessageLeft {
   filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.07));
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   background: #fff;
   padding: 20px;
+}
+.customContentMessageLeftDag {
+  border-radius: 5px;
+  border: 1px solid #E9EAF0;
+  padding: 20px;
+  background: #FFFFFF;
 }
 .customContentMessage {
   border-radius: 5px;
@@ -902,6 +1074,9 @@
   /* border: 1px solid rgba(0, 0, 0, 0.03);
   background: #FFF; */
 }
+.colRightMessagerieDag {
+  border-radius: 5px;
+}
 
 .listGroupItemMeessage {
   padding: 20px 15px;
@@ -940,6 +1115,10 @@
   height: 85vh;
   overflow: auto;
 }
+.modalBodyMessengerDag {
+  height: auto;
+  overflow: auto;
+}
 .listGroupItem {
   display: flex;
   align-items: center;
@@ -956,8 +1135,159 @@
   color: #102844;
   cursor: pointer !important;
 }
+.listGroupItemDag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  color: #1D2026;
+  border: none;
+}
+.listGroupItemDag.active,
+.listGroupItemDag:hover,
+.listGroupItemDag:focus,
+.listGroupItemDag:active {
+  background-color: #00C2CB1A;
+  border: none;
+  color: #1D2026;
+  cursor: pointer !important;
+}
+.dagMessagerieBtnAjoutContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+.dagMessagerieBtnAjout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #00C2CB1A;
+  padding: 0px 16px 0px 16px;
+  opacity: 0px;
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: -0.004em;
+  text-align: left;
+  color: #00C2CB;
+  border: .6px solid #00C2CB1A;
+}
+.dagMessagerieBtnAjout:hover {
+  color: #00C2CB;
+  border: .6px solid #00C2CB;
+}
+.btnSendDag {
+  background: #00C2CB;
+  border-radius: 6px;
+  gap: 12px;
+  color: #FFFFFF;
+}
+.dagMessagerieInputSelectType {
+  border: 1px solid #E9EAF0;
+  background-color: #FFFFFF;
+  border-radius: 0px;
+
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+  color: #4E5566;
+}
+.userNameMessageRecieveDag {
+  font-family: "Poppins";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+  color: #6E7485;
+}
+.btnSendModalDag {
+  height: 60px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: #00C2CB;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -0.008em;
+}
+.btnCancelModalDag {
+  height: 60px;
+  padding: 15px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: #F5F7FA;
+  color: #1D2026;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -0.008em;
+}
+.yadAlert {
+  border-left: 6px solid #09132d;
+  border-radius: 0.4rem;
+  color: #09132d;
+  padding: 2rem 1%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.yadAlertInfo {
+  background-color: rgba(50, 175, 239, 0.1);
+}
+
+.yadAlert h4 {
+  margin: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-size: 18px;
+}
+
+.dagAlert {
+  border-left: 6px solid #00C2CB;
+  border-radius: 0.4rem;
+  color: #09132d;
+  padding: 2rem 1%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dagAlertInfo {
+  background-color: #00C2CB1A;
+}
+
+.dagAlert h4 {
+  margin: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-size: 18px;
+}
 @media (min-width: 1024px) {
-  .customContentMessageLeft {
+  .customContentMessageLeft,
+  .customContentMessageLeftDag {
     height: 97vh;
     /* height: calc(100vh - 120px); */
   }
