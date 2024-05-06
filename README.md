@@ -63,25 +63,25 @@ class Example extends Component {
 
 **Some attribute for custom css**
 
-| Attribute ('yad' \| 'dag')     |  Target  | Description                                                                                      |
-| ------------------------------ | :------: | ------------------------------------------------------------------------------------------------ |
-| ._3oISP \| _Ib6zq              | Text block of messages send | To be used to customize the style of the block for messages sent by the user  |
-| ._N0eEV \| _3PC7-              | Text block of received messages | Use to customize the style of the block for messages received by the user |
-| ._3-4mn \| _2RbgV              | Input textarea | Use to customize the style of the textarea input                                           |
-| ._3rDVm \| _3kpUp              | Input search | Use to customize the style of the conversations input search                                 |
-| ._yBqpy \| _13Qr-              | Button new conversation | Use to customize the style of the add new conversation button                     |
-| ._3sqmx \| _300kl              | Conversation item | Use to customize the style of conversation items (list-group-item)                      |
-| ._3nSUg \| _2o4zq              | Conversation (user name) | Use to customize the username style in conversation item                         |
-| ._P9G0Y \| _35Req              | Conversation (time) | Use to customize the style of the sending date in conversation item                   |
-| ._1RfSY \| _1RfSY              | Conversation (last message preview) | Use to customize the style of the preview of the last message in conversation item |
-| ._1wrfJ                        | Modal (user item) | To be used to customize the style of the user list of the new discussion modal          |
+| Attribute ('yad' / 'dag')       |  Target  | Description                                                                                      |
+| ------------------------------- | :------: | ------------------------------------------------------------------------------------------------ |
+| ._3oISP  /  ._Ib6zq             | Text block of messages send | To be used to customize the style of the block for messages sent by the user  |
+| ._N0eEV  /  ._3PC7-             | Text block of received messages | Use to customize the style of the block for messages received by the user |
+| ._3-4mn  /  ._2RbgV             | Input textarea | Use to customize the style of the textarea input                                           |
+| ._3rDVm  /  ._3kpUp             | Input search | Use to customize the style of the conversations input search                                 |
+| ._yBqpy  /  ._13Qr-             | Button new conversation | Use to customize the style of the add new conversation button                     |
+| ._3sqmx  /  ._300kl             | Conversation item | Use to customize the style of conversation items (list-group-item)                      |
+| ._3nSUg  /  ._2o4zq             | Conversation (user name) | Use to customize the username style in conversation item                         |
+| ._P9G0Y  /  ._35Req             | Conversation (time) | Use to customize the style of the sending date in conversation item                   |
+| ._1RfSY  /  ._1RfSY             | Conversation (last message preview) | Use to customize the style of the preview of the last message in conversation item |
+| ._1wrfJ                         | Modal (user item) | To be used to customize the style of the user list of the new discussion modal          |
 
 **Troubleshoot**
 
 After installing the module, you may notice a style problem regarding the active conversation. This is due to the default style of bootstrap | react bootstrap.
 Add these lines of css code to your index.css file and that should solve the problem :)
 
-Yad style
+***Yad style***
 
 ```css
 ._3sqmx {
@@ -99,7 +99,7 @@ Yad style
 }
 ```
 
-Dag style
+***Dag style***
 
 ```css
 ._300kl {
