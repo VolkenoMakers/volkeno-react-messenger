@@ -26,4 +26,6 @@ jobs:
           npm run build
           npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # Assurez-vous d'avoir ajouté ce secret à votre référentiel
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} 
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
