@@ -237,8 +237,8 @@ export const chatData = [
   }
 ]
 
-export const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMCwidXNlcm5hbWUiOiJtYmF5ZS5uaWFzc0B5b3BtYWlsLmNvbSIsImV4cCI6MTk3MzE2MTI1MywiZW1haWwiOiJtYmF5ZS5uaWFzc0B5b3BtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNzEzOTYxMjUzfQ.-8SjlmK9NOqx0vL34RIRjZIZtd1wm-YpzOMYWLoSaqU"
-export const ApiBaseUrl = "https://yaay-ak-doom-api.volkeno-engineering.click/"
+export const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDE2ODYzNCwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NDk2ODYzNH0.Gkt3VVG0Uw4puz4PvkLxlsRW2tAUUtUYOykGDYuGDvU"
+export const ApiBaseUrl = "https://yaay-ak-doom-api.volkeno-engineering.click"
 
 
 

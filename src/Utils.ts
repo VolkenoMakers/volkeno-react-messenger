@@ -4,8 +4,10 @@ import { IUser } from './chatType'
 import { ApiBaseUrl } from './utils/http'
 import Avatar from './assets/avatar.png'
 
-export const formatDateHour = (date: any) => {
-  return moment(date).format('DD/MM/YYYY à HH:mm:ss')
+export const formatDateHour = (date: any, isStyleYad?: boolean) => {
+  return isStyleYad
+    ? moment(date).format('DD/MM/YYYY à HH:mm:ss')
+    : moment(date).fromNow()
 }
 
 export const truncateCaractere = (str: any, nbr: any) => {
