@@ -1,6 +1,6 @@
 {
   "name": "volkeno-react-messenger",
-  "version": "0.0.11",
+  "version": "1.0.0",
   "description": "The 'volkeno-react-messenger' module is a powerful and flexible messaging solution designed specifically for Volkeno's internal needs. Seamlessly integrating with Volkeno's internal data structure, this module provides a smooth and intuitive messaging experience for users",
   "author": "VolkenoMakers",
   "private": false,
@@ -12,7 +12,10 @@
     }
   ],
   "license": "MIT",
-  "repository": "VolkenoMakers/volkeno-react-messenger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolkenoMakers/volkeno-react-messenger.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
