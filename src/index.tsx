@@ -21,6 +21,7 @@ import { Form, ListGroup } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select'
 import { AlertInfo } from './Alert'
+
 // import { io } from 'socket.io-client'
 
 interface IVolkenoReactMessenger {
@@ -38,6 +39,7 @@ interface IVolkenoReactMessenger {
   setSecondListUsersEndpoint?: string
   setFirstListLabel?: string
   setSecondListLabel?: string
+  dataStructure?: 'old' | 'new'
 }
 const VolkenoReactMessenger = ({
   user,
@@ -53,7 +55,8 @@ const VolkenoReactMessenger = ({
   isMultiList = false,
   setSecondListUsersEndpoint,
   setFirstListLabel = 'Liste utilisateurs',
-  setSecondListLabel = 'Liste utilisateur 2'
+  setSecondListLabel = 'Liste utilisateur 2',
+  dataStructure = 'old'
 }: IVolkenoReactMessenger) => {
   const config = {
     headers: {
@@ -83,6 +86,7 @@ const VolkenoReactMessenger = ({
   const [sendingMessage, setSendingMessage] = React.useState(false)
   const [sendingMessageDag, setSendingMessageDag] = React.useState(false)
   const [disableBtn, setDisableBtn] = React.useState(true)
+  // const [text, setText] = useState('')
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
 
@@ -99,7 +103,9 @@ const VolkenoReactMessenger = ({
       axios
         .get(apiBaseUrl + setApiListUsersEndpoint, config)
         .then((response) => {
-          const listUserData = response.data.results
+          const listUserData =
+            dataStructure === 'old' ? response.data.results : response.data.data
+          console.log('response', listUserData)
           setListUser(listUserData)
         })
         .catch((error) => {
@@ -108,12 +114,17 @@ const VolkenoReactMessenger = ({
     }
   }, [user])
 
+  console.log(`me`, user)
+  console.log(`listUser`, listUser)
+
   React.useEffect(() => {
     if (user) {
       axios
         .get(apiBaseUrl + setApiConversationUserEndpoint, config)
         .then((response) => {
-          const conversationsData = response.data.results
+          const conversationsData =
+            dataStructure === 'old' ? response.data.results : response.data.data
+          console.log('responseConv', conversationsData)
           setConversations(conversationsData)
         })
         .catch((error) => {
@@ -147,19 +158,44 @@ const VolkenoReactMessenger = ({
       setSendingMessage(true)
       let data = {}
       if (receiver != null) {
-        data = {
-          content: message,
-          sender: user?.id,
-          receiver: receiver?.id
+        if (dataStructure === 'old') {
+          data = {
+            content: message,
+            sender: user?.id,
+            receiver: receiver?.id,
+            read: false,
+            conversation: conversationActive?.id || null
+          }
+        } else {
+          data = {
+            message: message,
+            sender_id: user?.user_id,
+            receiver_id: receiver?.user_id
+          }
         }
       } else {
-        data = {
-          content: message,
-          sender: user?.id,
-          receiver: conversationActive?.participants?.find(
-            (item: any) => item?.id !== user?.id
-          )?.id,
-          conversation: conversationActive?.id
+        const receiverId = conversationActive?.participants?.find(
+          (item: any) => item?.id !== user?.id
+        )?.id
+
+        if (dataStructure === 'old') {
+          data = {
+            content: message,
+            sender: user?.id,
+            receiver: receiverId,
+            // conversationActive?.participants?.find(
+            //   (item: any) => item?.id !== user?.id
+            // )?.id,
+            // conversation: conversationActive?.id
+            conversation: conversationActive?.id || null
+          }
+        } else {
+          data = {
+            message: message,
+            sender_id: user?.user_id,
+            receiver_id: receiverId,
+            conversation_id: conversationActive?.id
+          }
         }
       }
       try {
@@ -194,19 +230,38 @@ const VolkenoReactMessenger = ({
       setSendingMessageDag(true)
       let data = {}
       if (receiver != null) {
-        data = {
-          content: messageDag,
-          sender: user?.id,
-          receiver: receiver?.id
+        if (dataStructure === 'old') {
+          data = {
+            content: messageDag,
+            sender: user?.id,
+            receiver: receiver?.id
+          }
+        } else {
+          data = {
+            message: messageDag,
+            sender_id: user?.user_id,
+            receiver_id: receiver?.user_id
+          }
         }
       } else {
-        data = {
-          content: messageDag,
-          sender: user?.id,
-          receiver: conversationActive?.participants?.find(
-            (item: any) => item?.id !== user?.id
-          )?.id,
-          conversation: conversationActive?.id
+        if (dataStructure === 'old') {
+          data = {
+            content: messageDag,
+            sender: user?.id,
+            receiver: conversationActive?.participants?.find(
+              (item: any) => item?.id !== user?.id
+            )?.id,
+            conversation: conversationActive?.id
+          }
+        } else {
+          data = {
+            message: messageDag,
+            sender_id: user?.user_id,
+            receiver_id: conversationActive?.participants?.find(
+              (item: any) => item?.id !== user?.user_id
+            )?.id,
+            conversation_id: conversationActive?.id
+          }
         }
       }
       try {
@@ -330,6 +385,10 @@ const VolkenoReactMessenger = ({
 
     return dateA - dateB
   })
+
+  // function handleOnEnter(text: string) {
+  //   console.log('enter', text)
+  // }
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -431,6 +490,7 @@ const VolkenoReactMessenger = ({
                 // isMulti={isMultiList}
                 listToShow={listToShow}
                 listlabel={listlabel}
+                dataStructure={dataStructure}
               />
             </div>
             <div className='form-search-user-container position-relative  mb-4'>
@@ -648,14 +708,18 @@ const VolkenoReactMessenger = ({
                       showProfil &&
                       receiver?.avatar !== '/mediafiles/avatars/default.png' ? (
                         <img
-                          src={apiBaseUrl + receiver?.avatar}
+                          src={
+                            dataStructure === 'old'
+                              ? apiBaseUrl + receiver?.avatar
+                              : receiver?.avatar
+                          }
                           className={`${styles.imageProfilEntete} image_responsive`}
                           alt='Photo'
                           onError={() => setShowProfil(false)}
                         />
                       ) : (
                         <div className={styles.formatPseudo}>
-                          {getUserPseudo(receiver)}
+                          {getUserPseudo(receiver, dataStructure)}
                         </div>
                       )
                     ) : conversationActive?.participants?.find(
@@ -710,15 +774,25 @@ const VolkenoReactMessenger = ({
                     <div className='msg-user-infos-container'>
                       <div className='d-flex align-items-center msg-user-name'>
                         <p className={`${styles.profilDetailMessage} mb-0`}>
-                          {conversationActive == null
-                            ? receiver?.prenom + ' ' + receiver?.nom
+                          {dataStructure === 'old'
+                            ? conversationActive == null
+                              ? receiver?.prenom + ' ' + receiver?.nom
+                              : conversationActive?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )?.prenom +
+                                ' ' +
+                                conversationActive?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )?.nom
+                            : conversationActive == null
+                            ? receiver?.first_name + ' ' + receiver?.last_name
                             : conversationActive?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.prenom +
+                                (item: any) => item?.id !== user?.user_id
+                              )?.first_name +
                               ' ' +
                               conversationActive?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.nom}
+                                (item: any) => item?.id !== user?.user_id
+                              )?.last_name}
                         </p>
                       </div>
                       <div className='bloc-user-disconnect-time msg-user-lastonline'>
@@ -1165,7 +1239,8 @@ function NewChatModalDag({
   newMessageTitle,
   sendingMessage,
   listToShow,
-  listlabel
+  listlabel,
+  dataStructure
 }: any) {
   function closeModalNewChat() {
     setModalNewChat(false)
@@ -1173,9 +1248,10 @@ function NewChatModalDag({
 
   const onChoseReceiver = (x: any) => {
     console.log({ x })
-    const existingConversation = conversations.find((conversation: any) =>
+    const existingConversation = conversations?.find((conversation: any) =>
       conversation.participants.some(
-        (participant: any) => participant.id === x.value.id
+        // (participant: any) => participant.id === x.value.id
+        (participant: any) => participant.id === x.value.user_id
       )
     )
 
@@ -1190,7 +1266,11 @@ function NewChatModalDag({
     }
   }
   const options = listToShow?.map((user: any) => {
-    return { value: user, label: user?.prenom + ' ' + user?.nom }
+    if (dataStructure === 'old') {
+      return { value: user, label: user?.prenom + ' ' + user?.nom }
+    } else {
+      return { value: user, label: user?.first_name + ' ' + user?.last_name }
+    }
   })
 
   return (
