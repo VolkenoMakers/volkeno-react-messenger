@@ -12,7 +12,10 @@
     }
   ],
   "license": "MIT",
-  "repository": "VolkenoMakers/volkeno-react-messenger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolkenoMakers/volkeno-react-messenger.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
