@@ -1285,6 +1285,13 @@
   font-style: normal;
   font-size: 18px;
 }
+
+.contentContentDetailMessageInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 @media (min-width: 1024px) {
   .customContentMessageLeft,
   .customContentMessageLeftDag {
