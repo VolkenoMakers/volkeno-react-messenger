@@ -8,11 +8,11 @@ import 'volkeno-react-messenger/dist/index.css'
 // yad
 // const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
 // const token =
-//   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2FwcC9lbi9sb2dpbiIsImlhdCI6MTcyMTkzMjAzNiwiZXhwIjoxNzIxOTM1NjM2LCJuYmYiOjE3MjE5MzIwMzYsImp0aSI6IlFNSzFVNGhxRW5vS2VwTDgiLCJzdWIiOiIxNzIxNjUyOTcwTTRJMVQyMTYxNzA0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.d3y_a7BCZ1DF1YW6OEjXdZ9G9VsnLGHhwf3--RZ5rFQ' /* provide the token */
+//   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2FwcC9lbi9sb2dpbiIsImlhdCI6MTcyMjAzMDE2NCwiZXhwIjoxNzIyMDMzNzY0LCJuYmYiOjE3MjIwMzAxNjQsImp0aSI6Ill5YlU5eFNDVjlGNHg3d2oiLCJzdWIiOiIxNzIyMDE2NDAxNzQwWkc3MDc0ODI1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.mDQbOLoHdxWRVWuCJyy0Xk9H3gcHSovWdQdZYE8Xx4s' /* provide the token */
 
-// yad
-// const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
-// const ApiBaseUrl = 'http://127.0.0.1:8000'
+// // yad
+// // const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
+// const ApiBaseUrl = 'http://127.0.0.1:8000/api/v1/app/fr/'
 
 // const config = {
 //   headers: {
@@ -25,8 +25,8 @@ const App = () => {
   // React.useEffect(() => {
   //   axios
   //     // yad
-  //     .get(ApiBaseUrl + '/api/auth/me', config)
-  //     // .get(ApiBaseUrl + '/api/v1/app/fr/me', config)
+  //     // .get(ApiBaseUrl + '/api/auth/me', config)
+  //     .get(ApiBaseUrl + 'me', config)
   //     .then((response) => {
   //       const userData = response.data.data
   //       setUser(userData)
@@ -49,18 +49,18 @@ const App = () => {
       // token={token}
       // apiBaseUrl={ApiBaseUrl}
       // // yad
-      // setApiPostEndpoint={'/api/messages/'}
-      // // setApiPostEndpoint={'/api/v1/app/fr/messages'}
+      // // setApiPostEndpoint={'/api/messages/'}
+      // setApiPostEndpoint={'messages'}
       // // yad
-      // setApiListUsersEndpoint={'/api/medecins/?limit=1000'}
-      // // setApiListUsersEndpoint={'/api/v1/app/fr/students/'}
+      // // setApiListUsersEndpoint={'/api/medecins/?limit=1000'}
+      // setApiListUsersEndpoint={'students/'}
       // // yad
-      // setApiConversationUserEndpoint={`/api/user/${user?.slug}/conversations/`}
-      // // setApiConversationUserEndpoint={`/api/v1/app/fr/conversations-by-user/${user?.user_id}`}
-      // setStyle='yad'
+      // // setApiConversationUserEndpoint={`/api/user/${user?.slug}/conversations/`}
+      // setApiConversationUserEndpoint={`conversations-by-user/${user?.user_id}`}
+      // setStyle='dag'
       // isMultiList={false}
       // setFirstListLabel='Admin'
-      // // dataStructure='new'
+      // dataStructure='new'
       // // setSecondListLabel ='Medecins'
       // // setSecondListUsersEndpoint={'/api/medecins'}
     />
