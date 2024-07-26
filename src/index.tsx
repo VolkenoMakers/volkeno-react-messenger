@@ -21,6 +21,8 @@ import { Form, ListGroup } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select'
 import { AlertInfo } from './Alert'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 // import { io } from 'socket.io-client'
 
@@ -89,7 +91,7 @@ const VolkenoReactMessenger = ({
   // const [text, setText] = useState('')
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
-
+  console.log('receiver', receiver)
   const isStyleYad = (setStyle: string) => {
     return setStyle === 'yad'
   }
@@ -228,6 +230,11 @@ const VolkenoReactMessenger = ({
               ? response?.data?.conversation
               : response?.data?.data[activeConversationIndex]
           )
+          setConversations(
+            dataStructure === 'old'
+              ? response?.data?.conversation
+              : response?.data?.data
+          )
         } else {
           console.error('Active conversation not found in the response')
         }
@@ -285,6 +292,7 @@ const VolkenoReactMessenger = ({
           config
         )
 
+        console.log('response', response?.data?.data)
         const activeConversationIndex =
           dataStructure === 'old'
             ? response?.data?.conversation?.messages
@@ -317,7 +325,18 @@ const VolkenoReactMessenger = ({
               ? response?.data?.conversation
               : response?.data?.data[activeConversationIndex]
           )
+          setConversations(
+            dataStructure === 'old'
+              ? response?.data?.conversation
+              : response?.data?.data
+          )
+          setMessageDag('')
         } else {
+          setReceiver(null)
+          setConversations(response?.data?.data)
+          setConversationActive(response?.data?.data[0])
+          setMessages(response?.data?.data[0]?.messages)
+          setMessageDag('')
           console.error('Active conversation not found in the response')
         }
 
@@ -1299,12 +1318,14 @@ const VolkenoReactMessenger = ({
                                 </span>
                               )
                             ) : isStyleYad(setStyle) ? (
-                              <i className='fa-solid fa-paper-plane' />
+                              // <i className='fa-solid fa-paper-plane' />
+                              <FontAwesomeIcon icon={faPaperPlane} />
                             ) : (
                               <span
                                 className={`${styles.btnSendDag} d-flex align-items-center`}
                               >
-                                Send <i className='fa-solid fa-paper-plane' />
+                                {/* Send <i className='fa-solid fa-paper-plane' /> */}
+                                Send <FontAwesomeIcon icon={faPaperPlane} />
                               </span>
                             )}
                           </button>
@@ -1522,6 +1543,81 @@ const VolkenoReactMessenger = ({
                         </div>
                       )
                     )}
+                    {receiver && (
+                      <div className={styles.contentContentDetailMessageInfo}>
+                        <div className={styles.contentImgPpChat}>
+                          <div className='content-img-pp-chat'>
+                            {receiver?.avatar === null ? (
+                              <img
+                                src={
+                                  'https://ui-avatars.com/api/?name=' +
+                                  receiver?.first_name +
+                                  ' ' +
+                                  receiver?.last_name
+                                }
+                                alt={
+                                  receiver?.first_name +
+                                  ' ' +
+                                  receiver?.last_name
+                                }
+                                className={`${styles.imageProfilEntete} image_responsive`}
+                              />
+                            ) : (
+                              <img
+                                src={receiver?.avatar}
+                                alt={
+                                  receiver?.first_name +
+                                  ' ' +
+                                  receiver?.last_name
+                                }
+                                className={`${styles.imageProfilEntete} image_responsive`}
+                              />
+                            )}
+                          </div>
+                          <div
+                            className={
+                              styles.yadMessagerieDetailMesAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
+                            >
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill='#2CC84A'
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className='content-info-user-chat'>
+                          <div className='msg-user-infos-container'>
+                            <div className='d-flex align-items-center msg-user-name'>
+                              <p
+                                className={`${styles.profilDetailMessage} mb-0`}
+                              >
+                                {receiver?.first_name +
+                                  ' ' +
+                                  receiver?.last_name}
+                              </p>
+                            </div>
+                            <div className='bloc-user-disconnect-time msg-user-lastonline'>
+                              <p
+                                className={`${styles.textDisconnectTime} mb-0`}
+                              >
+                                En ligne
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className={`${styles.blocDetails} pb-5`}>
@@ -1687,12 +1783,14 @@ const VolkenoReactMessenger = ({
                                 </span>
                               )
                             ) : isStyleYad(setStyle) ? (
-                              <i className='fa-solid fa-paper-plane' />
+                              // <i className='fa-solid fa-paper-plane' />
+                              <FontAwesomeIcon icon={faPaperPlane} />
                             ) : (
                               <span
                                 className={`${styles.btnSendDag} d-flex align-items-center`}
                               >
-                                Send <i className='fa-solid fa-paper-plane' />
+                                {/* Send <i className='fa-solid fa-paper-plane' /> */}
+                                Send <FontAwesomeIcon icon={faPaperPlane} />
                               </span>
                             )}
                           </button>
@@ -1941,7 +2039,7 @@ function NewChatModalDag({
   }
 
   const onChoseReceiver = (x: any) => {
-    // console.log({ x })
+    console.log({ x })
     if (dataStructure === 'old') {
       const existingConversation = conversations?.find((conversation: any) =>
         conversation.participants?.some(
@@ -2040,7 +2138,8 @@ function NewChatModalDag({
                   </span>
                 ) : (
                   <span className='d-flex align-items-center gap-2'>
-                    Send Message <i className='fa-solid fa-paper-plane' />
+                    {/* Send Message <i className='fa-solid fa-paper-plane' /> */}
+                    Send Message <FontAwesomeIcon icon={faPaperPlane} />
                   </span>
                 )}
               </button>
