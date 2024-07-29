@@ -22,7 +22,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import Select from 'react-select'
 import { AlertInfo } from './Alert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane, faLink } from '@fortawesome/free-solid-svg-icons'
 
 // import { io } from 'socket.io-client'
 
@@ -1286,7 +1286,11 @@ const VolkenoReactMessenger = ({
                               className={styles.containerDisplayInputMessage}
                             >
                               <div className='share'>
-                                <i className='fa-solid fa-link img-icon-chat' />
+                                {/* <i className='fa-solid fa-link img-icon-chat' /> */}
+                                <FontAwesomeIcon
+                                  icon={faLink}
+                                  className='img-icon-chat'
+                                />
                               </div>
                               <div className='inp w-100'>
                                 <textarea
@@ -1751,7 +1755,11 @@ const VolkenoReactMessenger = ({
                               className={styles.containerDisplayInputMessage}
                             >
                               <div className='share'>
-                                <i className='fa-solid fa-link img-icon-chat' />
+                                {/* <i className='fa-solid fa-link img-icon-chat' /> */}
+                                <FontAwesomeIcon
+                                  icon={faLink}
+                                  className='img-icon-chat'
+                                />
                               </div>
                               <div className='inp w-100'>
                                 <textarea
@@ -1826,7 +1834,12 @@ VolkenoReactMessenger.propTypes = {
   setApiListUsersEndpoint: PropTypes.string, // Users list endpoint
   title: PropTypes.string, // Module title (optional)
   newMessageTitle: PropTypes.string, // New discussion title (optional)
-  setStyle: PropTypes.string // New discussion title (optional)
+  setStyle: PropTypes.string, // New discussion title (optional)
+  dataStructure: PropTypes.string, // Data structure type (optional)
+  isMultiList: PropTypes.bool,
+  setSecondListUsersEndpoint: PropTypes.string,
+  setFirstListLabel: PropTypes.string,
+  setSecondListLabel: PropTypes.string
 }
 export default VolkenoReactMessenger
 
