@@ -526,12 +526,12 @@ const VolkenoReactMessenger = ({
             .includes(searchConv.toLowerCase())
         )
 
-  const sortedMessages = messages?.slice().sort((a: any, b: any) => {
-    const dateA = new Date(a.created_at).getTime()
-    const dateB = new Date(b.created_at).getTime()
+  // const sortedMessages = messages?.slice().sort((a: any, b: any) => {
+  //   const dateA = new Date(a.created_at).getTime()
+  //   const dateB = new Date(b.created_at).getTime()
 
-    return dateA - dateB
-  })
+  //   return dateA - dateB
+  // })
 
   // function handleOnEnter(text: string) {
   //   console.log('enter', text)
