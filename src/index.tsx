@@ -23,8 +23,7 @@ import Select from 'react-select'
 import { AlertInfo } from './Alert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faLink } from '@fortawesome/free-solid-svg-icons'
-
-// import { io } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 interface IVolkenoReactMessenger {
   user: any
@@ -33,7 +32,6 @@ interface IVolkenoReactMessenger {
   setApiPostEndpoint: string
   setApiListUsersEndpoint: string
   setApiConversationUserEndpoint: string
-  // socketUrl: string
   title?: string
   newMessageTitle?: string
   setStyle?: 'yad' | 'dag'
@@ -50,7 +48,6 @@ const VolkenoReactMessenger = ({
   setApiPostEndpoint = '/api/messages',
   setApiListUsersEndpoint,
   setApiConversationUserEndpoint,
-  // socketUrl,
   title = 'Messagerie',
   newMessageTitle = 'Nouvelle discussion',
   setStyle = 'yad',
@@ -65,13 +62,21 @@ const VolkenoReactMessenger = ({
       Authorization: `Bearer ${token}`
     }
   } as AxiosRequestConfig
-  // const socket = io(socketUrl)
-  // if (user) {
-  //   socket.emit('newUser', {
-  //     userName: user?.prenom + ' ' + user?.nom,
-  //     socketID: socket.id
-  //   })
-  // }
+  const [socket, setSocket] = React.useState<any>(null)
+  const [onlineUsers, setOnlineUsers] = React.useState<any>([])
+
+  React.useEffect(() => {
+    // eslint-disable-next-line no-undef
+    const newSocket = io(
+      process.env.REACT_APP_SOCKET_URL || 'http://localhost:3001'
+    )
+    setSocket(newSocket)
+
+    return () => {
+      newSocket.disconnect()
+    }
+  }, [user])
+
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
   const [modalNewChatDag, setModalNewChatDag] = React.useState<boolean>(false)
@@ -99,6 +104,64 @@ const VolkenoReactMessenger = ({
   const isStyleDag = (setStyle: string) => {
     return setStyle === 'dag'
   }
+
+  const [newMessage, setNewMessage] = React.useState<any>(null)
+
+  // add online users
+  React.useEffect(() => {
+    if (socket === null) return
+    console.log({ socket })
+    socket.emit('addNewUser', user?.user_id)
+    socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
+      setOnlineUsers(res)
+    })
+
+    return () => {
+      socket.off('getOnlineUsers')
+    }
+  }, [socket])
+
+  console.log({ conversationActive })
+
+  // send message
+  React.useEffect(() => {
+    if (socket === null) return
+
+    const recipientId =
+      user?.user_id === conversationActive.initial_sender_id
+        ? conversationActive.receiver_id
+        : conversationActive.initial_sender_id
+
+    socket.emit('sendMessage', { ...newMessage, recipientId })
+  }, [newMessage])
+
+  // receive message and notification
+  React.useEffect(() => {
+    if (socket === null) return
+
+    socket.on('getMessage', (res: any) => {
+      console.log({ res })
+      console.log('messagesA', messages)
+      if (conversationActive?.id !== res.conversation_id) return
+      setMessages((prev: any) => [...prev, res?.message])
+      console.log({ messages })
+    })
+
+    // socket.on('getNotification', (res) => {
+    //   const isChatOpen = currentChat?.members.some((id) => id === res.senderId)
+
+    //   if (isChatOpen) {
+    //     setNotifications((prev) => [{ ...res, isRead: true }, ...prev])
+    //   } else {
+    //     setNotifications((prev) => [res, ...prev])
+    //   }
+    // })
+
+    return () => {
+      socket.off('getMessage')
+      // socket.off('getNotification')
+    }
+  }, [socket, conversationActive?.id, newMessage])
 
   React.useEffect(() => {
     if (user) {
@@ -128,7 +191,7 @@ const VolkenoReactMessenger = ({
           console.error('Error:', error)
         })
     }
-  }, [user])
+  }, [user, socket])
 
   React.useEffect(() => {
     if (user && isMultiList) {
@@ -220,7 +283,8 @@ const VolkenoReactMessenger = ({
                 return dateA - dateB
               })
 
-            setMessages(sortedMessages)
+            setNewMessage(sortedMessages[sortedMessages?.length - 1])
+            // setMessages(sortedMessages)
           } else {
             console.error('No messages found in the response')
           }
@@ -315,7 +379,8 @@ const VolkenoReactMessenger = ({
                 return dateA - dateB
               })
 
-            setMessages(sortedMessages)
+            setNewMessage(sortedMessages[sortedMessages?.length - 1])
+            // setMessages(sortedMessages)
           } else {
             console.error('No messages found in the response')
           }
@@ -794,7 +859,10 @@ const VolkenoReactMessenger = ({
                             onError={() => setShowProfil(false)}
                           />
                         )}
-                        {item?.en_ligne ? (
+                        {onlineUsers?.some(
+                          (user: any) =>
+                            user?.userId === item?.initial_receiver?.user_id
+                        ) ? (
                           <div
                             className={
                               styles.yadMessagerieListGroupAvatarIndicator
@@ -923,7 +991,10 @@ const VolkenoReactMessenger = ({
                               onError={() => setShowProfil(false)}
                             />
                           )}
-                          {item?.en_ligne ? (
+                          {onlineUsers?.some(
+                            (user: any) =>
+                              user?.userId === item?.initial_sender?.user_id
+                          ) ? (
                             <div
                               className={
                                 styles.yadMessagerieListGroupAvatarIndicator
@@ -1155,7 +1226,7 @@ const VolkenoReactMessenger = ({
                   </div>
                 </div>
                 <div className={`${styles.blocDetails} pb-5`}>
-                  {sortedMessages?.map((message: any) => (
+                  {messages?.map((message: any) => (
                     <div key={message?.id}>
                       {message?.sender?.id !== user?.id ? (
                         <div className='position-relative received-msg-item m-b-2'>
@@ -1413,27 +1484,55 @@ const VolkenoReactMessenger = ({
                               />
                             )}
                           </div>
-                          <div
-                            className={
-                              styles.yadMessagerieDetailMesAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
+                          {onlineUsers?.some(
+                            (user: any) =>
+                              user?.userId ===
+                              conversationActive?.initial_receiver?.user_id
+                          ) ? (
+                            <div
+                              className={
+                                styles.yadMessagerieDetailMesAvatarIndicator
+                              }
                             >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#2CC84A'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='10'
+                                height='10'
+                                viewBox='0 0 10 10'
+                                fill='none'
+                              >
+                                <circle
+                                  cx='5'
+                                  cy='4.99976'
+                                  r='4.5'
+                                  fill='#2CC84A'
+                                  stroke='white'
+                                />
+                              </svg>
+                            </div>
+                          ) : (
+                            <div
+                              className={
+                                styles.yadMessagerieDetailMesAvatarIndicator
+                              }
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='10'
+                                height='10'
+                                viewBox='0 0 10 10'
+                                fill='none'
+                              >
+                                <circle
+                                  cx='5'
+                                  cy='4.99976'
+                                  r='4.5'
+                                  fill='#F2F2F2'
+                                  stroke='white'
+                                />
+                              </svg>
+                            </div>
+                          )}
                         </div>
                         <div className='content-info-user-chat'>
                           <div className='msg-user-infos-container'>
@@ -1452,7 +1551,14 @@ const VolkenoReactMessenger = ({
                               <p
                                 className={`${styles.textDisconnectTime} mb-0`}
                               >
-                                En ligne
+                                {onlineUsers?.some(
+                                  (user: any) =>
+                                    user?.userId ===
+                                    conversationActive?.initial_receiver
+                                      ?.user_id
+                                )
+                                  ? 'En ligne'
+                                  : ''}
                               </p>
                             </div>
                           </div>
@@ -1505,21 +1611,55 @@ const VolkenoReactMessenger = ({
                                 styles.yadMessagerieDetailMesAvatarIndicator
                               }
                             >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#2CC84A'
-                                  stroke='white'
-                                />
-                              </svg>
+                              {onlineUsers?.some(
+                                (user: any) =>
+                                  user?.userId ===
+                                  conversationActive?.initial_sender?.user_id
+                              ) ? (
+                                <div
+                                  className={
+                                    styles.yadMessagerieDetailMesAvatarIndicator
+                                  }
+                                >
+                                  <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='10'
+                                    height='10'
+                                    viewBox='0 0 10 10'
+                                    fill='none'
+                                  >
+                                    <circle
+                                      cx='5'
+                                      cy='4.99976'
+                                      r='4.5'
+                                      fill='#2CC84A'
+                                      stroke='white'
+                                    />
+                                  </svg>
+                                </div>
+                              ) : (
+                                <div
+                                  className={
+                                    styles.yadMessagerieDetailMesAvatarIndicator
+                                  }
+                                >
+                                  <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='10'
+                                    height='10'
+                                    viewBox='0 0 10 10'
+                                    fill='none'
+                                  >
+                                    <circle
+                                      cx='5'
+                                      cy='4.99976'
+                                      r='4.5'
+                                      fill='#F2F2F2'
+                                      stroke='white'
+                                    />
+                                  </svg>
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className='content-info-user-chat'>
@@ -1539,7 +1679,14 @@ const VolkenoReactMessenger = ({
                                 <p
                                   className={`${styles.textDisconnectTime} mb-0`}
                                 >
-                                  En ligne
+                                  {onlineUsers?.some(
+                                    (user: any) =>
+                                      user?.userId ===
+                                      conversationActive?.initial_sender
+                                        ?.user_id
+                                  )
+                                    ? 'En ligne'
+                                    : ''}
                                 </p>
                               </div>
                             </div>
@@ -1625,7 +1772,7 @@ const VolkenoReactMessenger = ({
                   </div>
                 </div>
                 <div className={`${styles.blocDetails} pb-5`}>
-                  {sortedMessages?.map((message: any) => (
+                  {messages?.map((message: any) => (
                     <div key={message?.id}>
                       {message?.sender_id !== user?.user_id ? (
                         <div className='position-relative received-msg-item m-b-2'>
