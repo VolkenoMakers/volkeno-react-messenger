@@ -1,7 +1,12 @@
+const path = require('path')
+const dotenv = require('dotenv')
+
+dotenv.config({ path: path.resolve(process.cwd(), '.env') })
+
 const { Server } = require('socket.io')
 
 const io = new Server({
-  cors: ['http://localhost:3000/']
+  cors: ['http://localhost:3001/']
 })
 
 let onlineUsers = []
@@ -44,4 +49,4 @@ io.on('connection', (socket) => {
   })
 })
 
-io.listen(3001)
+io.listen(process.env.REACT_APP_SOCKET_PORT || 8804)
