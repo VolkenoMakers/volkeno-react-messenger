@@ -6,7 +6,11 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') })
 const { Server } = require('socket.io')
 
 const io = new Server({
-  cors: ['http://localhost:3001/']
+  cors: [
+    'http://localhost:3001/',
+    'http://127.0.0.1:8000/',
+    'http://localhost:3000/'
+  ]
 })
 
 let onlineUsers = []
@@ -49,4 +53,5 @@ io.on('connection', (socket) => {
   })
 })
 
+console.log('socket_port', process.env.REACT_APP_SOCKET_PORT)
 io.listen(process.env.REACT_APP_SOCKET_PORT || 8804)

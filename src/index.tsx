@@ -40,7 +40,7 @@ interface IVolkenoReactMessenger {
   setFirstListLabel?: string
   setSecondListLabel?: string
   dataStructure?: 'old' | 'new'
-  soketUrl: string
+  socketUrl: string
 }
 const VolkenoReactMessenger = ({
   user,
@@ -57,7 +57,7 @@ const VolkenoReactMessenger = ({
   setFirstListLabel = 'Liste utilisateurs',
   setSecondListLabel = 'Liste utilisateur 2',
   dataStructure = 'old',
-  soketUrl
+  socketUrl
 }: IVolkenoReactMessenger) => {
   const config = {
     headers: {
@@ -69,14 +69,14 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     // eslint-disable-next-line no-undef
-    const newSocket = io(soketUrl)
+    const newSocket = io(socketUrl, { autoConnect: true })
     setSocket(newSocket)
 
     return () => {
       newSocket.disconnect()
     }
-  }, [user, soketUrl])
-  console.log('socket_port', process.env.REACT_APP_SOCKET_PORT)
+  }, [user, socketUrl])
+  // console.log('socket_port', process.env.REACT_APP_SOCKET_PORT)
 
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
@@ -2050,7 +2050,7 @@ const VolkenoReactMessenger = ({
 }
 
 VolkenoReactMessenger.propTypes = {
-  soketUrl: PropTypes.string, // Socket url connection
+  socketUrl: PropTypes.string, // Socket url connection
   user: PropTypes.object, // User data
   token: PropTypes.string, // Authentication token
   apiBaseUrl: PropTypes.string, // Api base url

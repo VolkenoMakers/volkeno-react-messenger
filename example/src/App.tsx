@@ -44,7 +44,7 @@ const App = () => {
       setApiPostEndpoint={''}
       setApiListUsersEndpoint={''}
       setApiConversationUserEndpoint={''}
-      soketUrl={''}
+      socketUrl={''}
 
       // user={user}
       // token={token}
