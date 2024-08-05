@@ -114,6 +114,7 @@ const VolkenoReactMessenger = ({
     console.log({ socket })
     socket.emit('addNewUser', user?.user_id)
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
+      console.log('Connecté au serveur Socket.IO', res)
       setOnlineUsers(res)
     })
 
