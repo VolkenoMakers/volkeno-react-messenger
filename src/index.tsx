@@ -64,16 +64,17 @@ const VolkenoReactMessenger = ({
       Authorization: `Bearer ${token}`
     }
   } as AxiosRequestConfig
-  const [socket, setSocket] = React.useState<any>(null)
+  // const [socket, setSocket] = React.useState<any>(null)
+  const socket = io(socketUrl, { autoConnect: true })
+
   const [onlineUsers, setOnlineUsers] = React.useState<any>([])
 
   React.useEffect(() => {
     // eslint-disable-next-line no-undef
-    const newSocket = io(socketUrl, { autoConnect: true })
-    setSocket(newSocket)
+    socket.connect()
 
     return () => {
-      newSocket.disconnect()
+      socket.disconnect()
     }
   }, [user, socketUrl])
   // console.log('socket_port', process.env.REACT_APP_SOCKET_PORT)
@@ -111,7 +112,6 @@ const VolkenoReactMessenger = ({
   // add online users
   React.useEffect(() => {
     if (socket === null) return
-    console.log({ socket })
     socket.emit('addNewUser', user?.user_id)
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
       console.log('Connecté au serveur Socket.IO', res)
@@ -123,65 +123,65 @@ const VolkenoReactMessenger = ({
     }
   }, [socket])
 
-  console.log({ conversationActive })
-
-  // send message
   React.useEffect(() => {
-    if (socket === null) return
-
-    const recipientId =
-      user?.user_id === conversationActive.initial_sender_id
-        ? conversationActive.receiver_id
-        : conversationActive.initial_sender_id
-
-    socket.emit('sendMessage', { ...newMessage, recipientId })
-  }, [newMessage])
-
-  // receive message and notification
-  // React.useEffect(() => {
-  //   if (socket === null) return
-
-  //   socket.on('getMessage', (res: any) => {
-  //     console.log({ res })
-  //     console.log('messagesA', messages)
-  //     if (conversationActive?.id !== res.conversation_id) return
-  //     setMessages((prev: any) => [...prev, res?.message])
-  //     console.log({ messages })
-  //   })
-
-  //   // socket.on('getNotification', (res) => {
-  //   //   const isChatOpen = currentChat?.members.some((id) => id === res.senderId)
-
-  //   //   if (isChatOpen) {
-  //   //     setNotifications((prev) => [{ ...res, isRead: true }, ...prev])
-  //   //   } else {
-  //   //     setNotifications((prev) => [res, ...prev])
-  //   //   }
-  //   // })
-
-  //   return () => {
-  //     socket.off('getMessage')
-  //     // socket.off('getNotification')
-  //   }
-  // }, [socket, conversationActive?.id, newMessage])
+    socket.on('messageResponse', (data: any) => {
+      if (
+        data?.length &&
+        data?.some(
+          (el: any) =>
+            el?.initial_sender_id === user?.user_id ||
+            el?.receiver_id === user?.user_id
+        )
+      ) {
+        setConversations(data)
+      }
+    })
+    return () => {
+      socket.off('messageResponse')
+    }
+  }, [socket])
 
   // React.useEffect(() => {
   //   if (socket === null) return
 
-  //   console.log('Socket connected in this tab')
-  //   console.log('messagesAv', messages)
+  //   // console.log('Socket connected in this tab')
+  //   // console.log('messagesAv', messages)
 
   //   const handleMessage = (res: any) => {
-  //     console.log('Message received in this tab:', { res })
+  //     // console.log('Message received in this tab:', { res })
   //     if (conversationActive?.id !== res.conversation_id) return
 
   //     setMessages((prev: any) => {
+  //       // console.log('prev', prev)
+  //       if (prev.some((msg: any) => msg?.id === res?.id)) {
+  //         return prev
+  //       }
   //       const updatedMessages = [...prev, res]
-  //       console.log('Updated messages in this tab:', { updatedMessages })
+  //       // console.log('Updated messages in this tab:', { updatedMessages })
   //       return updatedMessages
   //     })
+
+  //     // Mise à jour de conversationActive
+  //     setConversationActive((prev: any) => ({
+  //       ...prev,
+  //       messages: [...prev?.messages, res]
+  //     }))
+
+  //     // Mise à jour de conversations
+  //     setConversations((prev: any) => {
+  //       return prev.map((conv: any) => {
+  //         if (conv.id === res.conversation_id) {
+  //           return {
+  //             ...conv,
+  //             messages: [...conv?.messages, res]
+  //           }
+  //         }
+  //         return conv
+  //       })
+  //     })
   //   }
-  //   console.log('messagesAp', messages)
+
+  //   // console.log('messagesAp', messages)
   //   socket.on('getMessage', handleMessage)
 
   //   // Clean up the socket listener on component unmount
@@ -189,55 +189,6 @@ const VolkenoReactMessenger = ({
   //     socket.off('getMessage', handleMessage)
   //   }
   // }, [socket, conversationActive?.id, newMessage])
-
-  React.useEffect(() => {
-    if (socket === null) return
-
-    // console.log('Socket connected in this tab')
-    // console.log('messagesAv', messages)
-
-    const handleMessage = (res: any) => {
-      // console.log('Message received in this tab:', { res })
-      if (conversationActive?.id !== res.conversation_id) return
-
-      setMessages((prev: any) => {
-        // console.log('prev', prev)
-        if (prev.some((msg: any) => msg?.id === res?.id)) {
-          return prev
-        }
-        const updatedMessages = [...prev, res]
-        // console.log('Updated messages in this tab:', { updatedMessages })
-        return updatedMessages
-      })
-
-      // Mise à jour de conversationActive
-      setConversationActive((prev: any) => ({
-        ...prev,
-        messages: [...prev?.messages, res]
-      }))
-
-      // Mise à jour de conversations
-      setConversations((prev: any) => {
-        return prev.map((conv: any) => {
-          if (conv.id === res.conversation_id) {
-            return {
-              ...conv,
-              messages: [...conv?.messages, res]
-            }
-          }
-          return conv
-        })
-      })
-    }
-
-    // console.log('messagesAp', messages)
-    socket.on('getMessage', handleMessage)
-
-    // Clean up the socket listener on component unmount
-    return () => {
-      socket.off('getMessage', handleMessage)
-    }
-  }, [socket, conversationActive?.id, newMessage])
 
   React.useEffect(() => {
     if (user) {
@@ -256,18 +207,22 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     if (user) {
-      axios
-        .get(apiBaseUrl + setApiConversationUserEndpoint, config)
-        .then((response) => {
-          const conversationsData =
-            dataStructure === 'old' ? response.data.results : response.data.data
-          setConversations(conversationsData)
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-        })
+      getMessages()
     }
-  }, [user, socket])
+  }, [user])
+
+  const getMessages = async () => {
+    await axios
+      .get(apiBaseUrl + setApiConversationUserEndpoint, config)
+      .then((response) => {
+        const conversationsData =
+          dataStructure === 'old' ? response.data.results : response.data.data
+        setConversations(conversationsData)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
 
   React.useEffect(() => {
     if (user && isMultiList) {
@@ -332,53 +287,56 @@ const VolkenoReactMessenger = ({
         }
       }
       try {
-        const response = await axios.post(
+        const response: any = await axios.post(
           apiBaseUrl + setApiPostEndpoint,
           data,
           config
         )
-        const activeConversationIndex =
-          dataStructure === 'old'
-            ? response?.data?.conversation?.messages
-            : response?.data?.data.findIndex(
-                (conv: any) => conv.id === conversationActive?.id
-              )
-
-        if (activeConversationIndex !== -1) {
-          const newMessages =
+        if (response?.data?.success) {
+          socket.emit('message', response?.data?.data)
+          const activeConversationIndex =
             dataStructure === 'old'
               ? response?.data?.conversation?.messages
-              : response?.data?.data[activeConversationIndex]?.messages
+              : response?.data?.data.findIndex(
+                  (conv: any) => conv.id === conversationActive?.id
+                )
 
-          if (newMessages) {
-            const sortedMessages = newMessages
-              .slice()
-              .sort((a: any, b: any) => {
-                const dateA = new Date(a.created_at).getTime()
-                const dateB = new Date(b.created_at).getTime()
-                return dateA - dateB
-              })
+          if (activeConversationIndex !== -1) {
+            const newMessages =
+              dataStructure === 'old'
+                ? response?.data?.conversation?.messages
+                : response?.data?.data[activeConversationIndex]?.messages
 
-            // Mise à jour locale de l'état
-            // updateLocalState(sortedMessages[sortedMessages?.length - 1])
-            setNewMessage(sortedMessages[sortedMessages?.length - 1])
-            setMessages(sortedMessages)
+            if (newMessages) {
+              const sortedMessages = newMessages
+                .slice()
+                .sort((a: any, b: any) => {
+                  const dateA = new Date(a.created_at).getTime()
+                  const dateB = new Date(b.created_at).getTime()
+                  return dateA - dateB
+                })
+
+              // Mise à jour locale de l'état
+              // updateLocalState(sortedMessages[sortedMessages?.length - 1])
+              setNewMessage(sortedMessages[sortedMessages?.length - 1])
+              setMessages(sortedMessages)
+            } else {
+              console.error('No messages found in the response')
+            }
+
+            setConversationActive(
+              dataStructure === 'old'
+                ? response?.data?.conversation
+                : response?.data?.data[activeConversationIndex]
+            )
+            setConversations(
+              dataStructure === 'old'
+                ? response?.data?.conversation
+                : response?.data?.data
+            )
           } else {
-            console.error('No messages found in the response')
+            console.error('Active conversation not found in the response')
           }
-
-          setConversationActive(
-            dataStructure === 'old'
-              ? response?.data?.conversation
-              : response?.data?.data[activeConversationIndex]
-          )
-          setConversations(
-            dataStructure === 'old'
-              ? response?.data?.conversation
-              : response?.data?.data
-          )
-        } else {
-          console.error('Active conversation not found in the response')
         }
       } catch (error) {
         console.error(`Error: ${error}`)
@@ -429,12 +387,14 @@ const VolkenoReactMessenger = ({
         }
       }
       try {
-        const response = await axios.post(
+        const response: any = await axios.post(
           apiBaseUrl + setApiPostEndpoint,
           data,
           config
         )
-
+        if (response?.data?.sucess === true) {
+          socket.emit('message', response?.data?.data)
+        }
         // console.log('response', response?.data?.data)
         const activeConversationIndex =
           dataStructure === 'old'
