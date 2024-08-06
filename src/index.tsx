@@ -112,7 +112,7 @@ const VolkenoReactMessenger = ({
   // add online users
   React.useEffect(() => {
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
-      console.log('Connecté au serveur Socket.IO', res)
+      // console.log('Connecté au serveur Socket.IO', res)
       setOnlineUsers(res)
     })
 
@@ -123,7 +123,15 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('messageResponse', (data: any) => {
-      console.log('data', data)
+      console.log(
+        'data',
+        data,
+        data?.some(
+          (el: any) =>
+            el?.initial_sender_id === user?.user_id ||
+            el?.receiver_id === user?.user_id
+        )
+      )
       if (
         data?.length &&
         data?.some(
