@@ -111,8 +111,6 @@ const VolkenoReactMessenger = ({
 
   // add online users
   React.useEffect(() => {
-    if (socket === null) return
-    socket.emit('addNewUser', user?.user_id)
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
       console.log('Connecté au serveur Socket.IO', res)
       setOnlineUsers(res)
@@ -125,6 +123,7 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('messageResponse', (data: any) => {
+      console.log('data', data)
       if (
         data?.length &&
         data?.some(
@@ -192,6 +191,7 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     if (user) {
+      socket.emit('addNewUser', user?.user_id)
       axios
         .get(apiBaseUrl + setApiListUsersEndpoint, config)
         .then((response) => {
