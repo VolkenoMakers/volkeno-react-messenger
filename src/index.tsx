@@ -107,7 +107,7 @@ const VolkenoReactMessenger = ({
     return setStyle === 'dag'
   }
 
-  const [newMessage, setNewMessage] = React.useState<any>(null)
+  // const [newMessage, setNewMessage] = React.useState<any>(null)
 
   // add online users
   React.useEffect(() => {
@@ -318,7 +318,7 @@ const VolkenoReactMessenger = ({
 
               // Mise à jour locale de l'état
               // updateLocalState(sortedMessages[sortedMessages?.length - 1])
-              setNewMessage(sortedMessages[sortedMessages?.length - 1])
+              // setNewMessage(sortedMessages[sortedMessages?.length - 1])
               setMessages(sortedMessages)
             } else {
               console.error('No messages found in the response')
@@ -418,7 +418,7 @@ const VolkenoReactMessenger = ({
                 return dateA - dateB
               })
 
-            setNewMessage(sortedMessages[sortedMessages?.length - 1])
+            // setNewMessage(sortedMessages[sortedMessages?.length - 1])
             setMessages(sortedMessages)
           } else {
             console.error('No messages found in the response')
