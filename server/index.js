@@ -5,15 +5,7 @@ const http = require('http').Server(app)
 const cors = require('cors')
 const socketIO = require('socket.io')(http, {
   cors: {
-    origin: [
-      'http://localhost:3000',
-      'https://yaay-ak-doom-app.volkeno-engineering.click',
-      'https://yaay-ak-doom-socket.withvolkeno.com',
-      'www.socket.io.volkeno.com/',
-      '164.92.136.142:4026',
-      'wss://echo.websocket.org',
-      'https://www.medsain-socket.withvolkeno.com'
-    ]
+    origin: ['http://localhost:3001', '164.92.136.142:4026']
   }
 })
 
@@ -42,7 +34,7 @@ socketIO.on('connection', (socket) => {
   socket.on('newUser', (data) => {
     // Adds the new user to the list of users
     users.push(data)
-    // console.log(users)
+    console.log(users)
     // Sends the list of users to the client
     socketIO.emit('newUserResponse', users)
   })

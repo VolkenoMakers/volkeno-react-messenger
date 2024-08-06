@@ -25,3 +25,16 @@ code {
   color: #102844;
   cursor: pointer !important;
 }
+._3sqmx {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+._3sqmx.active,
+._3sqmx:hover {
+  background-color: #F5F6FD;
+  border-color: #F5F6FD;
+  color: #102844;
+  cursor: pointer !important;
+}

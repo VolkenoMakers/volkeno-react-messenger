@@ -1,20 +1,32 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
 import { IUser } from './chatType'
 import { ApiBaseUrl } from './utils/http'
 import Avatar from './assets/avatar.png'
 
-export const formatDateHour = (date: any) => {
-  return moment(date).format('DD/MM/YYYY à HH:mm:ss')
+export const formatDateHour = (date: any, isStyleYad?: boolean) => {
+  return isStyleYad
+    ? moment(date).format('DD/MM/YYYY à HH:mm:ss')
+    : moment(date).fromNow()
 }
 
 export const truncateCaractere = (str: any, nbr: any) => {
   return str != null && str.length > nbr ? str.substring(0, nbr) + '...' : str
 }
 
-export function getUserPseudo(user?: IUser) {
+export function getUserPseudo(user?: IUser | any, dataStructure?: string) {
   if (user) {
-    return (user?.prenom?.charAt(0) + '.' + user?.nom?.charAt(0))?.toUpperCase()
+    return dataStructure === 'old'
+      ? (user?.prenom?.charAt(0) + '.' + user?.nom?.charAt(0))?.toUpperCase()
+      :
+        (
+          // eslint-disable-next-line camelcase
+          user?.first_name?.charAt(0) +
+          '.' +
+          // eslint-disable-next-line camelcase
+          user?.last_name?.charAt(0)
+        )?.toUpperCase()
   }
   return 'Y.D'
 }

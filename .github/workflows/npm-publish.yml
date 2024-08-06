@@ -1,0 +1,32 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build and publish
+        run: |
+          npm run build
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} 
+        #   GITHUB_USERNAME: ${{ secrets.USERNAME }}
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

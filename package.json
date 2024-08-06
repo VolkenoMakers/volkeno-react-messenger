@@ -1,10 +1,21 @@
 {
   "name": "volkeno-react-messenger",
-  "version": "1.0.1",
-  "description": "Made with create-react-library",
-  "author": "Papaul-msibiii",
+  "version": "0.2.0",
+  "description": "The 'volkeno-react-messenger' module is a powerful and flexible messaging solution designed specifically for Volkeno's internal needs. Seamlessly integrating with Volkeno's internal data structure, this module provides a smooth and intuitive messaging experience for users",
+  "author": "VolkenoMakers",
+  "private": false,
+  "contributors": [
+    {
+      "email": "paul.gomis@volkeno-tank.com",
+      "name": "Paul Gomis",
+      "url": "https://github.com/Papaul-msibiii"
+    }
+  ],
   "license": "MIT",
-  "repository": "Papaul-msibiii/volkeno-react-messenger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolkenoMakers/volkeno-react-messenger.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
@@ -63,15 +74,21 @@
     "dist"
   ],
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@types/jquery": "^3.5.29",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "jquery": "^3.7.1",
     "moment": "^2.29.4",
     "react-bootstrap": "^2.10.2",
     "react-icons": "^4.11.0",
+    "react-input-emoji": "^5.9.0",
     "react-router-dom": "^6.22.3",
+    "react-select": "^5.8.0",
     "socket.io-client": "^4.7.5",
     "yarn": "^1.22.19"
   }

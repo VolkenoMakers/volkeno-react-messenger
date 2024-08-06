@@ -238,7 +238,7 @@ export const chatData = [
 ]
 
 export const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDE2ODYzNCwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NDk2ODYzNH0.Gkt3VVG0Uw4puz4PvkLxlsRW2tAUUtUYOykGDYuGDvU"
-export const ApiBaseUrl = "https://yaay-ak-doom-api.volkeno-engineering.click/"
+export const ApiBaseUrl = "https://yaay-ak-doom-api.volkeno-engineering.click"
 
 
 
