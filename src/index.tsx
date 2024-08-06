@@ -123,15 +123,6 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     socket.on('messageResponse', (data: any) => {
-      console.log(
-        'data',
-        data,
-        data?.some(
-          (el: any) =>
-            el?.initial_sender_id === user?.user_id ||
-            el?.receiver_id === user?.user_id
-        )
-      )
       if (
         data?.length &&
         data?.some(
@@ -140,7 +131,7 @@ const VolkenoReactMessenger = ({
             el?.receiver_id === user?.user_id
         )
       ) {
-        setConversations(data)
+        getMessages()
       }
     })
     return () => {
@@ -908,7 +899,7 @@ const VolkenoReactMessenger = ({
                         )}
                         {onlineUsers?.some(
                           (user: any) =>
-                            user?.userId === item?.initial_receiver?.user_id
+                            user === item?.initial_receiver?.user_id
                         ) ? (
                           <div
                             className={
