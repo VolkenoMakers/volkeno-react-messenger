@@ -914,7 +914,7 @@ const VolkenoReactMessenger = ({
                           )}
                           {onlineUsers?.some(
                             (user: any) =>
-                              user === item?.initial_receiver?.user_id
+                              user?.userId === item?.initial_receiver?.user_id
                           ) ? (
                             <div
                               className={
@@ -1049,7 +1049,7 @@ const VolkenoReactMessenger = ({
                             )}
                             {onlineUsers?.some(
                               (user: any) =>
-                                user === item?.initial_sender?.user_id
+                                user?.userId === item?.initial_sender?.user_id
                             ) ? (
                               <div
                                 className={
