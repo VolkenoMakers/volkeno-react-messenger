@@ -24,6 +24,7 @@ import { AlertInfo } from './Alert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faLink } from '@fortawesome/free-solid-svg-icons'
 import { io } from 'socket.io-client'
+import Skeleton from 'react-loading-skeleton'
 
 interface IVolkenoReactMessenger {
   user: any
@@ -64,7 +65,6 @@ const VolkenoReactMessenger = ({
       Authorization: `Bearer ${token}`
     }
   } as AxiosRequestConfig
-  // const [socket, setSocket] = React.useState<any>(null)
   const socket = io(socketUrl, { autoConnect: true })
 
   const [onlineUsers, setOnlineUsers] = React.useState<any>([])
@@ -77,7 +77,6 @@ const VolkenoReactMessenger = ({
       socket.disconnect()
     }
   }, [user, socketUrl])
-  // console.log('socket_port', process.env.REACT_APP_SOCKET_PORT)
 
   const [showProfil, setShowProfil] = React.useState(true)
   const [modalNewChat, setModalNewChat] = React.useState<boolean>(false)
@@ -95,10 +94,11 @@ const VolkenoReactMessenger = ({
   const [sendingMessage, setSendingMessage] = React.useState(false)
   const [sendingMessageDag, setSendingMessageDag] = React.useState(false)
   const [disableBtn, setDisableBtn] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [lastConversation, setLastConversation] = React.useState(null)
   // const [text, setText] = useState('')
   // const [typingStatus, setTypingStatus] = React.useState<any>('')
   const lastMessageRef = React.useRef<any>(null)
-  // console.log('receiver', receiver)
   const isStyleYad = (setStyle: string) => {
     return setStyle === 'yad'
   }
@@ -107,12 +107,9 @@ const VolkenoReactMessenger = ({
     return setStyle === 'dag'
   }
 
-  // const [newMessage, setNewMessage] = React.useState<any>(null)
-
   // add online users
   React.useEffect(() => {
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
-      // console.log('Connecté au serveur Socket.IO', res)
       setOnlineUsers(res)
     })
 
@@ -139,55 +136,6 @@ const VolkenoReactMessenger = ({
     }
   }, [socket])
 
-  // React.useEffect(() => {
-  //   if (socket === null) return
-
-  //   // console.log('Socket connected in this tab')
-  //   // console.log('messagesAv', messages)
-
-  //   const handleMessage = (res: any) => {
-  //     // console.log('Message received in this tab:', { res })
-  //     if (conversationActive?.id !== res.conversation_id) return
-
-  //     setMessages((prev: any) => {
-  //       // console.log('prev', prev)
-  //       if (prev.some((msg: any) => msg?.id === res?.id)) {
-  //         return prev
-  //       }
-  //       const updatedMessages = [...prev, res]
-  //       // console.log('Updated messages in this tab:', { updatedMessages })
-  //       return updatedMessages
-  //     })
-
-  //     // Mise à jour de conversationActive
-  //     setConversationActive((prev: any) => ({
-  //       ...prev,
-  //       messages: [...prev?.messages, res]
-  //     }))
-
-  //     // Mise à jour de conversations
-  //     setConversations((prev: any) => {
-  //       return prev.map((conv: any) => {
-  //         if (conv.id === res.conversation_id) {
-  //           return {
-  //             ...conv,
-  //             messages: [...conv?.messages, res]
-  //           }
-  //         }
-  //         return conv
-  //       })
-  //     })
-  //   }
-
-  //   // console.log('messagesAp', messages)
-  //   socket.on('getMessage', handleMessage)
-
-  //   // Clean up the socket listener on component unmount
-  //   return () => {
-  //     socket.off('getMessage', handleMessage)
-  //   }
-  // }, [socket, conversationActive?.id, newMessage])
-
   React.useEffect(() => {
     if (user) {
       socket.emit('addNewUser', user?.user_id)
@@ -211,16 +159,28 @@ const VolkenoReactMessenger = ({
   }, [user])
 
   const getMessages = async () => {
-    await axios
-      .get(apiBaseUrl + setApiConversationUserEndpoint, config)
-      .then((response) => {
-        const conversationsData =
-          dataStructure === 'old' ? response.data.results : response.data.data
-        setConversations(conversationsData)
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
+    try {
+      setIsLoading(true)
+      const response = await axios.get(
+        apiBaseUrl + setApiConversationUserEndpoint,
+        config
+      )
+      const conversationsData =
+        dataStructure === 'old' ? response.data.results : response.data.data
+      setConversations(conversationsData)
+
+      if (conversationsData.length > 0) {
+        setLastConversation(
+          dataStructure === 'old'
+            ? conversationsData[conversationsData.length - 1]
+            : conversationsData[0]
+        )
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   React.useEffect(() => {
@@ -237,6 +197,13 @@ const VolkenoReactMessenger = ({
         })
     }
   }, [user])
+
+  React.useEffect(() => {
+    if (lastConversation) {
+      onChoseConvesation(lastConversation)
+    }
+  }, [lastConversation])
+
   React.useEffect(() => {
     if (!isMultiList) {
       setDisableBtn(false)
@@ -315,9 +282,6 @@ const VolkenoReactMessenger = ({
                   return dateA - dateB
                 })
 
-              // Mise à jour locale de l'état
-              // updateLocalState(sortedMessages[sortedMessages?.length - 1])
-              // setNewMessage(sortedMessages[sortedMessages?.length - 1])
               setMessages(sortedMessages)
             } else {
               console.error('No messages found in the response')
@@ -394,7 +358,6 @@ const VolkenoReactMessenger = ({
         if (response?.data?.sucess === true) {
           socket.emit('message', response?.data?.data)
         }
-        // console.log('response', response?.data?.data)
         const activeConversationIndex =
           dataStructure === 'old'
             ? response?.data?.conversation?.messages
@@ -417,7 +380,6 @@ const VolkenoReactMessenger = ({
                 return dateA - dateB
               })
 
-            // setNewMessage(sortedMessages[sortedMessages?.length - 1])
             setMessages(sortedMessages)
           } else {
             console.error('No messages found in the response')
@@ -442,26 +404,6 @@ const VolkenoReactMessenger = ({
           setMessageDag('')
           console.error('Active conversation not found in the response')
         }
-
-        // setMessages(
-        //   dataStructure === 'old'
-        //     ? response?.data?.conversation?.messages
-        //         ?.slice()
-        //         .sort((a: any, b: any) => {
-        //           const dateA = new Date(a.created_at).getTime()
-        //           const dateB = new Date(b.created_at).getTime()
-
-        //           return dateA - dateB
-        //         })
-        //     : response?.data?.data[0]?.messages
-        // )
-        // setConversationActive(
-        //   dataStructure === 'old'
-        //     ? response?.data?.conversation
-        //     : response?.data?.data
-        // )
-        // socket.emit('message', response?.data)
-        // socket.emit('typing', ``)
       } catch (error) {
         console.error(`Error: ${error}`)
       }
@@ -563,17 +505,6 @@ const VolkenoReactMessenger = ({
             .toLowerCase()
             .includes(searchConv.toLowerCase())
         )
-
-  // const sortedMessages = messages?.slice().sort((a: any, b: any) => {
-  //   const dateA = new Date(a.created_at).getTime()
-  //   const dateB = new Date(b.created_at).getTime()
-
-  //   return dateA - dateB
-  // })
-
-  // function handleOnEnter(text: string) {
-  //   console.log('enter', text)
-  // }
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -662,8 +593,6 @@ const VolkenoReactMessenger = ({
                 setModalNewChat={setModalNewChatDag}
                 setReceiver={setReceiver}
                 setConversationActive={setConversationActive}
-                // userList={listUser}
-                // secondListUser={secondListUser}
                 ApiBaseUrl={apiBaseUrl}
                 handleSendMessageModal={handleSendMessageModal}
                 messageDag={messageDag}
@@ -673,7 +602,6 @@ const VolkenoReactMessenger = ({
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
                 sendingMessage={sendingMessageDag}
-                // isMulti={isMultiList}
                 listToShow={listToShow}
                 listlabel={listlabel}
                 dataStructure={dataStructure}
@@ -706,294 +634,89 @@ const VolkenoReactMessenger = ({
             <ListGroup
               className={`list-group list-group-flush ${styles.yadMessagerieCustomListGroup}`}
             >
-              {!!filteredConversationList &&
-              filteredConversationList?.length > 0 ? (
-                filteredConversationList?.map((item: any) => {
-                  return dataStructure === 'old' ? (
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, index) => (
+                    // SKELETON
                     <ListGroup.Item
+                      key={index}
                       type='button'
                       className={`btn ${
                         isStyleYad(setStyle)
                           ? styles.listGroupItem
                           : styles.listGroupItemDag
-                      } ${styles.listGroupItemAction} ${
-                        item?.id === conversationActive?.id && 'active'
-                      }`}
-                      aria-current='true'
-                      key={item?.id}
-                      onClick={() => onChoseConvesation(item)}
+                      } ${styles.listGroupItemAction}`}
                     >
                       <div
                         className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
                       >
-                        {item?.participants?.find(
-                          (item: any) => item?.id !== user?.id
-                        )?.avatar &&
-                        showProfil &&
-                        item?.participants?.find(
-                          (item: any) => item?.id !== user?.id
-                        )?.avatar !== '/mediafiles/avatars/default.png' ? (
-                          <img
-                            src={getAvatar(
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.avatar
-                            )}
-                            className={styles.yadMessagerieListGroupAvatar}
-                            alt='Photo'
-                            onError={() => setShowProfil(false)}
-                          />
-                        ) : (
-                          <div className={styles.formatPseudo}>
-                            {getUserPseudo(
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )
-                            )}
-                          </div>
-                        )}
-                        {item?.en_ligne ? (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#2CC84A'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#F2F2F2'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        )}
+                        <Skeleton
+                          className={styles.yadMessagerieListGroupAvatar}
+                          circle
+                          style={{
+                            display: 'block'
+                          }}
+                          width={40}
+                          height={40}
+                        />
                       </div>
                       <div className='w-100'>
                         <div
                           className={styles.yadMessagerieListGroupNameContainer}
                         >
-                          <div
+                          <Skeleton
                             className={`${
                               isStyleYad(setStyle)
                                 ? styles.yadMessagerieListGroupName
                                 : styles.dagMessagerieListGroupName
                             } m-r-7`}
-                          >
-                            {
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.prenom
-                            }{' '}
-                            {
-                              item?.participants?.find(
-                                (item: any) => item?.id !== user?.id
-                              )?.nom
-                            }
-                          </div>
-                          <div
+                            style={{
+                              display: 'block'
+                            }}
+                            width={120}
+                            height={16}
+                          />
+                          <Skeleton
                             className={
                               isStyleYad(setStyle)
                                 ? styles.yadMessagerieListGroupHeure
                                 : styles.dagMessagerieListGroupHeure
                             }
-                          >
-                            {formatDateHour(
-                              item?.messages.slice().sort((a: any, b: any) => {
-                                const dateA = new Date(a.created_at).getTime()
-                                const dateB = new Date(b.created_at).getTime()
-
-                                return dateA - dateB
-                              })[item?.messages?.length - 1]?.created_at,
-                              isStyleYad(setStyle)
-                            )}
-                          </div>
+                            style={{
+                              display: 'block'
+                            }}
+                            width={80}
+                            height={16}
+                          />
                         </div>
-                        <div className={styles.yadMessagerieListGroupApercu}>
-                          {truncateCaractere(
-                            item?.messages.slice().sort((a: any, b: any) => {
-                              const dateA = new Date(a.created_at).getTime()
-                              const dateB = new Date(b.created_at).getTime()
-
-                              return dateA - dateB
-                            })[item?.messages?.length - 1]?.content,
-                            18
-                          )}
-                        </div>
+                        <Skeleton
+                          className={styles.yadMessagerieListGroupApercu}
+                          style={{
+                            display: 'block'
+                          }}
+                          width={200}
+                          height={16}
+                        />
                       </div>
                       <div
                         className={
                           styles.yadMessagerieListGroupCheckIconContainer
                         }
                       >
-                        <BsCheck2All
+                        <Skeleton
                           className={styles.yadMessagerieListGroupCheckIcon}
+                          style={{
+                            display: 'block'
+                          }}
+                          width={20}
+                          height={20}
                         />
                       </div>
                     </ListGroup.Item>
-                  ) : dataStructure === 'new' &&
-                    item?.initial_sender?.user_id === user?.user_id ? (
-                    <ListGroup.Item
-                      type='button'
-                      className={`btn ${
-                        isStyleYad(setStyle)
-                          ? styles.listGroupItem
-                          : styles.listGroupItemDag
-                      } ${styles.listGroupItemAction} ${
-                        item?.id === conversationActive?.id && 'active'
-                      }`}
-                      aria-current='true'
-                      key={item?.id}
-                      onClick={() => onChoseConvesation(item)}
-                    >
-                      <div
-                        className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
-                      >
-                        {item?.initial_receiver?.avatar === null ? (
-                          <div className={styles.formatPseudo}>
-                            {getUserPseudo(
-                              item?.initial_receiver,
-                              dataStructure
-                            )}
-                          </div>
-                        ) : (
-                          <img
-                            src={item?.initial_receiver?.avatar}
-                            className={styles.yadMessagerieListGroupAvatar}
-                            alt={
-                              item?.initial_receiver?.first_name +
-                              ' ' +
-                              item?.initial_receiver?.last_name
-                            }
-                            onError={() => setShowProfil(false)}
-                          />
-                        )}
-                        {onlineUsers?.some(
-                          (user: any) =>
-                            user === item?.initial_receiver?.user_id
-                        ) ? (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#2CC84A'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div
-                            className={
-                              styles.yadMessagerieListGroupAvatarIndicator
-                            }
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='10'
-                              height='10'
-                              viewBox='0 0 10 10'
-                              fill='none'
-                            >
-                              <circle
-                                cx='5'
-                                cy='4.99976'
-                                r='4.5'
-                                fill='#F2F2F2'
-                                stroke='white'
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      <div className='w-100'>
-                        <div
-                          className={styles.yadMessagerieListGroupNameContainer}
-                        >
-                          <div
-                            className={`${
-                              isStyleYad(setStyle)
-                                ? styles.yadMessagerieListGroupName
-                                : styles.dagMessagerieListGroupName
-                            } m-r-7`}
-                          >
-                            {item?.initial_receiver?.first_name}{' '}
-                            {item?.initial_receiver?.last_name}
-                          </div>
-                          <div
-                            className={
-                              isStyleYad(setStyle)
-                                ? styles.yadMessagerieListGroupHeure
-                                : styles.dagMessagerieListGroupHeure
-                            }
-                          >
-                            {formatDateHour(
-                              item?.messages[item?.messages?.length - 1]
-                                ?.created_at,
-                              isStyleYad(setStyle)
-                            )}
-                          </div>
-                        </div>
-                        <div className={styles.yadMessagerieListGroupApercu}>
-                          {truncateCaractere(
-                            item?.messages[item?.messages?.length - 1]?.message,
-                            18
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          styles.yadMessagerieListGroupCheckIconContainer
-                        }
-                      >
-                        <BsCheck2All
-                          className={styles.yadMessagerieListGroupCheckIcon}
-                        />
-                      </div>
-                    </ListGroup.Item>
-                  ) : (
-                    dataStructure === 'new' &&
-                    item?.initial_receiver?.user_id === user?.user_id && (
+                  ))
+                : !!filteredConversationList &&
+                  filteredConversationList?.length > 0 &&
+                  filteredConversationList?.map((item: any) => {
+                    return dataStructure === 'old' ? (
                       <ListGroup.Item
                         type='button'
                         className={`btn ${
@@ -1010,28 +733,188 @@ const VolkenoReactMessenger = ({
                         <div
                           className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
                         >
-                          {item?.initial_sender?.avatar === null ? (
+                          {item?.participants?.find(
+                            (item: any) => item?.id !== user?.id
+                          )?.avatar &&
+                          showProfil &&
+                          item?.participants?.find(
+                            (item: any) => item?.id !== user?.id
+                          )?.avatar !== '/mediafiles/avatars/default.png' ? (
+                            <img
+                              src={getAvatar(
+                                item?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )?.avatar
+                              )}
+                              className={styles.yadMessagerieListGroupAvatar}
+                              alt='Photo'
+                              onError={() => setShowProfil(false)}
+                            />
+                          ) : (
                             <div className={styles.formatPseudo}>
                               {getUserPseudo(
-                                item?.initial_sender,
+                                item?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )
+                              )}
+                            </div>
+                          )}
+                          {item?.en_ligne ? (
+                            <div
+                              className={
+                                styles.yadMessagerieListGroupAvatarIndicator
+                              }
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='10'
+                                height='10'
+                                viewBox='0 0 10 10'
+                                fill='none'
+                              >
+                                <circle
+                                  cx='5'
+                                  cy='4.99976'
+                                  r='4.5'
+                                  fill='#2CC84A'
+                                  stroke='white'
+                                />
+                              </svg>
+                            </div>
+                          ) : (
+                            <div
+                              className={
+                                styles.yadMessagerieListGroupAvatarIndicator
+                              }
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='10'
+                                height='10'
+                                viewBox='0 0 10 10'
+                                fill='none'
+                              >
+                                <circle
+                                  cx='5'
+                                  cy='4.99976'
+                                  r='4.5'
+                                  fill='#F2F2F2'
+                                  stroke='white'
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        <div className='w-100'>
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupNameContainer
+                            }
+                          >
+                            <div
+                              className={`${
+                                isStyleYad(setStyle)
+                                  ? styles.yadMessagerieListGroupName
+                                  : styles.dagMessagerieListGroupName
+                              } m-r-7`}
+                            >
+                              {
+                                item?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )?.prenom
+                              }{' '}
+                              {
+                                item?.participants?.find(
+                                  (item: any) => item?.id !== user?.id
+                                )?.nom
+                              }
+                            </div>
+                            <div
+                              className={
+                                isStyleYad(setStyle)
+                                  ? styles.yadMessagerieListGroupHeure
+                                  : styles.dagMessagerieListGroupHeure
+                              }
+                            >
+                              {formatDateHour(
+                                item?.messages
+                                  .slice()
+                                  .sort((a: any, b: any) => {
+                                    const dateA = new Date(
+                                      a.created_at
+                                    ).getTime()
+                                    const dateB = new Date(
+                                      b.created_at
+                                    ).getTime()
+
+                                    return dateA - dateB
+                                  })[item?.messages?.length - 1]?.created_at,
+                                isStyleYad(setStyle)
+                              )}
+                            </div>
+                          </div>
+                          <div className={styles.yadMessagerieListGroupApercu}>
+                            {truncateCaractere(
+                              item?.messages.slice().sort((a: any, b: any) => {
+                                const dateA = new Date(a.created_at).getTime()
+                                const dateB = new Date(b.created_at).getTime()
+
+                                return dateA - dateB
+                              })[item?.messages?.length - 1]?.content,
+                              18
+                            )}
+                          </div>
+                        </div>
+                        <div
+                          className={
+                            styles.yadMessagerieListGroupCheckIconContainer
+                          }
+                        >
+                          <BsCheck2All
+                            className={styles.yadMessagerieListGroupCheckIcon}
+                          />
+                        </div>
+                      </ListGroup.Item>
+                    ) : dataStructure === 'new' &&
+                      item?.initial_sender?.user_id === user?.user_id ? (
+                      <ListGroup.Item
+                        type='button'
+                        className={`btn ${
+                          isStyleYad(setStyle)
+                            ? styles.listGroupItem
+                            : styles.listGroupItemDag
+                        } ${styles.listGroupItemAction} ${
+                          item?.id === conversationActive?.id && 'active'
+                        }`}
+                        aria-current='true'
+                        key={item?.id}
+                        onClick={() => onChoseConvesation(item)}
+                      >
+                        <div
+                          className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
+                        >
+                          {item?.initial_receiver?.avatar === null ? (
+                            <div className={styles.formatPseudo}>
+                              {getUserPseudo(
+                                item?.initial_receiver,
                                 dataStructure
                               )}
                             </div>
                           ) : (
                             <img
-                              src={item?.initial_sender?.avatar}
+                              src={item?.initial_receiver?.avatar}
                               className={styles.yadMessagerieListGroupAvatar}
                               alt={
-                                item?.initial_sender?.first_name +
+                                item?.initial_receiver?.first_name +
                                 ' ' +
-                                item?.initial_sender?.last_name
+                                item?.initial_receiver?.last_name
                               }
                               onError={() => setShowProfil(false)}
                             />
                           )}
                           {onlineUsers?.some(
                             (user: any) =>
-                              user === item?.initial_sender?.user_id
+                              user === item?.initial_receiver?.user_id
                           ) ? (
                             <div
                               className={
@@ -1091,8 +974,8 @@ const VolkenoReactMessenger = ({
                                   : styles.dagMessagerieListGroupName
                               } m-r-7`}
                             >
-                              {item?.initial_sender?.first_name}{' '}
-                              {item?.initial_sender?.last_name}
+                              {item?.initial_receiver?.first_name}{' '}
+                              {item?.initial_receiver?.last_name}
                             </div>
                             <div
                               className={
@@ -1126,18 +1009,158 @@ const VolkenoReactMessenger = ({
                           />
                         </div>
                       </ListGroup.Item>
+                    ) : (
+                      dataStructure === 'new' &&
+                      item?.initial_receiver?.user_id === user?.user_id && (
+                        <ListGroup.Item
+                          type='button'
+                          className={`btn ${
+                            isStyleYad(setStyle)
+                              ? styles.listGroupItem
+                              : styles.listGroupItemDag
+                          } ${styles.listGroupItemAction} ${
+                            item?.id === conversationActive?.id && 'active'
+                          }`}
+                          aria-current='true'
+                          key={item?.id}
+                          onClick={() => onChoseConvesation(item)}
+                        >
+                          <div
+                            className={`${styles.yadMessagerieListGroupAvatarContainer} d-flex`}
+                          >
+                            {item?.initial_sender?.avatar === null ? (
+                              <div className={styles.formatPseudo}>
+                                {getUserPseudo(
+                                  item?.initial_sender,
+                                  dataStructure
+                                )}
+                              </div>
+                            ) : (
+                              <img
+                                src={item?.initial_sender?.avatar}
+                                className={styles.yadMessagerieListGroupAvatar}
+                                alt={
+                                  item?.initial_sender?.first_name +
+                                  ' ' +
+                                  item?.initial_sender?.last_name
+                                }
+                                onError={() => setShowProfil(false)}
+                              />
+                            )}
+                            {onlineUsers?.some(
+                              (user: any) =>
+                                user === item?.initial_sender?.user_id
+                            ) ? (
+                              <div
+                                className={
+                                  styles.yadMessagerieListGroupAvatarIndicator
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  width='10'
+                                  height='10'
+                                  viewBox='0 0 10 10'
+                                  fill='none'
+                                >
+                                  <circle
+                                    cx='5'
+                                    cy='4.99976'
+                                    r='4.5'
+                                    fill='#2CC84A'
+                                    stroke='white'
+                                  />
+                                </svg>
+                              </div>
+                            ) : (
+                              <div
+                                className={
+                                  styles.yadMessagerieListGroupAvatarIndicator
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  width='10'
+                                  height='10'
+                                  viewBox='0 0 10 10'
+                                  fill='none'
+                                >
+                                  <circle
+                                    cx='5'
+                                    cy='4.99976'
+                                    r='4.5'
+                                    fill='#F2F2F2'
+                                    stroke='white'
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                          <div className='w-100'>
+                            <div
+                              className={
+                                styles.yadMessagerieListGroupNameContainer
+                              }
+                            >
+                              <div
+                                className={`${
+                                  isStyleYad(setStyle)
+                                    ? styles.yadMessagerieListGroupName
+                                    : styles.dagMessagerieListGroupName
+                                } m-r-7`}
+                              >
+                                {item?.initial_sender?.first_name}{' '}
+                                {item?.initial_sender?.last_name}
+                              </div>
+                              <div
+                                className={
+                                  isStyleYad(setStyle)
+                                    ? styles.yadMessagerieListGroupHeure
+                                    : styles.dagMessagerieListGroupHeure
+                                }
+                              >
+                                {formatDateHour(
+                                  item?.messages[item?.messages?.length - 1]
+                                    ?.created_at,
+                                  isStyleYad(setStyle)
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              className={styles.yadMessagerieListGroupApercu}
+                            >
+                              {truncateCaractere(
+                                item?.messages[item?.messages?.length - 1]
+                                  ?.message,
+                                18
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupCheckIconContainer
+                            }
+                          >
+                            <BsCheck2All
+                              className={styles.yadMessagerieListGroupCheckIcon}
+                            />
+                          </div>
+                        </ListGroup.Item>
+                      )
                     )
-                  )
-                })
-              ) : (
-                <AlertInfo
-                  message='Pas de données'
-                  isStyleYad={isStyleYad(setStyle)}
-                />
-              )}
+                  })}
+              {!isLoading &&
+                (!filteredConversationList ||
+                  filteredConversationList.length === 0) && (
+                  <AlertInfo
+                    message='Pas de données'
+                    isStyleYad={isStyleYad(setStyle)}
+                  />
+                )}
             </ListGroup>
           </div>
         </div>
+
         {dataStructure === 'old' && (
           <div
             className={`col-lg-8 ${
@@ -1146,7 +1169,146 @@ const VolkenoReactMessenger = ({
                 : styles.colRightMessagerieDag
             } d-flex mb-3`}
           >
-            {conversationActive != null || receiver != null ? (
+            {isLoading ? (
+              <div
+                className={`${
+                  isStyleYad(setStyle)
+                    ? styles.dtailsMessagesTabsComponent
+                    : styles.dtailsMessagesTabsComponentDag
+                } w-100`}
+              >
+                <div
+                  className={styles.contentContentDetailMessageInfoContainer}
+                >
+                  <div
+                    className={`${styles.contentContentDetailMessageInfo} p-3`}
+                  >
+                    <div className={styles.contentImgPpChat}>
+                      <Skeleton
+                        className={`${styles.imageProfilEntete} image_responsive`}
+                        circle
+                        width={50}
+                        height={50}
+                      />
+                    </div>
+                    <div className='content-info-user-chat'>
+                      <div className='msg-user-infos-container'>
+                        <div className='d-flex align-items-center msg-user-name'>
+                          <Skeleton
+                            className={`${styles.profilDetailMessage} mb-0`}
+                            width={150}
+                            height={16}
+                          />
+                        </div>
+                        <div className='bloc-user-disconnect-time msg-user-lastonline'>
+                          <Skeleton
+                            className={`${styles.textDisconnectTime} mb-0`}
+                            width={80}
+                            height={16}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={`${styles.blocDetails} pb-5`}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className='position-relative received-msg-item m-b-2'
+                    >
+                      <div
+                        className={`${
+                          isStyleYad(setStyle)
+                            ? styles.blocMessageRecu
+                            : styles.blocMessageRecuDag
+                        } p-3`}
+                      >
+                        <div className='content-img-pp-message-recieve'>
+                          <Skeleton
+                            className={styles.imgPpMessageRecieve}
+                            circle
+                            width={30}
+                            height={30}
+                          />
+                        </div>
+                        <div className='info-text-message-recu'>
+                          <div className='d-flex flex-column'>
+                            <Skeleton
+                              className={
+                                isStyleYad(setStyle)
+                                  ? styles.textMessageRecu
+                                  : styles.textMessageRecuDag
+                              }
+                              width={200}
+                              height={16}
+                            />
+                          </div>
+                          <Skeleton
+                            className={`${
+                              isStyleYad(setStyle)
+                                ? styles.timeDetailMessageRecu
+                                : styles.timeDetailMessageRecuDag
+                            } mt-3`}
+                            width={80}
+                            height={16}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  className={`${styles.textAreaFormContainer} p-3 border-top`}
+                >
+                  <div className={styles.leftFooterContainer}>
+                    <div
+                      className={
+                        isStyleYad(setStyle)
+                          ? styles.inputGroup
+                          : styles.inputGroupDag
+                      }
+                    >
+                      <div className={styles.inputContainer}>
+                        <div className={styles.containerDisplayInputMessage}>
+                          <div className='share'>
+                            <Skeleton
+                              className='img-icon-chat'
+                              width={20}
+                              height={20}
+                            />
+                          </div>
+                          <div className='inp w-100'>
+                            <Skeleton
+                              className={`${styles.messagerieCustomTextarrea} form-control`}
+                              width='100%'
+                              height={40}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        sendingMessage
+                          ? styles.btnDisabled
+                          : styles.btnContainer
+                      }
+                    >
+                      <Skeleton
+                        className={
+                          isStyleYad(setStyle)
+                            ? 'fa-solid fa-paper-plane'
+                            : `${styles.btnSendDag} d-flex align-items-center`
+                        }
+                        width={40}
+                        height={40}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : conversationActive != null || receiver != null ? (
               <div
                 className={`${
                   isStyleYad(setStyle)
@@ -1467,7 +1629,146 @@ const VolkenoReactMessenger = ({
                 : styles.colRightMessagerieDag
             } d-flex mb-3`}
           >
-            {conversationActive != null || receiver != null ? (
+            {isLoading ? (
+              <div
+                className={`${
+                  isStyleYad(setStyle)
+                    ? styles.dtailsMessagesTabsComponent
+                    : styles.dtailsMessagesTabsComponentDag
+                } w-100`}
+              >
+                <div
+                  className={styles.contentContentDetailMessageInfoContainer}
+                >
+                  <div
+                    className={`${styles.contentContentDetailMessageInfo} p-3`}
+                  >
+                    <div className={styles.contentImgPpChat}>
+                      <Skeleton
+                        className={`${styles.imageProfilEntete} image_responsive`}
+                        circle
+                        width={50}
+                        height={50}
+                      />
+                    </div>
+                    <div className='content-info-user-chat'>
+                      <div className='msg-user-infos-container'>
+                        <div className='d-flex align-items-center msg-user-name'>
+                          <Skeleton
+                            className={`${styles.profilDetailMessage} mb-0`}
+                            width={150}
+                            height={16}
+                          />
+                        </div>
+                        <div className='bloc-user-disconnect-time msg-user-lastonline'>
+                          <Skeleton
+                            className={`${styles.textDisconnectTime} mb-0`}
+                            width={80}
+                            height={16}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={`${styles.blocDetails} pb-5`}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className='position-relative received-msg-item m-b-2'
+                    >
+                      <div
+                        className={`${
+                          isStyleYad(setStyle)
+                            ? styles.blocMessageRecu
+                            : styles.blocMessageRecuDag
+                        } p-3`}
+                      >
+                        <div className='content-img-pp-message-recieve'>
+                          <Skeleton
+                            className={styles.imgPpMessageRecieve}
+                            circle
+                            width={30}
+                            height={30}
+                          />
+                        </div>
+                        <div className='info-text-message-recu'>
+                          <div className='d-flex flex-column'>
+                            <Skeleton
+                              className={
+                                isStyleYad(setStyle)
+                                  ? styles.textMessageRecu
+                                  : styles.textMessageRecuDag
+                              }
+                              width={200}
+                              height={16}
+                            />
+                          </div>
+                          <Skeleton
+                            className={`${
+                              isStyleYad(setStyle)
+                                ? styles.timeDetailMessageRecu
+                                : styles.timeDetailMessageRecuDag
+                            } mt-3`}
+                            width={80}
+                            height={16}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  className={`${styles.textAreaFormContainer} p-3 border-top`}
+                >
+                  <div className={styles.leftFooterContainer}>
+                    <div
+                      className={
+                        isStyleYad(setStyle)
+                          ? styles.inputGroup
+                          : styles.inputGroupDag
+                      }
+                    >
+                      <div className={styles.inputContainer}>
+                        <div className={styles.containerDisplayInputMessage}>
+                          <div className='share'>
+                            <Skeleton
+                              className='img-icon-chat'
+                              width={20}
+                              height={20}
+                            />
+                          </div>
+                          <div className='inp w-100'>
+                            <Skeleton
+                              className={`${styles.messagerieCustomTextarrea} form-control`}
+                              width='100%'
+                              height={40}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        sendingMessage
+                          ? styles.btnDisabled
+                          : styles.btnContainer
+                      }
+                    >
+                      <Skeleton
+                        className={
+                          isStyleYad(setStyle)
+                            ? 'fa-solid fa-paper-plane'
+                            : `${styles.btnSendDag} d-flex align-items-center`
+                        }
+                        width={40}
+                        height={40}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : conversationActive != null || receiver != null ? (
               <div
                 className={`${
                   isStyleYad(setStyle)
@@ -2083,7 +2384,7 @@ function NewChatModal({
         setReceiver(x)
         setConversationActive(null)
         setMessages(null)
-        closeModalNewChat() // Fermer la modal de nouvelle conversation
+        closeModalNewChat()
       }
     } else {
       const conversation = conversations.filter(
@@ -2100,7 +2401,7 @@ function NewChatModal({
         setReceiver(x)
         setConversationActive(null)
         setMessages(null)
-        closeModalNewChat() // Fermer la modal de nouvelle conversation
+        closeModalNewChat()
       }
     }
   }
@@ -2218,8 +2519,6 @@ function NewChatModalDag({
   setModalNewChat,
   setReceiver,
   setConversationActive,
-  // userList,
-  // secondListUser,
   conversations,
   handleSendMessageModal,
   messageDag,

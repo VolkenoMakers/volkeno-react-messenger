@@ -1,6 +1,6 @@
 {
   "name": "volkeno-react-messenger",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The 'volkeno-react-messenger' module is a powerful and flexible messaging solution designed specifically for Volkeno's internal needs. Seamlessly integrating with Volkeno's internal data structure, this module provides a smooth and intuitive messaging experience for users",
   "author": "VolkenoMakers",
   "private": false,
@@ -87,6 +87,7 @@
     "react-bootstrap": "^2.10.2",
     "react-icons": "^4.11.0",
     "react-input-emoji": "^5.9.0",
+    "react-loading-skeleton": "^3.4.0",
     "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",
     "socket.io-client": "^4.7.5",
