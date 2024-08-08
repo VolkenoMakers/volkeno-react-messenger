@@ -64,8 +64,8 @@ const App = () => {
       dataStructure='new'
       setSecondListLabel ='Helpers'
       setSecondListUsersEndpoint={'user/helpers/'}
-      // socketUrl={'http://localhost:8804'}
-      socketUrl={'https://socket-dag.volkeno.com'}
+      socketUrl={'http://localhost:8806'}
+      // socketUrl={'https://socket-dag.volkeno.com'}
     />
   )
 }
