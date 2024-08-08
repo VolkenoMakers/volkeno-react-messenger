@@ -26,6 +26,7 @@ class Example extends Component {
         setApiPostEndpoint={'/api/messages'}
         setApiListUsersEndpoint={'/api/List_user_url'}
         setApiConversationUserEndpoint={'/api/List_conversation_user_url'}
+        socketUrl={'socket_url'}
      />
     )
   }
