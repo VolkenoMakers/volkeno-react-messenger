@@ -2387,7 +2387,7 @@ function NewChatModal({
         closeModalNewChat()
       }
     } else {
-      const conversation = conversations.filter(
+      const conversation = conversations?.filter(
         (conv: any) =>
           conv?.initial_sender_id === x?.user_id ||
           conv?.receiver_id === x?.user_id
@@ -2554,7 +2554,7 @@ function NewChatModalDag({
         setMessages(null)
       }
     } else {
-      const conversation = conversations.filter(
+      const conversation = conversations?.filter(
         (conv: any) =>
           conv?.initial_sender_id === x.value?.user_id ||
           conv?.receiver_id === x.value?.user_id
