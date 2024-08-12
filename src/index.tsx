@@ -112,7 +112,6 @@ const VolkenoReactMessenger = ({
     socket.on('getOnlineUsers', (res: React.SetStateAction<never[]>) => {
       setOnlineUsers(res)
     })
-
     return () => {
       socket.off('getOnlineUsers')
     }
@@ -167,13 +166,16 @@ const VolkenoReactMessenger = ({
       )
       const conversationsData =
         dataStructure === 'old' ? response.data.results : response.data.data
-      setConversations(conversationsData)
 
-      if (conversationsData.length > 0) {
+      const conversationsArray: any = Object.values(conversationsData)
+
+      setConversations(conversationsArray)
+
+      if (conversationsArray.length > 0) {
         setLastConversation(
           dataStructure === 'old'
-            ? conversationsData[conversationsData.length - 1]
-            : conversationsData[0]
+            ? conversationsArray[conversationsArray.length - 1]
+            : conversationsArray[0]
         )
       }
     } catch (error) {
@@ -260,6 +262,7 @@ const VolkenoReactMessenger = ({
         )
         if (response?.data?.success) {
           socket.emit('message', response?.data?.data)
+          // getMessages()
           const activeConversationIndex =
             dataStructure === 'old'
               ? response?.data?.conversation?.messages
@@ -487,24 +490,27 @@ const VolkenoReactMessenger = ({
     setSearchConv(e.target.value)
   }
   const filteredConversationList =
-    dataStructure === 'old'
-      ? conversations?.filter((item: any) =>
-          `${item?.participants?.find((p: any) => p.id !== user?.id)?.prenom} ${
-            item?.participants?.find((p: any) => p.id !== user?.id)?.nom
-          }`
-            .toLowerCase()
-            .includes(searchConv.toLowerCase())
-        )
-      : conversations?.filter((item: any) =>
-          `${
-            item?.initial_receiver?.first_name ||
-            item?.initial_sender?.first_name
-          } ${
-            item?.initial_receiver?.last_name || item?.initial_sender?.last_name
-          }`
-            .toLowerCase()
-            .includes(searchConv.toLowerCase())
-        )
+    Array.isArray(conversations) && conversations.length > 0
+      ? dataStructure === 'old'
+        ? conversations?.filter((item: any) =>
+            `${
+              item?.participants?.find((p: any) => p.id !== user?.id)?.prenom
+            } ${item?.participants?.find((p: any) => p.id !== user?.id)?.nom}`
+              .toLowerCase()
+              .includes(searchConv.toLowerCase())
+          )
+        : conversations?.filter((item: any) =>
+            `${
+              item?.initial_receiver?.first_name ||
+              item?.initial_sender?.first_name
+            } ${
+              item?.initial_receiver?.last_name ||
+              item?.initial_sender?.last_name
+            }`
+              .toLowerCase()
+              .includes(searchConv.toLowerCase())
+          )
+      : []
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -2536,7 +2542,7 @@ function NewChatModalDag({
   }
 
   const onChoseReceiver = (x: any) => {
-    console.log({ x })
+    // console.log({ x })
     if (dataStructure === 'old') {
       const existingConversation = conversations?.find((conversation: any) =>
         conversation.participants?.some(
