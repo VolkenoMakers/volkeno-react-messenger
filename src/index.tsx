@@ -137,7 +137,10 @@ const VolkenoReactMessenger = ({
 
   React.useEffect(() => {
     if (user) {
-      socket.emit('addNewUser', user?.user_id)
+      socket.emit(
+        'addNewUser',
+        dataStructure === 'old' ? user?.id : user?.user_id
+      )
       axios
         .get(apiBaseUrl + setApiListUsersEndpoint, config)
         .then((response) => {
@@ -511,6 +514,8 @@ const VolkenoReactMessenger = ({
               .includes(searchConv.toLowerCase())
           )
       : []
+
+  console.log('filteredConversationList', filteredConversationList)
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -593,6 +598,7 @@ const VolkenoReactMessenger = ({
                 setMessages={setMessages}
                 newMessageTitle={newMessageTitle}
                 dataStructure={dataStructure}
+                onlineUsers={onlineUsers}
               />
               <NewChatModalDag
                 modalNewChat={modalNewChatDag}
@@ -761,55 +767,42 @@ const VolkenoReactMessenger = ({
                               {getUserPseudo(
                                 item?.participants?.find(
                                   (item: any) => item?.id !== user?.id
-                                )
+                                ),
+                                dataStructure
                               )}
                             </div>
                           )}
-                          {item?.en_ligne ? (
-                            <div
-                              className={
-                                styles.yadMessagerieListGroupAvatarIndicator
-                              }
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
                             >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#2CC84A'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          ) : (
-                            <div
-                              className={
-                                styles.yadMessagerieListGroupAvatarIndicator
-                              }
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#F2F2F2'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          )}
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill={
+                                  onlineUsers?.some((onlineUser: any) =>
+                                    item?.participants?.some(
+                                      (participant: any) =>
+                                        participant?.id !== user?.id &&
+                                        participant?.id === onlineUser?.userId
+                                    )
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         </div>
                         <div className='w-100'>
                           <div
@@ -918,54 +911,35 @@ const VolkenoReactMessenger = ({
                               onError={() => setShowProfil(false)}
                             />
                           )}
-                          {onlineUsers?.some(
-                            (user: any) =>
-                              user?.userId === item?.initial_receiver?.user_id
-                          ) ? (
-                            <div
-                              className={
-                                styles.yadMessagerieListGroupAvatarIndicator
-                              }
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
                             >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#2CC84A'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          ) : (
-                            <div
-                              className={
-                                styles.yadMessagerieListGroupAvatarIndicator
-                              }
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#F2F2F2'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          )}
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill={
+                                  onlineUsers?.some(
+                                    (user: any) =>
+                                      user?.userId ===
+                                      item?.initial_receiver?.user_id
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         </div>
                         <div className='w-100'>
                           <div
@@ -1053,54 +1027,35 @@ const VolkenoReactMessenger = ({
                                 onError={() => setShowProfil(false)}
                               />
                             )}
-                            {onlineUsers?.some(
-                              (user: any) =>
-                                user?.userId === item?.initial_sender?.user_id
-                            ) ? (
-                              <div
-                                className={
-                                  styles.yadMessagerieListGroupAvatarIndicator
-                                }
+                            <div
+                              className={
+                                styles.yadMessagerieListGroupAvatarIndicator
+                              }
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='10'
+                                height='10'
+                                viewBox='0 0 10 10'
+                                fill='none'
                               >
-                                <svg
-                                  xmlns='http://www.w3.org/2000/svg'
-                                  width='10'
-                                  height='10'
-                                  viewBox='0 0 10 10'
-                                  fill='none'
-                                >
-                                  <circle
-                                    cx='5'
-                                    cy='4.99976'
-                                    r='4.5'
-                                    fill='#2CC84A'
-                                    stroke='white'
-                                  />
-                                </svg>
-                              </div>
-                            ) : (
-                              <div
-                                className={
-                                  styles.yadMessagerieListGroupAvatarIndicator
-                                }
-                              >
-                                <svg
-                                  xmlns='http://www.w3.org/2000/svg'
-                                  width='10'
-                                  height='10'
-                                  viewBox='0 0 10 10'
-                                  fill='none'
-                                >
-                                  <circle
-                                    cx='5'
-                                    cy='4.99976'
-                                    r='4.5'
-                                    fill='#F2F2F2'
-                                    stroke='white'
-                                  />
-                                </svg>
-                              </div>
-                            )}
+                                <circle
+                                  cx='5'
+                                  cy='4.99976'
+                                  r='4.5'
+                                  fill={
+                                    onlineUsers?.some(
+                                      (user: any) =>
+                                        user?.userId ===
+                                        item?.initial_sender?.user_id
+                                    )
+                                      ? '#2CC84A'
+                                      : '#F2F2F2'
+                                  }
+                                  stroke='white'
+                                />
+                              </svg>
+                            </div>
                           </div>
                           <div className='w-100'>
                             <div
@@ -1372,13 +1327,13 @@ const VolkenoReactMessenger = ({
                           {getUserPseudo(
                             conversationActive?.participants?.find(
                               (item: any) => item?.id !== user?.id
-                            )
+                            ),
+                            dataStructure
                           )}
                         </div>
                       )}
-
                       <div
-                        className={styles.yadMessagerieDetailMesAvatarIndicator}
+                        className={styles.yadMessagerieListGroupAvatarIndicator}
                       >
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
@@ -1391,7 +1346,17 @@ const VolkenoReactMessenger = ({
                             cx='5'
                             cy='4.99976'
                             r='4.5'
-                            fill='#2CC84A'
+                            fill={
+                              onlineUsers?.some((onlineUser: any) =>
+                                conversationActive?.participants?.some(
+                                  (participant: any) =>
+                                    participant?.id !== user?.id &&
+                                    participant?.id === onlineUser?.userId
+                                )
+                              )
+                                ? '#2CC84A'
+                                : '#F2F2F2'
+                            }
                             stroke='white'
                           />
                         </svg>
@@ -1424,7 +1389,15 @@ const VolkenoReactMessenger = ({
                         </div>
                         <div className='bloc-user-disconnect-time msg-user-lastonline'>
                           <p className={`${styles.textDisconnectTime} mb-0`}>
-                            En ligne
+                            {onlineUsers?.some((onlineUser: any) =>
+                              conversationActive?.participants?.some(
+                                (participant: any) =>
+                                  participant?.id !== user?.id &&
+                                  participant?.id === onlineUser?.userId
+                              )
+                            )
+                              ? 'En ligne'
+                              : ''}
                           </p>
                         </div>
                       </div>
@@ -1476,7 +1449,10 @@ const VolkenoReactMessenger = ({
                                 )
                               ) : (
                                 <div className={styles.formatPseudo}>
-                                  {getUserPseudo(message?.sender)}
+                                  {
+                                    (getUserPseudo(message?.sender),
+                                    dataStructure)
+                                  }
                                 </div>
                               )}
                             </div>
@@ -1829,55 +1805,36 @@ const VolkenoReactMessenger = ({
                               />
                             )}
                           </div>
-                          {onlineUsers?.some(
-                            (user: any) =>
-                              user?.userId ===
-                              conversationActive?.initial_receiver?.user_id
-                          ) ? (
-                            <div
-                              className={
-                                styles.yadMessagerieDetailMesAvatarIndicator
-                              }
+                          <div
+                            className={
+                              styles.yadMessagerieDetailMesAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
                             >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#2CC84A'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          ) : (
-                            <div
-                              className={
-                                styles.yadMessagerieDetailMesAvatarIndicator
-                              }
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='10'
-                                height='10'
-                                viewBox='0 0 10 10'
-                                fill='none'
-                              >
-                                <circle
-                                  cx='5'
-                                  cy='4.99976'
-                                  r='4.5'
-                                  fill='#F2F2F2'
-                                  stroke='white'
-                                />
-                              </svg>
-                            </div>
-                          )}
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill={
+                                  onlineUsers?.some(
+                                    (user: any) =>
+                                      user?.userId ===
+                                      conversationActive?.initial_receiver
+                                        ?.user_id
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         </div>
                         <div className='content-info-user-chat'>
                           <div className='msg-user-infos-container'>
@@ -1956,55 +1913,36 @@ const VolkenoReactMessenger = ({
                                 styles.yadMessagerieDetailMesAvatarIndicator
                               }
                             >
-                              {onlineUsers?.some(
-                                (user: any) =>
-                                  user?.userId ===
-                                  conversationActive?.initial_sender?.user_id
-                              ) ? (
-                                <div
-                                  className={
-                                    styles.yadMessagerieDetailMesAvatarIndicator
-                                  }
+                              <div
+                                className={
+                                  styles.yadMessagerieDetailMesAvatarIndicator
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  width='10'
+                                  height='10'
+                                  viewBox='0 0 10 10'
+                                  fill='none'
                                 >
-                                  <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='10'
-                                    height='10'
-                                    viewBox='0 0 10 10'
-                                    fill='none'
-                                  >
-                                    <circle
-                                      cx='5'
-                                      cy='4.99976'
-                                      r='4.5'
-                                      fill='#2CC84A'
-                                      stroke='white'
-                                    />
-                                  </svg>
-                                </div>
-                              ) : (
-                                <div
-                                  className={
-                                    styles.yadMessagerieDetailMesAvatarIndicator
-                                  }
-                                >
-                                  <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='10'
-                                    height='10'
-                                    viewBox='0 0 10 10'
-                                    fill='none'
-                                  >
-                                    <circle
-                                      cx='5'
-                                      cy='4.99976'
-                                      r='4.5'
-                                      fill='#F2F2F2'
-                                      stroke='white'
-                                    />
-                                  </svg>
-                                </div>
-                              )}
+                                  <circle
+                                    cx='5'
+                                    cy='4.99976'
+                                    r='4.5'
+                                    fill={
+                                      onlineUsers?.some(
+                                        (user: any) =>
+                                          user?.userId ===
+                                          conversationActive?.initial_sender
+                                            ?.user_id
+                                      )
+                                        ? '#2CC84A'
+                                        : '#F2F2F2'
+                                    }
+                                    stroke='white'
+                                  />
+                                </svg>
+                              </div>
                             </div>
                           </div>
                           <div className='content-info-user-chat'>
@@ -2086,7 +2024,14 @@ const VolkenoReactMessenger = ({
                                 cx='5'
                                 cy='4.99976'
                                 r='4.5'
-                                fill='#2CC84A'
+                                fill={
+                                  onlineUsers?.some(
+                                    (user: { userId: any }) =>
+                                      user.userId === receiver.id
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
                                 stroke='white'
                               />
                             </svg>
@@ -2107,7 +2052,11 @@ const VolkenoReactMessenger = ({
                               <p
                                 className={`${styles.textDisconnectTime} mb-0`}
                               >
-                                En ligne
+                                {onlineUsers?.some(
+                                  (user: any) => user.userId === receiver.id
+                                )
+                                  ? 'En ligne'
+                                  : 'Hors ligne'}
                               </p>
                             </div>
                           </div>
@@ -2160,7 +2109,10 @@ const VolkenoReactMessenger = ({
                                 )
                               ) : (
                                 <div className={styles.formatPseudo}>
-                                  {getUserPseudo(message?.sender)}
+                                  {
+                                    (getUserPseudo(message?.sender),
+                                    dataStructure)
+                                  }
                                 </div>
                               )}
                             </div>
@@ -2345,7 +2297,8 @@ function NewChatModal({
   conversations,
   setMessages,
   newMessageTitle,
-  dataStructure
+  dataStructure,
+  onlineUsers
 }: any) {
   const [searchValue, setSearchValue] = React.useState('')
 
@@ -2451,7 +2404,7 @@ function NewChatModal({
                   >
                     <button className='btn no-link'>
                       <div className='d-flex align-items-center gap-2'>
-                        <div>
+                        <div className='position-relative'>
                           {item?.avatar !==
                           '/mediafiles/avatars/default.png' ? (
                             <img
@@ -2461,9 +2414,40 @@ function NewChatModal({
                             />
                           ) : (
                             <div className={styles.formatPseudo}>
-                              {getUserPseudo(item)}
+                              {(getUserPseudo(item), dataStructure)}
                             </div>
                           )}
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
+                            >
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill={
+                                  onlineUsers?.some((onlineUser: any) =>
+                                    item?.participants?.some(
+                                      (participant: any) =>
+                                        participant?.id !== item?.id &&
+                                        participant?.id === onlineUser?.userId
+                                    )
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         </div>
                         <div className={styles.userForSendMessageInfos}>
                           <h3 className='mb-0'>
@@ -2486,7 +2470,7 @@ function NewChatModal({
                   >
                     <button className='btn no-link'>
                       <div className='d-flex align-items-center gap-2'>
-                        <div>
+                        <div className='position-relative'>
                           {item?.avatar === null ? (
                             <div className={styles.formatPseudo}>
                               {getUserPseudo(item, dataStructure)}
@@ -2498,6 +2482,37 @@ function NewChatModal({
                               alt={`${item?.first_name} ${item?.last_name}`}
                             />
                           )}
+                          <div
+                            className={
+                              styles.yadMessagerieListGroupAvatarIndicator
+                            }
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='10'
+                              height='10'
+                              viewBox='0 0 10 10'
+                              fill='none'
+                            >
+                              <circle
+                                cx='5'
+                                cy='4.99976'
+                                r='4.5'
+                                fill={
+                                  onlineUsers?.some((onlineUser: any) =>
+                                    item?.participants?.some(
+                                      (participant: any) =>
+                                        participant?.id !== item?.id &&
+                                        participant?.id === onlineUser?.userId
+                                    )
+                                  )
+                                    ? '#2CC84A'
+                                    : '#F2F2F2'
+                                }
+                                stroke='white'
+                              />
+                            </svg>
+                          </div>
                         </div>
                         <div className={styles.userForSendMessageInfos}>
                           <h3 className='mb-0'>
