@@ -515,7 +515,7 @@ const VolkenoReactMessenger = ({
           )
       : []
 
-  console.log('filteredConversationList', filteredConversationList)
+  // console.log('receiver', receiver)
   return (
     <div className='mb-3 p-2'>
       <div className='row'>
@@ -2328,7 +2328,7 @@ function NewChatModal({
       // Vérifier si l'utilisateur sélectionné a déjà une conversation active
       const existingConversation = conversations.find((conversation: any) =>
         conversation.participants?.some(
-          (participant: any) => participant.id === x.id
+          (participant: any) => participant.id === x.value.id
         )
       )
 
@@ -2364,7 +2364,7 @@ function NewChatModal({
       }
     }
   }
-
+  // console.log('filteredUserList test', filteredUserList)
   return (
     <Modal show={modalNewChat} onHide={() => closeModalNewChat()}>
       <Modal.Header className='modal-header border-0 p-3' closeButton>
@@ -2499,12 +2499,9 @@ function NewChatModal({
                                 cy='4.99976'
                                 r='4.5'
                                 fill={
-                                  onlineUsers?.some((onlineUser: any) =>
-                                    item?.participants?.some(
-                                      (participant: any) =>
-                                        participant?.id !== item?.id &&
-                                        participant?.id === onlineUser?.userId
-                                    )
+                                  onlineUsers?.some(
+                                    (user: any) =>
+                                      user?.userId === item?.user_id
                                   )
                                     ? '#2CC84A'
                                     : '#F2F2F2'
