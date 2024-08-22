@@ -8,11 +8,12 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 // // yad
 // // const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImRldkB2b2xrZW5vLmNvbSIsImV4cCI6MTk1NDMyMjM3OSwiZW1haWwiOiJkZXZAdm9sa2Vuby5jb20iLCJvcmlnX2lhdCI6MTY5NTEyMjM3OX0.hRkniFxpbFI33T8Df21zKKyDRoCIzzhwATsLKAGG0zk' /* provide the token */
+// // const token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo5LCJ1c2VybmFtZSI6InB5dGhvbmZvcmplYWdlckBnbWFpbC5jb20iLCJleHAiOjE5ODM1Mjg3MDUsImVtYWlsIjoicHl0aG9uZm9yamVhZ2VyQGdtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNzI0MzI4NzA1fQ.ugj0-lbG_aW-uFKgUT1VIvxgdNlSUHqN7eWAMq5I5Gk' /* praticien */
 // const token =
-//   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2FwcC9lbi9sb2dpbiIsImlhdCI6MTcyMzQ5NzcxMSwiZXhwIjoxNzIzNTAxMzExLCJuYmYiOjE3MjM0OTc3MTEsImp0aSI6InppWm1sUnF2b2J5aDE2UDciLCJzdWIiOiIxNzIzMjA1OTIzQzJLN1IzOTgyNDg0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.-Ak7TWOPaYvigYQLzP2rxTkUd5bmaX86xa_pmNs-uBM' /* provide the token */
+//   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2FwcC9lbi9sb2dpbiIsImlhdCI6MTcyNDMzNDg2MSwiZXhwIjoxNzI0MzM4NDYxLCJuYmYiOjE3MjQzMzQ4NjEsImp0aSI6ImF5N1VLVng3UTR5UTlCQXYiLCJzdWIiOiIxNzIzMjA1OTIzQzJLN1IzOTgyNDg0IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.-EK1BUekFyFV-CGSk9btmLE_xzeUI5vkLQFGjPWXxDU' /* provide the token */
 
 // // // yad
-// // // const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
+// // const ApiBaseUrl = 'https://yaay-ak-doom-api.volkeno-engineering.click'
 // const ApiBaseUrl = 'http://127.0.0.1:8000/api/v1/app/fr/'
 
 // const config = {
